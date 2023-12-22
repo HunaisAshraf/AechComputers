@@ -1,0 +1,12 @@
+body{
+  overflow-x: hidden;
+}
+
+.navbar,
+.login-container {
+  background-color: #090125;
+}
+
+.main{
+  height: 100vh;
+}

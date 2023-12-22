@@ -4,6 +4,6 @@ const addAdmin = require("../controllers/adminController");
 
 const router = express.Router();
 
-router.get("/",addAdmin)
+// router.get("/",addAdmin)
 
 module.exports = router;

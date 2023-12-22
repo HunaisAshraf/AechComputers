@@ -1,8 +1,16 @@
 const express = require("express");
-const adminLoginController = require("../controllers/adminController");
+const router = express.Router();
+const {
+  adminLoginPageController,
+  adminLoginController,
+  getHomeController
+} = require("../controllers/adminController");
+const { isAdmin } = require("../middlewares/adminMiddlewares");
 
-const router = express.Router()
+router.get("/admin-login", adminLoginPageController);
 
-router.get("/admin-login",adminLoginController)
+router.post("/admin-login", adminLoginController);
+
+router.get("/admin-dashboard",isAdmin,getHomeController)
 
 module.exports = router;

@@ -19,8 +19,5 @@
     "mongoose": "^8.0.3",
     "morgan": "^1.10.0",
     "nocache": "^4.0.0"
-  },
-  "devDependencies": {
-    "tailwindcss": "^3.4.0"
   }
 }
