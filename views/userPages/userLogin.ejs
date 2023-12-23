@@ -1,0 +1,57 @@
+<%- include("partials/header") %>
+
+<main class="container-md">
+  <div class="row justify-content-center align-items-center mt-5">
+    <div
+      class="login-container py-5 col-md-8 row justify-content-center align-items-center rounded"
+    >
+      <h3 class="text-center text-white mb-4">SignIn</h3>
+      <div class="col-md-8 bg-white rounded">
+        <form class="py-5 px-2" action="/signin" method="post">
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label"
+              >Email address</label
+            >
+            <input
+              type="email"
+              class="form-control"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              name="email"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label"
+              >Password</label
+            >
+            <input
+              type="password"
+              class="form-control"
+              id="exampleInputPassword1"
+              name="password"
+            />
+          </div>
+
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary w-50">Submit</button>
+          </div>
+          <div class="text-center d-flex mt-5 justify-content-between">
+            <a
+              href="/signup"
+              class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+              >Create new account</a
+            >
+
+            <a
+              href="/forget-password"
+              class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+              >Forget password?</a
+            >
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include("partials/footer") %>

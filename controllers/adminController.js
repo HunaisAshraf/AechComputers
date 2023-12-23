@@ -2,7 +2,11 @@ const UserModel = require("../models/adminModel");
 const hashPassword = require("../helpers/helper");
 
 const adminLoginPageController = async (req, res) => {
-  res.render("adminPages/adminLogin");
+  if (!req.session.admin) {
+    res.render("adminPages/adminLogin");
+  } else {
+    res.redirect("/admin-dashboard");
+  }
 };
 
 const getHomeController = async (req, res) => {
@@ -31,8 +35,18 @@ const adminLoginController = async (req, res) => {
   }
 };
 
+const adminLogoutController = (req, res) => {
+  try {
+    req.session.admin = null;
+    res.redirect("/admin-login");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   adminLoginPageController,
   adminLoginController,
   getHomeController,
+  adminLogoutController,
 };

@@ -1,4 +1,4 @@
-body{
+body {
   overflow-x: hidden;
 }
 
@@ -7,6 +7,6 @@ body{
   background-color: #090125;
 }
 
-.main{
+.main {
   height: 100vh;
 }
