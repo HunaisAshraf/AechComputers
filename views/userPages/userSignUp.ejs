@@ -7,26 +7,32 @@
     >
       <h3 class="text-center text-white mb-4">SignUp</h3>
       <div class="col-md-8 bg-white rounded">
-        <form class="py-5 px-2" action="/signin" method="post">
+        <form class="py-5 px-2" action="/signup" method="post">
           <div class="mb-3">
             <label for="firstName" class="form-label">First Name</label>
             <input
-              type="email"
+              type="text"
               class="form-control"
               id="firstName"
               aria-describedby="emailHelp"
               name="firstName"
             />
+            <% if(inputErr){ %>
+            <span class="text-danger"><%= errMsg.firstName %></span>
+            <% } %>
           </div>
           <div class="mb-3">
             <label for="lastName" class="form-label">Last Name</label>
             <input
-              type="email"
+              type="text"
               class="form-control"
               id="lastName"
               aria-describedby="emailHelp"
               name="lastName"
             />
+            <% if(inputErr){ %>
+            <span class="text-danger"><%= errMsg.lastName %></span>
+            <% } %>
           </div>
           <div class="mb-3">
             <label for="email" class="form-label">Email</label>
@@ -37,6 +43,9 @@
               aria-describedby="emailHelp"
               name="email"
             />
+            <% if(inputErr){ %>
+            <span class="text-danger"><%= errMsg.email %></span>
+            <% } %>
           </div>
           <div class="mb-3">
             <label for="phone" class="form-label">Phone</label>
@@ -47,6 +56,9 @@
               aria-describedby="emailHelp"
               name="phone"
             />
+            <% if(inputErr){ %>
+            <span class="text-danger"><%= errMsg.phone %></span>
+            <% } %>
           </div>
           <div class="mb-3">
             <label for="password" class="form-label">Password</label>
@@ -55,8 +67,10 @@
               class="form-control"
               id="password"
               name="password"
-              oninput="checkPassword(this.value)"
             />
+            <% if(inputErr){ %>
+            <span class="text-danger"><%= errMsg.password %></span>
+            <% } %>
           </div>
           <div class="mb-3">
             <label for="confirmPassword" class="form-label"
@@ -66,13 +80,17 @@
               type="password"
               class="form-control"
               id="confirmPassword"
-              name="password"
-              oninput="nn(this.value)"
+              name="confirmPassword"
             />
+            <% if(inputErr){ %>
+            <span class="text-danger"><%= errMsg.confirmPassword %></span>
+            <% } %>
           </div>
 
           <div class="text-center">
-            <button type="submit" class="btn btn-primary w-50">Submit</button>
+            <button type="submit" id="button" class="btn btn-primary w-50">
+              Submit
+            </button>
           </div>
           <div class="text-center mt-3">
             <a
@@ -87,17 +105,24 @@
   </div>
 </main>
 <script>
-  let password = document.getElementById("password");
-  let Password2 = document.getElementById("confirmPassword");
+  // let password;
+  // function checkPassword(value) {
+  //   let passwordLength = document.getElementById("password-length");
+  //   if (value.length >= 6) {
+  //     password = value;
+  //     passwordLength.innerText = "";
+  //   } else {
+  //     passwordLength.innerText = "password should be atleast 6 characters";
+  //   }
+  // }
 
-  let pass;
-  function checkPassword(value) {
-    if (value.length < 6) {
-      pass = value;
-    }
-  }
-
-  function nn(value) {
-    console.log("pass : ", pass);
-  }
+  // function confirm(value) {
+  //   const notMatch = document.getElementById("notmatch");
+  //   console.log(notMatch);
+  //   if (password !== value) {
+  //     notMatch.innerText = "password dosen't match";
+  //   } else {
+  //     notMatch.innerText = "";
+  //   }
+  // }
 </script>
