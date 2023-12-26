@@ -1,0 +1,92 @@
+<%- include("partials/header") %>
+<section class="content col-md-10">
+  <h2>User List</h2>
+  <div class="border rounded p-2">
+    <div class="search d-md-flex justify-content-between border-bottom p-2">
+      <form action="/search-user" class="d-flex" method="post">
+        <input
+          type="text"
+          class="form-control rounded-start-pill w-100"
+          placeholder="search"
+          name="search"
+        />
+        <button type="submit" class="btn btn-dark rounded-end-pill">
+          <i class="bi bi-search text-white"></i>
+        </button>
+      </form>
+      <form action="/filter-user" method="post" id="filter" class="w-25">
+        <select
+          class="form-select rounded-pill w-100"
+          aria-label="Default select example"
+          onchange="handleSubmit(this.value)"
+        >
+          <option selected>Status</option>
+          <option value="active">Active</option>
+          <option value="block">Blocked</option>
+        </select>
+        <input
+          type="text"
+          name="filter"
+          type="hidden"
+          class="hidden"
+          id="selectedValue"
+          value=""
+        />
+      </form>
+    </div>
+    <div class="content p-3">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% users.forEach((user,i) => { %>
+
+          <tr id="<%= user._id %>">
+            <th scope="row"><%= i+1 %></th>
+            <td><%= user.firstName %> <%= user.lastName %></td>
+            <td><%= user.email %></td>
+            <td><%= user.phone %></td>
+            <% if(user.isBlocked){ %>
+            <td>
+              <a href="/unblock-user/<%= user._id %>" class="btn btn-dark"
+                >Blocked</a
+              >
+            </td>
+            <% }else{ %>
+            <td>
+              <a href="/block-user/<%= user._id %>" class="btn btn-success"
+                >Active</a
+              >
+            </td>
+            <% } %>
+            <td>
+              <a href="/delete-user/<%= user._id %>" class="btn btn-danger"
+                >Delete</a
+              >
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+    function handleSubmit(val) {
+      let selectedValue = document.getElementById("selectedValue");
+      selectedValue.value = val;
+
+      let form = document.getElementById("filter");
+      form.submit();
+    }
+  </script>
+</section>
+
+<%- include("partials/footer") %>

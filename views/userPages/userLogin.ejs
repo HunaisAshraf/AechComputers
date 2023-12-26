@@ -8,6 +8,16 @@
       <h3 class="text-center text-white mb-4">SignIn</h3>
       <div class="col-md-8 bg-white rounded">
         <form class="py-5 px-2" action="/signin" method="post">
+          <% if(userNotFound){ %>
+          <div class="bg-danger-subtle text-center py-1 rounded mb-2">
+            <h5>User Not found</h5>
+          </div>
+          <% } %>
+           <% if(invalidCredentials){ %>
+          <div class="bg-danger-subtle text-center py-1 rounded mb-2">
+            <h5>username or password dosen't match</h5>
+          </div>
+          <% } %>
           <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label"
               >Email address</label

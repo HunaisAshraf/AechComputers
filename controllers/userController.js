@@ -1,14 +1,63 @@
-const { validateEmail, getOtp, hashPassword } = require("../helpers/helper");
+const {
+  validateEmail,
+  getOtp,
+  hashPassword,
+  comparePassword,
+} = require("../helpers/helper");
 const otpSender = require("../helpers/sendOtpHelper");
 const userModel = require("../models/userModel");
 
 const getHomeController = async (req, res) => {
-  res.send("home");
+  res.render("userPages/userHome", { signIn: req.session.signIn });
 };
 
 const getUserLoginController = (req, res) => {
-  res.render("userPages/userLogin", { signIn: req.session.signIn });
+  try {
+    if (!req.session.signIn) {
+      res.render("userPages/userLogin", {
+        signIn: req.session.signIn,
+        userNotFound: req.session.userNotFound,
+        invalidCredentials: req.session.invalidCredentials,
+      });
+      req.session.userNotFound = false;
+      req.session.invalidCredentials = false;
+      req.session.save();
+    } else {
+      res.redirect("/");
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };
+
+const userLoginController = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await userModel.findOne({ email: email });
+
+    if (!user) {
+      req.session.userNotFound = true;
+      res.redirect("/signin");
+    }
+    if (user.isBlocked) {
+      req.session.userNotFound = true;
+      res.redirect("/signin");
+    }
+    const passwordMatch = await comparePassword(password, user.password);
+
+    if (!passwordMatch) {
+      req.session.invalidCredentials = true;
+      res.redirect("/signin");
+    }
+
+    req.session.signIn = true;
+    res.redirect("/");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const getUserSignupController = (req, res) => {
   res.render("userPages/userSignUp", {
     signIn: req.session.signIn,
@@ -90,7 +139,7 @@ const getOtpVerifyPage = async (req, res) => {
       req.session.otp = null;
       console.log("otp expired ", req.session.otp);
     }, 1000 * 60);
-    
+
     res.render("userPages/otpVerify", {
       signIn: req.session.signIn,
       inValidOTP: req.session.inValidOtp,
@@ -134,13 +183,137 @@ const addUser = async (req, res, next) => {
   }
 };
 
+const getForgetpageController = async (req, res) => {
+  if (req.session.signIn) {
+    res.redirect("/");
+  } else {
+    res.render("userPages/forgetPassword", {
+      signIn: req.session.signIn,
+      notExist: req.session.notExists,
+    });
+  }
+};
+
+const forgetPasswordController = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+
+    const user = await userModel.findOne({ email });
+
+    if (user) {
+      req.session.user = req.body;
+      next();
+    } else {
+      req.session.notExists = true;
+      res.redirect("/forget-Password");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const sendForgetOtp = async (req, res) => {
+  const { email } = req.session.user;
+  const otp = getOtp();
+  req.session.otp = otp;
+  const send = await otpSender(email, email, otp);
+
+  if (send) {
+    res.redirect("/forgetpassword-otp");
+  }
+};
+
+const getForgetOtpController = (req, res) => {
+  if (req.session.signIn) {
+    res.redirect("/");
+  } else {
+    res.render("userPages/forgetPasswordOtp", {
+      signIn: req.session.signIn,
+      inValidOTP: req.session.inValidOtp,
+    });
+  }
+};
+const forgetpasswordOtpVerify = async (req, res, next) => {
+  try {
+    const { otp } = req.body;
+
+    console.log(otp);
+
+    if (otp !== "" && otp == req.session.otp) {
+      res.redirect("/update-password");
+    } else {
+      req.session.inValidOtp = true;
+      res.redirect("/forgetpassword-otp");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getUpdatePasswordController = async (req, res) => {
+  try {
+    res.render("userPages/updatePassword", {
+      signIn: req.session.signIn,
+      inputErr: req.session.inputErr,
+      errMsg: req.session.errMsg,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const updatePasswordController = async (req, res) => {
+  try {
+    const { password, confirmPassword } = req.body;
+    const { email } = req.session.user;
+    console.log(email);
+    const errMsg = {};
+    req.session.inputErr = false;
+    if (password.length < 6) {
+      errMsg["password"] = "Password should be grater than 6 character";
+      req.session.inputErr = true;
+    }
+    if (confirmPassword !== password) {
+      errMsg["confirmPassword"] = "Password dosen't match";
+      req.session.inputErr = true;
+    }
+
+    if (req.session.inputErr) {
+      req.session.errMsg = errMsg;
+      res.redirect("/update-password");
+    } else {
+      let hashedPassword = await hashPassword(password);
+      let user = await userModel.findOneAndUpdate(
+        { email },
+        { password: hashedPassword }
+      );
+      res.redirect("/signin");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const userLogoutController = (req, res) => {
+  req.session.signIn = false;
+  res.redirect("/");
+};
 module.exports = {
+  getHomeController,
   getUserLoginController,
-  getUserLoginController,
+  userLoginController,
   userSignupController,
   getUserSignupController,
   getOtpVerifyPage,
   otpVerify,
   sendOtp,
   addUser,
+  getForgetpageController,
+  forgetPasswordController,
+  getForgetOtpController,
+  getUpdatePasswordController,
+  forgetpasswordOtpVerify,
+  sendForgetOtp,
+  updatePasswordController,
+  userLogoutController,
 };
