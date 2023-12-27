@@ -38,15 +38,20 @@
             name="description"
           />
         </div>
-        <div class="mb-3">
-          <label for="image" class="form-label">Category Image</label>
-          <input
-            type="file"
-            class="form-control"
-            id="image"
-            aria-describedby="emailHelp"
-            name="image"
-          />
+        <div class="mb-3 d-flex gap-3">
+          <img id="image" class="rounded" alt="" height="120" />
+          <div>
+            <label for="image" class="form-label">Category Image</label>
+            <input
+              type="file"
+              class="form-control"
+              id="image"
+              aria-describedby="emailHelp"
+              name="image"
+              accept="image/*"
+              onchange="loadFile(event)"
+            />
+          </div>
         </div>
         <div class="text-center">
           <button type="submit" class="btn btn-dark w-50">Submit</button>
@@ -54,6 +59,13 @@
       </form>
     </div>
   </div>
+  <script>
+    function loadFile(event) {
+      let image = document.getElementById("image");
+
+      image.src = URL.createObjectURL(event.target.files[0]);
+    }
+  </script>
 </section>
 
 <%- include("partials/footer") %>

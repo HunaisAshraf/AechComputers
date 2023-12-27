@@ -33,15 +33,20 @@
             value="<%= category.description %>"
           />
         </div>
-        <div class="mb-3">
-          <label for="image" class="form-label">Category Image</label>
-          <input
-            type="file"
-            class="form-control"
-            id="image"
-            aria-describedby="emailHelp"
-            name="image"
-          />
+        <div class="mb-3 d-flex gap-3">
+          <img id="image" src="uploads/<%= category.image %>" alt="" class="rounded" height="120" />
+          <div>
+            <label for="image" class="form-label">Category Image</label>
+            <input
+              type="file"
+              class="form-control"
+              id="image"
+              aria-describedby="emailHelp"
+              name="image"
+              accept="image/*"
+              onchange="loadFile(event)"
+            />
+          </div>
         </div>
         <input
           type="hidden"
@@ -55,6 +60,12 @@
       </form>
     </div>
   </div>
+  <script>
+    function loadFile(event) {
+      let image = document.getElementById("image");
+      image.src = URL.createObjectURL(event.target.files[0]);
+    }
+  </script>
 </section>
 
 <%- include("partials/footer") %>

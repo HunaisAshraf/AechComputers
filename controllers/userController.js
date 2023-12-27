@@ -143,6 +143,7 @@ const getOtpVerifyPage = async (req, res) => {
     res.render("userPages/otpVerify", {
       signIn: req.session.signIn,
       inValidOTP: req.session.inValidOtp,
+      otp: req.session.otp,
     });
   } catch (error) {
     console.log(error);
@@ -230,14 +231,14 @@ const getForgetOtpController = (req, res) => {
     res.render("userPages/forgetPasswordOtp", {
       signIn: req.session.signIn,
       inValidOTP: req.session.inValidOtp,
+      otp: req.session.otp,
     });
   }
 };
+
 const forgetpasswordOtpVerify = async (req, res, next) => {
   try {
     const { otp } = req.body;
-
-    console.log(otp);
 
     if (otp !== "" && otp == req.session.otp) {
       res.redirect("/update-password");
@@ -298,6 +299,7 @@ const userLogoutController = (req, res) => {
   req.session.signIn = false;
   res.redirect("/");
 };
+
 module.exports = {
   getHomeController,
   getUserLoginController,

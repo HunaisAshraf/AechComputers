@@ -2,9 +2,7 @@ const nodemailer = require("nodemailer");
 
 const otpSender = async (name, email, otp) => {
   try {
-    console.log(process.env.EMAIL);
-    console.log(process.env.PASSWORD);
-
+    console.log("otp sending...");
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 587,
@@ -20,7 +18,7 @@ const otpSender = async (name, email, otp) => {
       subject: "OTP for verification",
       html: `<h2>Hi ${name}</h2><br/><p>Your OTP for verification is</p><h4> ${otp}</h4>`,
     });
-
+    console.log("otp successful");
     return info;
   } catch (error) {
     console.log(error);
