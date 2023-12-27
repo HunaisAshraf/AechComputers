@@ -1,0 +1,109 @@
+<%- include("partials/header") %>
+
+<section class="content col-md-10">
+  <div class="box border rounded p-2">
+    <div class="border-bottom">
+      <h2>Add Product</h2>
+    </div>
+    <div class="mt-2">
+      <div class="w-100 d-flex align-items-center justify-content-center">
+        <form
+          class="w-75"
+          action="/add-product"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label"
+              >Product Name</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="exampleInputPassword1"
+              name="productName"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Price</label>
+            <input
+              type="number"
+              class="form-control"
+              id="exampleInputPassword1"
+              name="price"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label"
+              >Category</label
+            >
+            <select class="form-select" name="category" id="">
+              <option selected>Category</option>
+              <% categories.forEach(category => { %>
+              <option value="<%= category._id %>"><%= category.categoryName %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label"
+              >Quantity</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              id="exampleInputPassword1"
+              name="quantity"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label"
+              >Description</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="exampleInputPassword1"
+              name="description"
+            />
+          </div>
+          <div class="mb-3">
+            <div id="imageDiv" class="d-flex"></div>
+            <div>
+              <label for="exampleInputPassword1" class="form-label"
+                >Image</label
+              >
+              <input
+                type="file"
+                class="form-control"
+                id="exampleInputPassword1"
+                name="images"
+                accept="image/*"
+                multiple
+                onchange="loadFile(event)"
+              />
+            </div>
+          </div>
+          <div class="text-center">
+            <button class="btn btn-dark">Add Product</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    function loadFile(event) {
+      let imageDiv = document.getElementById("imageDiv");
+
+      for (let i = 0; i < 4; i++) {
+        let image = document.createElement("img");
+        image.src = URL.createObjectURL(event.target.files[i]);
+        image.style.height = "120px";
+        image.style.margin = "20px";
+        image.style.borderRadius = "5px";
+        imageDiv.appendChild(image);
+      }
+    }
+  </script>
+</section>
+
+<%- include("partials/footer") %>

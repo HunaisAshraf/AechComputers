@@ -5,6 +5,7 @@ const nocache = require("nocache");
 const userRoute = require("./routes/userRoutes");
 const adminRoute = require("./routes/adminRoute");
 const categoryRoute = require("./routes/categoryRoute");
+const productRoute = require("./routes/productRoute");
 const connectDB = require("./config/db");
 const path = require("node:path");
 const session = require("express-session");
@@ -38,6 +39,7 @@ app.use("/edit-category", express.static("public"));
 app.use(userRoute);
 app.use(adminRoute);
 app.use(categoryRoute);
+app.use(productRoute);
 
 app.listen(process.env.PORT, () => {
   console.log(`server started in port ${process.env.PORT}`);
