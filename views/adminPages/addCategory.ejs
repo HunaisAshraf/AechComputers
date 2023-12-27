@@ -1,0 +1,59 @@
+<%- include("partials/header") %>
+<section class="content col-md-10">
+  <div
+    class="box border rounded p-2 d-flex flex-column align-items-center justify-content-center"
+  >
+    <div class="w-50 shadow p-5">
+      <h2 class="text-center my-3">Add Category</h2>
+      <% if(categoryExist){ %>
+      <div class="bg-danger-subtle text-center py-1 rounded mb-2">
+        <h5>Category already exists</h5>
+      </div>
+      <% } %> <% if(noValidInfo){ %>
+      <div class="bg-danger-subtle text-center py-1 rounded mb-2">
+        <h5>Enter valid information</h5>
+      </div>
+      <% } %>
+
+      <form action="/add-category" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label for="category" class="form-label">Category Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="category"
+            aria-describedby="emailHelp"
+            name="categoryName"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="description" class="form-label"
+            >Category Description</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            id="description"
+            aria-describedby="emailHelp"
+            name="description"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="image" class="form-label">Category Image</label>
+          <input
+            type="file"
+            class="form-control"
+            id="image"
+            aria-describedby="emailHelp"
+            name="image"
+          />
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-dark w-50">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<%- include("partials/footer") %>

@@ -120,7 +120,7 @@ const filterUserController = async (req, res) => {
     }
     req.session.allUser = users;
     res.redirect("/user-list");
-    res.render("adminPages/userList", { users });
+    // res.render("adminPages/userList", { users });
   } catch (error) {
     console.log(error);
   }

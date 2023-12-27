@@ -1,0 +1,109 @@
+<%- include("partials/header") %>
+<section class="content col-md-10">
+  <h2>Category List</h2>
+  <div class="border rounded p-2">
+    <div class="search d-md-flex justify-content-between border-bottom p-2">
+      <form action="/search-category" class="d-flex" method="post">
+        <input
+          type="text"
+          class="form-control rounded-start-pill w-100"
+          placeholder="search"
+          name="search"
+        />
+        <button type="submit" class="btn btn-dark rounded-end-pill">
+          <i class="bi bi-search text-white"></i>
+        </button>
+      </form>
+      <div class="d-flex w-50 gap-2">
+        <form action="/filter-category" method="post" id="filter" class="w-50">
+          <select
+            class="form-select rounded w-100"
+            aria-label="Default select example"
+            onchange="handleSubmit(this.value)"
+          >
+            <option selected>Status</option>
+            <option value="available">Available</option>
+            <option value="notAvailable">Not Available</option>
+          </select>
+          <input
+            type="text"
+            name="filter"
+            type="hidden"
+            class="hidden"
+            id="selectedValue"
+            value=""
+          />
+        </form>
+        <a href="/add-category" class="btn btn-dark w-50">Add Category</a>
+      </div>
+    </div>
+    <div class="content p-3">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Image</th>
+            <th scope="col">Category</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% categories.forEach((category,i) => { %>
+
+          <tr>
+            <th scope="row"><%= i+1 %></th>
+            <td>
+              <img
+              height="70"
+                src="uploads/<%= category.image %>"
+                alt="<%= category.categoryName %>"
+               
+              />
+            </td>
+            <td><%= category.categoryName %></td>
+            <% if(category.isAvailable){ %>
+            <td>
+              <a
+                href="/block-category/<%= category._id %>"
+                class="btn btn-success"
+                >Available</a
+              >
+            </td>
+            <% }else{ %>
+            <td>
+              <a
+                href="/unblock-category/<%= category._id %>"
+                class="btn btn-dark"
+                >NotAvailable</a
+              >
+            </td>
+            <% } %>
+            <td>
+              <a href="/edit-category/<%= category._id %>" class="btn btn-dark"
+                >Edit</a
+              >
+              <a
+                href="/delete-category/<%= category._id %>"
+                class="btn btn-danger"
+                >Delete</a
+              >
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+    function handleSubmit(val) {
+      let selectedValue = document.getElementById("selectedValue");
+      selectedValue.value = val;
+
+      let form = document.getElementById("filter");
+      form.submit();
+    }
+  </script>
+</section>
+
+<%- include("partials/footer") %>
