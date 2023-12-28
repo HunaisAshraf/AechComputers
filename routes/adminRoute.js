@@ -13,6 +13,12 @@ const {
   filterUserController,
 } = require("../controllers/adminController");
 const { isAdmin } = require("../middlewares/adminMiddlewares");
+const {
+  getBannerPage,
+  getAddBannerPage,
+  addBannerController,
+} = require("../controllers/bannerControl");
+const upload = require("../helpers/multer");
 
 router.get("/admin-login", adminLoginPageController);
 
@@ -33,6 +39,11 @@ router.get("/delete-user/:id", isAdmin, deleteUserController);
 router.post("/search-user", isAdmin, searchUserController);
 
 router.post("/filter-user", isAdmin, filterUserController);
+
+router.get("/banner-list", isAdmin, getBannerPage);
+
+router.get("/add-banner", isAdmin, getAddBannerPage);
+router.post("/add-banner", isAdmin, upload.any(), addBannerController);
 
 module.exports = router;
 

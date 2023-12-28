@@ -34,6 +34,7 @@ app.use(
 
 app.use(express.static(path.join(__dirname, "/public")));
 app.use("/edit-category", express.static("public"));
+app.use("/edit-product", express.static("public"));
 
 //routes
 app.use(userRoute);

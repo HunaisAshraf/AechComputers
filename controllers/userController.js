@@ -4,11 +4,37 @@ const {
   hashPassword,
   comparePassword,
 } = require("../helpers/helper");
+const BannerModel = require("../models/bannerModel");
 const otpSender = require("../helpers/sendOtpHelper");
 const userModel = require("../models/userModel");
+const CategoryModel = require("../models/categoryModel");
+const ProductModel = require("../models/productModel");
 
 const getHomeController = async (req, res) => {
-  res.render("userPages/userHome", { signIn: req.session.signIn });
+  try {
+    const banners = await BannerModel.find();
+    const categories = await CategoryModel.find();
+    res.render("userPages/userHome", {
+      signIn: req.session.signIn,
+      banners,
+      categories,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getProductsPage = async (req, res) => {
+  try {
+    const products = await ProductModel.find();
+
+    res.render("userPages/productsPage", {
+      signIn: req.session.signIn,
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const getUserLoginController = (req, res) => {
@@ -318,4 +344,5 @@ module.exports = {
   sendForgetOtp,
   updatePasswordController,
   userLogoutController,
+  getProductsPage,
 };

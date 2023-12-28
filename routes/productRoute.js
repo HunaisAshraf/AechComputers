@@ -5,14 +5,18 @@ const {
   getAddProductPage,
   addProductController,
   getProductListPage,
-  deleteProductController
+  deleteProductController,
+  getProductEditpage,
+  editProductController,
 } = require("../controllers/productController");
 
 const router = express.Router();
 
-router.get("/product-list",isAdmin,getProductListPage)
+router.get("/product-list", isAdmin, getProductListPage);
 router.get("/add-product", isAdmin, getAddProductPage);
 router.post("/add-product", isAdmin, upload.any(), addProductController);
 router.get("/delete-product/:id", isAdmin, deleteProductController);
+router.get("/edit-product/:id", isAdmin, getProductEditpage);
+router.post("/edit-product", isAdmin, upload.any(), editProductController);
 
 module.exports = router;

@@ -1,0 +1,192 @@
+<%- include("partials/header") %>
+
+<section class="content col-md-10">
+  <div class="box border rounded p-2">
+    <div class="border-bottom">
+      <h2>Edit Product</h2>
+    </div>
+    <div class="mt-2">
+      <div class="w-100 d-flex align-items-center justify-content-center">
+        <form
+          class="w-75"
+          action="/edit-product"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label"
+              >Product Name</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="exampleInputPassword1"
+              name="productName"
+              value="<%= product.productName %>"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Price</label>
+            <input
+              type="number"
+              class="form-control"
+              id="exampleInputPassword1"
+              name="price"
+              value="<%= product.price%>"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label"
+              >Category</label
+            >
+            <select class="form-select" name="category" id="">
+              <option selected><%= product.category.categoryName %></option>
+              <% categories.forEach(category => { %>
+              <option value="<%= category._id %>">
+                <%= category.categoryName %>
+              </option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label"
+              >Quantity</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              id="exampleInputPassword1"
+              name="quantity"
+              value="<%= product.quantity %>"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label"
+              >Description</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="exampleInputPassword1"
+              name="description"
+              value="<%= product.description %>"
+            />
+          </div>
+          <div class="mb-3">
+            <div class="d-flex justify-content-center gap-1">
+              <div id="imageDiv">
+                <img
+                  height="120"
+                  style="margin: 10px; border-radius: 5px"
+                  src="uploads/<%= product.images[0] %>"
+                  alt=""
+                  id="img1"
+                />
+
+                <input
+                  type="file"
+                  class="form-control"
+                  id="exampleInputPassword1"
+                  name="image1"
+                  accept="image/*"
+                  onchange="loadImage1(event)"
+                  required
+                  value="<%= product.images[0] %>"
+                />
+              </div>
+              <div id="imageDiv">
+                <img
+                  height="120"
+                  style="margin: 10px; border-radius: 5px"
+                  src="uploads/<%= product.images[1] %>"
+                  alt=""
+                  id="img2"
+                />
+
+                <input
+                  type="file"
+                  class="form-control"
+                  id="exampleInputPassword1"
+                  name="image2"
+                  accept="image/*"
+                  onchange="loadImage2(event)"
+                  required
+                  value="<%= product.images[1] %>"
+                />
+              </div>
+              <div id="imageDiv">
+                <img
+                  height="120"
+                  style="margin: 10px; border-radius: 5px"
+                  src="uploads/<%= product.images[2] %>"
+                  alt=""
+                  id="img3"
+                />
+
+                <input
+                  type="file"
+                  class="form-control"
+                  id="exampleInputPassword1"
+                  name="image3"
+                  accept="image/*"
+                  onchange="loadImage3(event)"
+                  required
+                  value="<%= product.images[2] %>"
+                />
+              </div>
+              <div id="imageDiv">
+                <img
+                  height="120"
+                  style="margin: 10px; border-radius: 5px"
+                  src="uploads/<%= product.images[3] %>"
+                  alt=""
+                  id="img4"
+                />
+
+                <input
+                  type="file"
+                  class="form-control"
+                  id="exampleInputPassword1"
+                  name="image4"
+                  accept="image/*"
+                  onchange="loadImage4(event)"
+                  required
+                  value="uploads/<%= product.images[3] %>"
+                />
+              </div>
+            </div>
+          </div>
+          <input
+            type="hidden"
+            class="hidden"
+            name="id"
+            value="<%= product._id %>"
+          />
+          <div class="text-center">
+            <button class="btn btn-dark">Edit Product</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    function loadImage1(e) {
+      let img = document.getElementById("img1");
+      img.src = URL.createObjectURL(e.target.files[0]);
+    }
+    function loadImage2(e) {
+      let img = document.getElementById("img2");
+      img.src = URL.createObjectURL(e.target.files[0]);
+    }
+    function loadImage3(e) {
+      let img = document.getElementById("img3");
+      img.src = URL.createObjectURL(e.target.files[0]);
+    }
+    function loadImage4(e) {
+      let img = document.getElementById("img4");
+      img.src = URL.createObjectURL(e.target.files[0]);
+    }
+  </script>
+</section>
+
+<%- include("partials/footer") %>

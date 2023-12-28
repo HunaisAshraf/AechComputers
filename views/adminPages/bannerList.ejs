@@ -1,0 +1,19 @@
+<%- include("partials/header") %>
+<section class="content col-md-10">
+  <div class="border rounded p-2">
+    <div class="search  border-bottom p-2 d-flex justify-content-between align-items-center">
+      <h2>Banner List</h2>
+      <a href="/add-banner" class="btn btn-dark">Add Banner</a>
+    </div>
+    <div class="content p-3">
+      <% banner.forEach(b => { %>
+      <div class="border b-3 d-flex justify-content-around align-items-center py-3">
+        <img width="500" class="rounded" src="uploads/<%= b.image %>" alt=""  />
+        <button class="btn btn-dark">Delete</button>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<%- include("partials/footer") %>

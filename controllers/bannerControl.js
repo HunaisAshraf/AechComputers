@@ -1,0 +1,29 @@
+const BannerModel = require("../models/bannerModel");
+
+const getBannerPage = async (req, res) => {
+  try {
+    const banner = await BannerModel.find();
+    console.log(banner);
+    res.render("adminPages/bannerList", { banner });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getAddBannerPage = (req, res) => {
+  res.render("adminPages/addBanner");
+};
+
+const addBannerController = async (req, res) => {
+  try {
+    const image = req.files[0].filename;
+
+    await new BannerModel({ image }).save();
+
+    res.redirect("/banner-list");
+  } catch (error) {
+    console.log("error in adding banner ", error);
+  }
+};
+
+module.exports = { getBannerPage, getAddBannerPage, addBannerController };
