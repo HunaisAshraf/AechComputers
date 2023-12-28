@@ -24,13 +24,26 @@ const getHomeController = async (req, res) => {
   }
 };
 
-const getProductsPage = async (req, res) => {
+const getShopPage = async (req, res) => {
   try {
     const products = await ProductModel.find();
-
-    res.render("userPages/productsPage", {
+    res.render("userPages/shopPage", {
       signIn: req.session.signIn,
       products,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getProductPage = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const product = await ProductModel.findOne({ _id: id });
+    res.render("userPages/productPage", {
+      signIn: req.session.signin,
+      product,
     });
   } catch (error) {
     console.log(error);
@@ -344,5 +357,6 @@ module.exports = {
   sendForgetOtp,
   updatePasswordController,
   userLogoutController,
-  getProductsPage,
+  getShopPage,
+  getProductPage,
 };

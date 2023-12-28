@@ -17,13 +17,15 @@ const {
   forgetpasswordOtpVerify,
   sendForgetOtp,
   updatePasswordController,
-  getProductsPage,
+  getShopPage,
+  getProductPage,
 } = require("../controllers/userController");
 
 const router = express.Router();
 
 router.get("/", getHomeController);
-router.get("/shop", getProductsPage);
+router.get("/shop", getShopPage);
+router.get("/product/:id", getProductPage);
 
 //login routes
 router.get("/signin", getUserLoginController);

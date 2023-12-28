@@ -40,7 +40,9 @@
               >Category</label
             >
             <select class="form-select" name="category" id="">
-              <option selected><%= product.category.categoryName %></option>
+              <option value="<%= product.category._id %>" selected>
+                <%= product.category.categoryName %>
+              </option>
               <% categories.forEach(category => { %>
               <option value="<%= category._id %>">
                 <%= category.categoryName %>
@@ -90,7 +92,6 @@
                   name="image1"
                   accept="image/*"
                   onchange="loadImage1(event)"
-                  required
                   value="<%= product.images[0] %>"
                 />
               </div>
@@ -110,7 +111,6 @@
                   name="image2"
                   accept="image/*"
                   onchange="loadImage2(event)"
-                  required
                   value="<%= product.images[1] %>"
                 />
               </div>
@@ -130,7 +130,6 @@
                   name="image3"
                   accept="image/*"
                   onchange="loadImage3(event)"
-                  required
                   value="<%= product.images[2] %>"
                 />
               </div>
@@ -150,7 +149,6 @@
                   name="image4"
                   accept="image/*"
                   onchange="loadImage4(event)"
-                  required
                   value="uploads/<%= product.images[3] %>"
                 />
               </div>

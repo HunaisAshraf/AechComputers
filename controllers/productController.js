@@ -34,7 +34,6 @@ const addProductController = async (req, res) => {
       description,
       images,
     }).save();
-    console.log(product);
     res.redirect("/product-list");
   } catch (error) {
     console.log("error in adding product ", error);
@@ -72,23 +71,59 @@ const editProductController = async (req, res) => {
   try {
     const { productName, price, category, quantity, description, id } =
       req.body;
-
     const images = req.files.map((m) => m.filename);
 
-    await ProductModel.findOneAndUpdate(id, {
-      $push: { images: { $each: images } },
-    });
+    console.log(id);
 
-    await ProductModel.findOneAndUpdate(id, {
-      productName,
-      price,
-      category,
-      quantity,
-      description,
-    });
+    await ProductModel.updateOne(
+      { _id: id },
+      {
+        $set: {
+          productName,
+          price,
+          category,
+          quantity,
+          description,
+        },
+      }
+    );
+
+    if (req.files[0]) {
+      await ProductModel.updateOne(
+        { _id: id },
+        {
+          $set: { ["images.0"]: req.files[0].filename },
+        }
+      );
+    }
+    if (req.files[1]) {
+      await ProductModel.updateOne(
+        { _id: id },
+        {
+          $set: { ["images.1"]: req.files[1].filename },
+        }
+      );
+    }
+    if (req.files[2]) {
+      await ProductModel.updateOne(
+        { _id: id },
+        {
+          $set: { ["images.2"]: req.files[2].filename },
+        }
+      );
+    }
+    if (req.files[3]) {
+      await ProductModel.updateOne(
+        { _id: id },
+        {
+          $set: { ["images.3"]: req.files[3].filename },
+        }
+      );
+    }
+
     res.redirect("/product-list");
   } catch (error) {
-    console.log(error);
+    console.log("error in updating image ", error);
   }
 };
 

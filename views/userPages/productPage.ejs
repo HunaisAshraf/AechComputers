@@ -1,0 +1,88 @@
+<%- include("partials/header") %>
+<main class="container-md">
+  <section>
+    <div class="p-3 mt-4 row align-items-center">
+      <div class="image text-center col-md-6 d-flex align-items-center">
+        <div class="list-img d-flex flex-column">
+          <% product.images.forEach(image => { %>
+          <img
+            src="uploads/<%= image %>"
+            height="100"
+            alt=""
+            class="me-2 mb-2 rounded zoom-img"
+            data-zoom-image="uploads/<%= image %>"
+            onclick="changeImg(this)"
+          />
+          <% }) %>
+        </div>
+        <div class="show-img">
+          <img
+            id="disp-img"
+            src="uploads/<%= product.images[0] %>"
+            alt=""
+            class="rounded img-fluid"
+            data-zoom-image="uploads/<%= product.images[0] %>"
+          />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <h3><%= product.productName %></h3>
+        <p class=""><%= product.price %></p>
+        <div class="btn-group" role="group">
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            onclick="decrement()"
+          >
+            -
+          </button>
+          <button type="button" class="btn" id="counterDisplay">0</button>
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            onclick="increment()"
+          >
+            +
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
+
+  <script>
+    function changeImg(clickedImg) {
+      let image = document.getElementById("disp-img");
+      image.src = clickedImg.src;
+    }
+    $(document).ready(function () {
+      $(".zoom-img").elevateZoom({
+        cursor: "crosshair",
+        easing: true,
+      });
+      $("#disp-img").elevateZoom({
+        zoomType: "inner",
+        cursor: "crosshair",
+        easing: true,
+      });
+    });
+
+    let counter = 0;
+
+    function increment() {
+      counter++;
+      updateCounterDisplay();
+    }
+
+    function decrement() {
+      counter--;
+      updateCounterDisplay();
+    }
+
+    function updateCounterDisplay() {
+      document.getElementById("counterDisplay").innerText = counter;
+    }
+  </script>
+</main>
+<%- include("partials/footer") %>

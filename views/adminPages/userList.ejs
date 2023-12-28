@@ -68,7 +68,7 @@
             </td>
             <% } %>
             <td>
-              <a href="/delete-user/<%= user._id %>" class="btn btn-danger"
+              <a onclick="return confirm('Are you sure you want to delete')" href="/delete-user/<%= user._id %>" class="btn btn-danger"
                 >Delete</a
               >
             </td>

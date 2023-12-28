@@ -6,7 +6,7 @@
       <div class="row">
         <% products.forEach(product => { %>
         <div class="col-md-4">
-          <a href="/product" class="text-decoration-none text-dark">
+          <a href="/product/<%= product._id %>" class="text-decoration-none text-dark">
             <img
               src="uploads/<%= product.images[0] %>"
               alt=""
