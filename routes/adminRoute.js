@@ -43,6 +43,7 @@ router.post("/filter-user", isAdmin, filterUserController);
 router.get("/banner-list", isAdmin, getBannerPage);
 
 router.get("/add-banner", isAdmin, getAddBannerPage);
+
 router.post("/add-banner", isAdmin, upload.any(), addBannerController);
 
 module.exports = router;

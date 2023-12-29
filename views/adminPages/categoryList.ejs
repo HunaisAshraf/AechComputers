@@ -55,10 +55,9 @@
             <th scope="row"><%= i+1 %></th>
             <td>
               <img
-              height="70"
+                height="70"
                 src="uploads/<%= category.image %>"
                 alt="<%= category.categoryName %>"
-               
               />
             </td>
             <td><%= category.categoryName %></td>
@@ -83,13 +82,50 @@
               <a href="/edit-category/<%= category._id %>" class="btn btn-dark"
                 >Edit</a
               >
-              <a
+              <!-- <a
                 href="/delete-category/<%= category._id %>"
                 class="btn btn-danger"
                 >Delete</a
+              > -->
+              <button
+                type="button"
+                class="btn btn-danger"
+                data-bs-toggle="modal"
+                data-bs-target="#delete-<%= category._id %>"
               >
+                Delete
+              </button>
             </td>
           </tr>
+          <div
+            class="modal fade"
+            id="delete-<%= category._id %>"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-body my-3 text-center">
+                  <h4>Are you sure you want to delete</h4>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-dark"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <a
+                    href="/delete-category/<%= category._id %>"
+                    class="btn btn-danger"
+                    >Delete</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
           <% }) %>
         </tbody>
       </table>

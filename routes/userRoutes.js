@@ -33,7 +33,7 @@ router.post("/signin", userLoginController);
 
 // signup routes
 router.get("/signup", getUserSignupController);
-router.post("/signup", userSignupController, sendOtp, getOtpVerifyPage);
+router.post("/signup", userSignupController, sendOtp);
 router.get("/verify-otp", getOtpVerifyPage);
 router.post("/verify-otp", otpVerify, addUser);
 router.get("/resend-otp", sendOtp, getOtpVerifyPage);

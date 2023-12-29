@@ -3,9 +3,16 @@ const ProductModel = require("../models/productModel");
 
 const getProductListPage = async (req, res) => {
   try {
-    const products = await ProductModel.find().populate("category");
+    let products;
+    if (req.session.product) {
+      products = req.session.product;
+    } else {
+      products = await ProductModel.find().populate("category");
+    }
 
     res.render("adminPages/productList", { products });
+    req.session.product = null;
+    req.session.save();
   } catch (error) {
     console.log("error in getting products in adminpanel ", error);
   }
@@ -127,6 +134,64 @@ const editProductController = async (req, res) => {
   }
 };
 
+const filterProductController = async (req, res) => {
+  try {
+    const { filter } = req.body;
+    let products;
+    if (filter === "available") {
+      products = await ProductModel.find({ isListed: true });
+    } else {
+      products = await ProductModel.find({ isListed: false });
+    }
+    req.session.product = products;
+    res.redirect("/product-list");
+    // res.render("adminPages/userList", { users });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const blockProductController = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const product = await ProductModel.findByIdAndUpdate(id, {
+      isListed: false,
+    });
+    res.redirect("/product-list");
+  } catch (error) {
+    console.log(error);
+  }
+};
+const unblockProductController = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const product = await ProductModel.findByIdAndUpdate(id, {
+      isListed: true,
+    });
+    res.redirect("/product-list");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const searchproductController = async (req, res) => {
+  try {
+    const { search } = req.body;
+    const product = await ProductModel.find({
+      $or: [
+        { productName: { $regex: search, $options: "i" } },
+        { description: { $regex: search, $options: "i" } },
+      ],
+    });
+    req.session.product = product;
+    res.redirect("/product-list");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   getProductListPage,
   getAddProductPage,
@@ -134,4 +199,8 @@ module.exports = {
   deleteProductController,
   getProductEditpage,
   editProductController,
+  filterProductController,
+  blockProductController,
+  unblockProductController,
+  searchproductController,
 };

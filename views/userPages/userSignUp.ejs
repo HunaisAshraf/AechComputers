@@ -6,7 +6,13 @@
       class="login-container py-5 col-md-8 row justify-content-center align-items-center rounded"
     >
       <h3 class="text-center text-white mb-4">SignUp</h3>
+
       <div class="col-md-8 bg-white rounded">
+        <% if(inputErr){ %>
+        <div class="bg-danger-subtle text-center mt-3 rounded mb-2">
+          <h5><%= errMsg.user %></h5>
+        </div>
+        <% } %>
         <form class="py-5 px-2" action="/signup" method="post">
           <div class="mb-3">
             <label for="firstName" class="form-label">First Name</label>

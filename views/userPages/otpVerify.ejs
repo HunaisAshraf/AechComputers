@@ -15,6 +15,7 @@
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               name="otp"
+              onchange="handleChange(this.value)"
             />
             <input
               id="correctOtp"
@@ -32,7 +33,12 @@
 
           <p id="time-counter"></p>
 
-          <button id="submit" class="submit-btn" onclick="handleClick()">
+          <button
+            id="submit"
+            class="submit-btn"
+            type="button"
+            onclick="handleSubmit()"
+          >
             Submit
           </button>
           <a href="/resend-otp" id="resend" class="submit-btn hidden">Resend</a>
@@ -46,17 +52,24 @@
     let submit = document.getElementById("submit");
     let resend = document.getElementById("resend");
     let form = document.getElementById("form");
-
-    function handleClick() {
+    let otpMatch = false;
+    function handleChange(enteredOtp) {
       let correctOtp = document.getElementById("correctOtp").value;
-      let enteredOtp = document.getElementById("otp").value;
       let invalid = document.getElementById("invalid");
 
-      if (correctOtp === enteredOtp) {
-        form.submit();
-      } else {
+      if (correctOtp !== enteredOtp) {
         invalid.style.color = "red";
         invalid.innerText = "Invalid OTP";
+      } else {
+        invalid.innerText = "";
+        otpMatch = true;
+      }
+    }
+
+    function handleSubmit() {
+      console.log(otpMatch);
+      if (otpMatch) {
+        form.submit();
       }
     }
 

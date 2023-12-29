@@ -28,7 +28,11 @@
           <div class="col-md-8 bg-white rounded">
             <form class="py-5 px-2" action="/admin-login" method="post">
               <h3 class="text-center mb-4">Admin Login</h3>
-
+              <% if(invalid) {%>
+              <div class="bg-danger-subtle text-center py-1 rounded mb-2">
+                <h5>username or password dosen't match</h5>
+              </div>
+              <% } %>
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label"
                   >Email address</label

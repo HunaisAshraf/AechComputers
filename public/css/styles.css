@@ -1,15 +1,21 @@
 body {
   overflow-x: hidden;
-  background-color: #E4E3E3;
+  background-color: #e4e3e3;
 }
 
 .navbar,
-.login-container {
+.login-container,
+footer {
   background-color: #090125;
 }
 
-.main {
-  height: 100vh;
+footer {
+  color: white;
+  height: 50px;
+}
+
+main {
+  min-height: 100vh;
 }
 
 .submit-btn {
@@ -26,4 +32,9 @@ body {
 }
 .box {
   height: 100%;
+}
+.card-img-top {
+  width: 100%;
+  height: 30vh;
+  object-fit: contain;
 }

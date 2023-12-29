@@ -114,7 +114,7 @@ const sendOtp = async (req, res, next) => {
 
     const send = await otpSender(firstName, email, otp);
 
-    next();
+    res.redirect("/verify-otp");
   } catch (error) {
     console.log(error);
   }
@@ -125,8 +125,15 @@ const userSignupController = async (req, res, next) => {
     const { firstName, lastName, email, phone, password, confirmPassword } =
       req.body;
 
+    const user = await userModel.findOne({ email });
+    console.log(user);
+
     const errMsg = {};
     req.session.inputErr = false;
+    if (user) {
+      errMsg["user"] = "User exist";
+      req.session.inputErr = true;
+    }
     if (firstName === "" || !/^[A-Za-z]+$/.test(firstName)) {
       errMsg["firstName"] = "First Name is not valid";
       req.session.inputErr = true;
@@ -174,11 +181,11 @@ const userSignupController = async (req, res, next) => {
 
 const getOtpVerifyPage = async (req, res) => {
   try {
-    setTimeout(() => {
-      req.session.otp = null;
-      console.log("otp expired ", req.session.otp);
-    }, 1000 * 60);
-
+    // setTimeout(() => {
+    //   req.session.otp = null;
+    //   console.log("otp expired ", req.session.otp);
+    // }, 1000 * 60);
+    console.log("userpage ", req.session.otp);
     res.render("userPages/otpVerify", {
       signIn: req.session.signIn,
       inValidOTP: req.session.inValidOtp,
@@ -192,13 +199,13 @@ const getOtpVerifyPage = async (req, res) => {
 const otpVerify = async (req, res, next) => {
   try {
     const { otp } = req.body;
-
     if (otp !== "" && otp == req.session.otp) {
       next();
-    } else {
-      req.session.inValidOtp = true;
-      res.redirect("/verify-otp");
     }
+    // next();
+    //   req.session.inValidOtp = true;
+    //   res.redirect("/verify-otp");
+    // }
   } catch (error) {
     console.log(error);
   }

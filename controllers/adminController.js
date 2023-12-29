@@ -5,10 +5,12 @@ const userModel = require("../models/userModel");
 
 const adminLoginPageController = async (req, res) => {
   if (!req.session.admin) {
-    res.render("adminPages/adminLogin");
+    res.render("adminPages/adminLogin", { invalid: req.session.inValid });
   } else {
     res.redirect("/admin-dashboard");
   }
+  req.session.inValid = null;
+  req.session.save();
 };
 
 const getHomeController = async (req, res) => {
@@ -18,6 +20,15 @@ const getHomeController = async (req, res) => {
 const adminLoginController = async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    if (email === "") {
+      req.session.inValid = true;
+      res.redirect("/admin-login");
+    }
+    if (password === "") {
+      req.session.inValid = true;
+      res.redirect("/admin-login");
+    }
 
     const user = await AdminModel.findOne({ email });
 
@@ -30,6 +41,7 @@ const adminLoginController = async (req, res) => {
       req.session.adminInfo = user;
       res.redirect("/admin-dashboard");
     } else {
+      req.session.inValid = true;
       res.redirect("/admin-login");
     }
   } catch (error) {

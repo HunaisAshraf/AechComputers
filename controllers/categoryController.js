@@ -49,14 +49,14 @@ const AddCategoryController = async (req, res) => {
     if (categories) {
       req.session.categoryExist = true;
       res.redirect("/add-category");
+    } else {
+      const newCategory = await new CategoryModel({
+        categoryName,
+        description,
+        image,
+      }).save();
+      res.redirect("/category-list");
     }
-
-    const newCategory = await new CategoryModel({
-      categoryName,
-      description,
-      image,
-    }).save();
-    res.redirect("/category-list");
   } catch (error) {
     console.log(error);
   }
@@ -103,7 +103,7 @@ const getEditCategoryPage = async (req, res) => {
     const { id } = req.params;
 
     const category = await CategoryModel.findOne({ _id: id });
-    console.log(category);
+
     res.render("adminPages/editCategory", { category });
   } catch (error) {
     console.log("error in editing category ", error);
@@ -113,11 +113,21 @@ const getEditCategoryPage = async (req, res) => {
 const editCategoryController = async (req, res) => {
   try {
     const { categoryName, description, id } = req.body;
-    const image = req.files[0].filename;
+    const image = req.files[0]?.filename;
+
+    const findCat = await CategoryModel.findOne({ _id: id });
+
     const category = await CategoryModel.updateOne(
       { _id: id },
-      { $set: { categoryName, description,image } }
+      { $set: { categoryName, description } }
     );
+    if (image) {
+      const category = await CategoryModel.updateOne(
+        { _id: id },
+        { $set: { image } }
+      );
+    }
+
     res.redirect("category-list");
   } catch (error) {
     console.log("error in updating category ", error);
