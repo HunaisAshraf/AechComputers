@@ -42,7 +42,7 @@ const getProductPage = async (req, res) => {
 
     const product = await ProductModel.findOne({ _id: id });
     res.render("userPages/productPage", {
-      signIn: req.session.signin,
+      signIn: req.session.signIn,
       product,
     });
   } catch (error) {
