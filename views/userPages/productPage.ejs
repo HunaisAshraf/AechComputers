@@ -33,26 +33,44 @@
         <p class="fw-semibold">
           ₹ <%= new Intl.NumberFormat().format(product.price) %>
         </p>
-        <div class="btn-group" role="group">
-          <button
-            type="button"
-            class="btn btn-outline-secondary"
-            onclick="decrement()"
-          >
-            -
-          </button>
-          <button type="button" class="btn" id="counterDisplay">0</button>
-          <button
-            type="button"
-            class="btn btn-outline-secondary"
-            onclick="increment()"
-          >
-            +
-          </button>
-        </div>
-        <div class="my-3">
-          <button class="btn btn-dark w-25">Add To Cart</button>
-        </div>
+        <form action="/add-to-cart/<%= product.id %>" method="post" >
+          <div class="btn-group" role="group">
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              onclick="decrement()"
+            >
+              -
+            </button>
+            <input
+              type="number"
+              id="counterDisplay"
+              name="quantity"
+              value="1"
+              style="width: 40px;"
+            />
+
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              onclick="increment()"
+            >
+              +
+            </button>
+          </div>
+          <input
+            type="hidden"
+            class="hidden"
+            value="<%= product.quantity %>"
+            id="productQuantity"
+          />
+          <div class="my-3">
+            <button type="submit" class="btn btn-dark w-25">Add To Cart</button>
+            <!-- <a href="/add-to-cart/<%= product._id %>" class="btn btn-dark w-25"
+              >Add To Cart</a
+            > -->
+          </div>
+        </form>
         <p class="fw-semibold fs-5">Product Details</p>
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium,
@@ -63,8 +81,8 @@
       </div>
     </div>
     <% }else{ %>
-      <h1 class="text-center my-5">Product not found</h1>
-      <% } %>
+    <h1 class="text-center my-5">Product not found</h1>
+    <% } %>
   </section>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
@@ -86,20 +104,32 @@
       // });
     });
 
-    let counter = 0;
+    let counter = 1;
 
     function increment() {
-      counter++;
-      updateCounterDisplay();
+      let productQuantity = document.getElementById("productQuantity").value;
+      if (counter >= productQuantity) {
+        Swal.fire({
+          title: "Max Quantity!!!",
+          text: "You have reached the maximum quantity",
+          icon: "warning",
+          confirmButtonText: "Ok",
+        });
+      } else if (counter >= 1) {
+        counter++;
+        updateCounterDisplay();
+      }
     }
 
     function decrement() {
-      counter--;
-      updateCounterDisplay();
+      if (counter > 1) {
+        counter--;
+        updateCounterDisplay();
+      }
     }
 
     function updateCounterDisplay() {
-      document.getElementById("counterDisplay").innerText = counter;
+      document.getElementById("counterDisplay").value = counter;
     }
   </script>
 </main>

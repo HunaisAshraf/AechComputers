@@ -2,13 +2,14 @@ const express = require("express");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 const nocache = require("nocache");
+const connectDB = require("./config/db");
+const path = require("node:path");
+const session = require("express-session");
 const userRoute = require("./routes/userRoutes");
 const adminRoute = require("./routes/adminRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const productRoute = require("./routes/productRoute");
-const connectDB = require("./config/db");
-const path = require("node:path");
-const session = require("express-session");
+const cartRoute = require("./routes/cartRoute")
 
 const app = express();
 
@@ -42,6 +43,7 @@ app.use(userRoute);
 app.use(adminRoute);
 app.use(categoryRoute);
 app.use(productRoute);
+app.use(cartRoute);
 
 app.listen(process.env.PORT, () => {
   console.log(`server started in port ${process.env.PORT}`);

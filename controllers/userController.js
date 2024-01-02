@@ -90,6 +90,7 @@ const userLoginController = async (req, res) => {
       res.redirect("/signin");
     }
 
+    req.session.user = user;
     req.session.signIn = true;
     res.redirect("/");
   } catch (error) {

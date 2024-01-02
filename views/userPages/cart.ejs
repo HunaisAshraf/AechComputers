@@ -1,0 +1,186 @@
+<%- include("partials/header") %>
+
+<main class="container">
+  <section class="d-md-flex mt-5 gap-2">
+    <div class="cart col-md-8 border rounded">
+      <div class="cart-head border-bottom py-4">
+        <h3>Your Cart</h3>
+      </div>
+      <div class="cart-item table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Image</th>
+              <th scope="col">Product Name</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Price</th>
+              <th scope="col">Remove</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% cartProducts.forEach((products,i) => { %>
+            <tr>
+              <th scope="row"><%= i+1 %></th>
+              <td>
+                <img
+                  src="uploads/<%= products.product.images[0] %>"
+                  alt="<%= products.product.productName %>"
+                  height="70px"
+                />
+              </td>
+              <td><%= products.product.productName %></td>
+
+              <!-- hidde tags -->
+              <input
+                type="hidden"
+                class="hidden"
+                value="<%= products.product.quantity %>"
+                id="productQuantity<%= i %>"
+              />
+              <% console.log("products",products.product.quantity) %>
+              <input
+                type="hidden"
+                class="hidden"
+                value="<%= products.product._id %>"
+                id="productId<%= i %>"
+              />
+
+              <!-- <td><%= products.product.quantity %></td> -->
+              <td>
+                <div class="btn-group" role="group">
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary"
+                    id="<%= i %>"
+                    onclick="decrement(this.id)"
+                  >
+                    -
+                  </button>
+
+                  <!-- <input
+                    type="hidden"
+                    class="hidded"
+                    value="<%= products.product.quantity %>"
+                    id="productQuantity<%= i %>"
+                  /> -->
+                  <input
+                    type="number"
+                    id="counterDisplay<%= i %>"
+                    name="quantity"
+                    value="<%= products.quantity %>"
+                    style="width: 40px"
+                    readonly
+                  />
+
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary"
+                    id="<%= i %>"
+                    onclick="increment('<%= i %>')"
+                  >
+                    +
+                  </button>
+                </div>
+              </td>
+
+              <td class="price">
+                ₹ <%=new Intl.NumberFormat().format( products.product.price*
+                products.quantity ) %>
+              </td>
+              <td>
+                <a href="" class="btn btn-dark"
+                  ><i class="bi bi-trash3-fill"></i
+                ></a>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="price col-md-4">
+      <div class="d-fixed border rounded">
+        <div class="summary-head p-2 border-bottom text-center">
+          <h3>Summary</h3>
+        </div>
+        <div class="coupon p-2 border-bottom">
+          <label for="Coupoun">Apply Coupoun</label>
+          <input type="text" class="form-control" id="Coupoun" />
+        </div>
+        <div class="p-2 d-flex justify-content-between">
+          <p>Total Price :</p>
+          <p id="totalPrice">
+            ₹ <%=new Intl.NumberFormat().format( totalPrice)%>
+          </p>
+        </div>
+        <div class="text-center my-3">
+          <button class="btn btn-dark w-50">Place Order</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  let counter = 1;
+
+  function increment(index) {
+    let productId = document.getElementById("productId" + index).value;
+    let cartQuantity = document.getElementById("counterDisplay" + index).value;
+    let productQuantity = document.getElementById(
+      "productQuantity" + index
+    ).value;
+    counter = cartQuantity;
+    if (Number(counter) >= Number(productQuantity)) {
+      console.log("ssss");
+      Swal.fire({
+        title: "Max Quantity!!!",
+        text: "You have reached the maximum quantity",
+        icon: "warning",
+        confirmButtonText: "Ok",
+      });
+    } else if (counter >= 1) {
+      counter++;
+      updateCounterDisplay(index);
+      updateQuantity(productId, counter);
+    }
+  }
+
+  function decrement(index) {
+    let productId = document.getElementById("productId" + index).value;
+    let cartQuantity = document.getElementById("counterDisplay" + index).value;
+    counter = cartQuantity;
+    if (counter > 1) {
+      counter--;
+      updateCounterDisplay(index);
+      updateQuantity(productId, counter);
+    }
+  }
+
+  async function updateQuantity(product, quantity) {
+    try {
+      const data = await fetch("/update-cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          product,
+          quantity,
+        }),
+      });
+      let json = await data.json();
+      if (json.success) {
+        window.location.reload()
+      } else {
+      }
+    } catch (error) {
+      console.log("errror in updating quantity ", error);
+    }
+  }
+
+  function updateCounterDisplay(index) {
+    document.getElementById("counterDisplay" + index).value = counter;
+  }
+</script>
+
+<%- include("partials/footer") %>

@@ -1,8 +1,8 @@
-const requireSignIn = (req, res) => {
+const requireSignIn = (req, res, next) => {
   if (req.session.signIn) {
     next();
   } else {
-    res.redirect("/login");
+    res.redirect("/signin");
   }
 };
 
