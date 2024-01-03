@@ -20,7 +20,7 @@
           </thead>
           <tbody>
             <% cartProducts.forEach((products,i) => { %>
-            <tr>
+            <tr class="cartItem" data-price="<%= products.product.price %>">
               <th scope="row"><%= i+1 %></th>
               <td>
                 <img
@@ -31,14 +31,13 @@
               </td>
               <td><%= products.product.productName %></td>
 
-              <!-- hidde tags -->
+              <!-- hidden tags -->
               <input
                 type="hidden"
                 class="hidden"
                 value="<%= products.product.quantity %>"
                 id="productQuantity<%= i %>"
               />
-              <% console.log("products",products.product.quantity) %>
               <input
                 type="hidden"
                 class="hidden"
@@ -46,7 +45,7 @@
                 id="productId<%= i %>"
               />
 
-              <!-- <td><%= products.product.quantity %></td> -->
+
               <td>
                 <div class="btn-group" role="group">
                   <button
@@ -57,13 +56,6 @@
                   >
                     -
                   </button>
-
-                  <!-- <input
-                    type="hidden"
-                    class="hidded"
-                    value="<%= products.product.quantity %>"
-                    id="productQuantity<%= i %>"
-                  /> -->
                   <input
                     type="number"
                     id="counterDisplay<%= i %>"
@@ -85,7 +77,7 @@
               </td>
 
               <td class="price">
-                ₹ <%=new Intl.NumberFormat().format( products.product.price*
+                ₹ <%=new Intl.NumberFormat("en-IN").format( products.product.price*
                 products.quantity ) %>
               </td>
               <td>
@@ -111,11 +103,11 @@
         <div class="p-2 d-flex justify-content-between">
           <p>Total Price :</p>
           <p id="totalPrice">
-            ₹ <%=new Intl.NumberFormat().format( totalPrice)%>
+            ₹ <%=new Intl.NumberFormat("en-IN").format( totalPrice)%>
           </p>
         </div>
         <div class="text-center my-3">
-          <button class="btn btn-dark w-50">Place Order</button>
+          <a href="/address" class="btn btn-dark w-50">Place Order</a>
         </div>
       </div>
     </div>
@@ -133,7 +125,6 @@
     ).value;
     counter = cartQuantity;
     if (Number(counter) >= Number(productQuantity)) {
-      console.log("ssss");
       Swal.fire({
         title: "Max Quantity!!!",
         text: "You have reached the maximum quantity",
@@ -158,6 +149,24 @@
     }
   }
 
+  function calculatePrice(products) {
+    let price = document.querySelectorAll(".price");
+
+    let grandTotal = 0;
+    for (let i = 0; i < products.length; i++) {
+      price[i].innerHTML = `₹ ${new Intl.NumberFormat("en-IN").format(
+        products[i].product.price * products[i].quantity
+      )}`;
+      grandTotal += products[i].product.price * products[i].quantity;
+    }
+
+    console.log(grandTotal);
+
+    document.getElementById(
+      "totalPrice"
+    ).innerHTML = `₹ ${new Intl.NumberFormat("en-IN").format(grandTotal)}`;
+  }
+
   async function updateQuantity(product, quantity) {
     try {
       const data = await fetch("/update-cart", {
@@ -169,9 +178,12 @@
         }),
       });
       let json = await data.json();
-      if (json.success) {
-        window.location.reload()
-      } else {
+      if (json?.success) {
+        console.log(json?.products);
+        calculatePrice(json?.products);
+        // let products = json?.products;
+        // let totalPrice =
+        // window.location.reload();
       }
     } catch (error) {
       console.log("errror in updating quantity ", error);

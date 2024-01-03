@@ -1,0 +1,367 @@
+<%- include("partials/header") %>
+<main class="container-md">
+  <div class="border rounded m-4 p-5">
+    <div class="d-flex justify-content-between mb-5 border-bottom pb-3">
+      <h3>Address</h3>
+      <button
+        class="btn btn-dark"
+        data-bs-toggle="modal"
+        data-bs-target="#addressForm"
+      >
+        Add Address
+      </button>
+      <div
+        class="modal fade"
+        id="addressForm"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="add-from">Add Addrress</h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <form class="" action="/add-address" method="post">
+                <div class="mb-3">
+                  <label for="name" class="form-label">Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    name="name"
+                    aria-describedby="emailHelp"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="phone" class="form-label">Phone</label>
+                  <input
+                    type="Number"
+                    class="form-control"
+                    id="phone"
+                    name="phone"
+                    aria-describedby="emailHelp"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="houseNo" class="form-label">House No</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="houseNo"
+                    name="houseNo"
+                    aria-describedby="emailHelp"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="city" class="form-label">City</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="city"
+                    name="city"
+                    aria-describedby="emailHelp"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="state" class="form-label">State</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="state"
+                    name="state"
+                    aria-describedby="emailHelp"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="pincode" class="form-label">Pincode</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="pincode"
+                    name="pincode"
+                    aria-describedby="emailHelp"
+                    required
+                  />
+                </div>
+                <div class="text-center">
+                  <button type="submit" class="btn btn-dark w-50">
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Phone</th>
+            <th scope="col">House</th>
+            <th scope="col">City</th>
+            <th scope="col">State</th>
+            <th scope="col">Pincode</th>
+            <th scope="col">Action</th>
+            <th scope="col">Select Address</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% addresses.forEach((address,i) => { %>
+          <tr>
+            <th scope="row"><%= i+1 %></th>
+            <td><%= address.name %></td>
+            <td><%= address.phone %></td>
+            <td><%= address.houseNo %></td>
+            <td><%= address.city %></td>
+            <td><%= address.state %></td>
+            <td>
+              <a
+                data-bs-toggle="modal"
+                data-bs-target="#editForm<%= address._id %>"
+                href="/edit-address/<%= address._id %>"
+                class="btn btn-dark"
+                ><i class="bi bi-pencil-square"></i
+              ></a>
+              <a
+                href="/delete-address/<%= address._id %>"
+                class="btn btn-danger"
+                ><i class="bi bi-trash-fill"></i
+              ></a>
+            </td>
+            <td><%= address.pincode %></td>
+            <td>
+              <a class="btn btn-dark" href="/select/<%= address._id %>"
+                >Select</a
+              >
+            </td>
+            <div
+              class="modal fade"
+              id="editForm<%= address._id %>"
+              tabindex="-1"
+              aria-labelledby="exampleModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="add-from">
+                      Edit Addrress
+                    </h1>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <form
+                      class=""
+                      action="/update-address/<%= address._id %>"
+                      method="post"
+                    >
+                      <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="name"
+                          name="name"
+                          value="<%= address.name %>"
+                          aria-describedby="emailHelp"
+                          required
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="phone" class="form-label">Phone</label>
+                        <input
+                          type="Number"
+                          class="form-control"
+                          id="phone"
+                          name="phone"
+                          value="<%= address.phone %>"
+                          aria-describedby="emailHelp"
+                          required
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="houseNo" class="form-label">House No</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="houseNo"
+                          name="houseNo"
+                          value="<%= address.houseNo %>"
+                          aria-describedby="emailHelp"
+                          required
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="city" class="form-label">City</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="city"
+                          name="city"
+                          value="<%= address.city %>"
+                          aria-describedby="emailHelp"
+                          required
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="state" class="form-label">State</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="state"
+                          name="state"
+                          value="<%= address.state %>"
+                          aria-describedby="emailHelp"
+                          required
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="pincode" class="form-label">Pincode</label>
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="pincode"
+                          name="pincode"
+                          value="<%= address.pincode %>"
+                          aria-describedby="emailHelp"
+                          required
+                        />
+                      </div>
+                      <div class="text-center">
+                        <button type="submit" class="btn btn-dark w-50">
+                          Submit
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div
+    class="modal fade"
+    id="addressForm"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="add-from">Add Addrress</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form class="" action="/add-address" method="post">
+            <div class="text-center">
+              <h2>Add Address</h2>
+            </div>
+            <div class="mb-3">
+              <label for="name" class="form-label">Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                name="name"
+                aria-describedby="emailHelp"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="phone" class="form-label">Phone</label>
+              <input
+                type="Number"
+                class="form-control"
+                id="phone"
+                name="phone"
+                aria-describedby="emailHelp"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="houseNo" class="form-label">House No</label>
+              <input
+                type="text"
+                class="form-control"
+                id="houseNo"
+                name="houseNo"
+                aria-describedby="emailHelp"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="city" class="form-label">City</label>
+              <input
+                type="text"
+                class="form-control"
+                id="city"
+                name="city"
+                aria-describedby="emailHelp"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="state" class="form-label">State</label>
+              <input
+                type="text"
+                class="form-control"
+                id="state"
+                name="state"
+                aria-describedby="emailHelp"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="pincode" class="form-label">Pincode</label>
+              <input
+                type="number"
+                class="form-control"
+                id="pincode"
+                name="pincode"
+                aria-describedby="emailHelp"
+                required
+              />
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-dark w-50">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<script></script>
+<%- include("partials/footer") %>

@@ -1,4 +1,5 @@
 const CartModel = require("../models/cartModel");
+const AddressModel = require("../models/addressModel");
 
 const getCartPage = async (req, res) => {
   try {
@@ -28,7 +29,6 @@ const addToCartController = async (req, res) => {
 
     const foundProduct = await CartModel.findOne({ product });
     const foundUser = await CartModel.findOne({ user });
-    console.log(product);
 
     if (foundProduct && foundUser) {
       foundProduct.quantity += quantity;
@@ -40,6 +40,9 @@ const addToCartController = async (req, res) => {
         product,
         quantity,
       }).save();
+
+      console.log(cart);
+
       res.redirect("/cart");
     }
   } catch (error) {
@@ -51,17 +54,93 @@ const updateCartController = async (req, res) => {
   try {
     const product = req.body.product;
     const quantity = Number(req.body.quantity);
-    console.log(quantity);
+
     const response = await CartModel.updateOne(
       { $and: [{ user: req.session.user._id }, { product }] },
       { $set: { quantity } }
     );
-    console.log(response);
-    res.status(200).json({ success: true });
+
+    const cartProducts = await CartModel.find({
+      user: req.session.user._id,
+    }).populate("product");
+    res.status(200).json({
+      success: true,
+      products: cartProducts,
+    });
   } catch (error) {
     console.error("error in updating cart ", error);
     res.status(500).json({ success: false });
   }
 };
 
-module.exports = { getCartPage, addToCartController, updateCartController };
+const getAdressPage = async (req, res) => {
+  try {
+    const addresses = await AddressModel.find();
+    res.render("userPages/addresspage", {
+      signIn: req.session.signIn,
+      addresses,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const addAdressController = async (req, res) => {
+  try {
+    const user_id = req.session.user._id;
+    const { name, phone, houseNo, city, state, pincode } = req.body;
+
+    const address = await new AddressModel({
+      user_id,
+      name,
+      phone,
+      houseNo,
+      city,
+      state,
+      pincode,
+    }).save();
+    res.redirect("/address");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const updateAdressController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user_id = req.session.user._id;
+    const { name, phone, houseNo, city, state, pincode } = req.body;
+    const address = await AddressModel.findByIdAndUpdate(id, {
+      user_id,
+      name,
+      phone,
+      houseNo,
+      city,
+      state,
+      pincode,
+    });
+    res.redirect("/address");
+  } catch (error) {
+    console.log("error in updating address ", error);
+  }
+};
+
+const deleteAddressController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const address = await AddressModel.findByIdAndDelete(id);
+    res.redirect("/address");
+  } catch (error) {
+    console.log("error in deleting address ", error);
+  }
+};
+
+module.exports = {
+  getCartPage,
+  addToCartController,
+  updateCartController,
+  getAdressPage,
+  addAdressController,
+  updateAdressController,
+  deleteAddressController,
+};
