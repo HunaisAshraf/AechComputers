@@ -1,5 +1,5 @@
+const { AddressModel } = require("../models/addressModel");
 const CartModel = require("../models/cartModel");
-const AddressModel = require("../models/addressModel");
 
 const getCartPage = async (req, res) => {
   try {
@@ -134,6 +134,8 @@ const deleteAddressController = async (req, res) => {
     console.log("error in deleting address ", error);
   }
 };
+
+
 
 module.exports = {
   getCartPage,

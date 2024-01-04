@@ -38,3 +38,7 @@ main {
   height: 30vh;
   object-fit: contain;
 }
+
+.card p,.shipping-address p{
+  margin: 0;
+}

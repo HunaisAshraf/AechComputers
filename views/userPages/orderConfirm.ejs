@@ -1,0 +1,21 @@
+<%- include("partials/header") %>
+<main class="container-md d-flex justify-content-center align-items-center">
+  <div class="box">
+    <div class="order border rounded py-3 px-5 text-center shadow">
+      <div class="">
+        <img
+          src="https://static.vecteezy.com/system/resources/previews/006/900/704/non_2x/green-tick-checkbox-illustration-isolated-on-white-background-free-vector.jpg"
+          alt=""
+          height="100"
+        />
+        <h5>Hey <%= order.address.name %></h5>
+        <h1>Order Confirmed</h1>
+      </div>
+      <p>order id : <%= order._id %></p>
+      <a href="/" class="btn btn-dark">Continue Shoping</a>
+      <a href="/user-profile" class="btn btn-dark">Order Details</a>
+    </div>
+  </div>
+</main>
+
+<%- include("partials/footer") %>

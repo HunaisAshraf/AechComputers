@@ -9,7 +9,7 @@ const userRoute = require("./routes/userRoutes");
 const adminRoute = require("./routes/adminRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const productRoute = require("./routes/productRoute");
-const cartRoute = require("./routes/cartRoute")
+const cartRoute = require("./routes/cartRoute");
 
 const app = express();
 
@@ -44,6 +44,9 @@ app.use(adminRoute);
 app.use(categoryRoute);
 app.use(productRoute);
 app.use(cartRoute);
+app.use("/*", (req, res) => {
+  res.render("userPages/404", { signIn: req.session.signIn });
+});
 
 app.listen(process.env.PORT, () => {
   console.log(`server started in port ${process.env.PORT}`);

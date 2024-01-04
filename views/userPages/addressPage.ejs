@@ -1,15 +1,249 @@
 <%- include("partials/header") %>
 <main class="container-md">
-  <div class="border rounded m-4 p-5">
-    <div class="d-flex justify-content-between mb-5 border-bottom pb-3">
-      <h3>Address</h3>
-      <button
-        class="btn btn-dark"
-        data-bs-toggle="modal"
-        data-bs-target="#addressForm"
-      >
-        Add Address
-      </button>
+  <section class="row my-4 gap-4">
+    <div class="border rounded col-md-8 p-5">
+      <div class="d-flex justify-content-between mb-5 border-bottom pb-3">
+        <h3>Address</h3>
+        <button
+          class="btn btn-dark"
+          data-bs-toggle="modal"
+          data-bs-target="#addressForm"
+        >
+          Add Address
+        </button>
+        <div
+          class="modal fade"
+          id="addressForm"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="add-from">Add Addrress</h1>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form class="" action="/add-address" method="post">
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="name"
+                      name="name"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input
+                      type="Number"
+                      class="form-control"
+                      id="phone"
+                      name="phone"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="houseNo" class="form-label">House No</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="houseNo"
+                      name="houseNo"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="city" class="form-label">City</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="city"
+                      name="city"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="state" class="form-label">State</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="state"
+                      name="state"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="pincode" class="form-label">Pincode</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="pincode"
+                      name="pincode"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-dark w-50">
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cards d-flex gap-2">
+        <% addresses.forEach(address => { %>
+        <div class="card w-25">
+          <div class="card-body">
+            <h5 class="card-title"><%= address.name %></h5>
+            <p class="card-text"><%= address.phone %></p>
+            <p class="card-text"><%= address.houseNo %></p>
+            <p class="card-text"><%= address.city %></p>
+            <p class="card-text"><%= address.state %></p>
+            <p class="card-text"><%= address.pincode %></p>
+            <button
+              onclick="selectAddress('<%= JSON.stringify(address)%>')"
+              class="btn btn-dark my-2"
+            >
+              Select
+            </button>
+            <button
+              data-bs-toggle="modal"
+              data-bs-target="#editForm<%= address._id %>"
+              class="btn btn-dark"
+            >
+              <i class="bi bi-pencil-square"></i>
+            </button>
+            <a href="/delete-address/<%= address._id %>" class="btn btn-danger"
+              ><i class="bi bi-trash-fill"></i
+            ></a>
+          </div>
+        </div>
+        <div
+          class="modal fade"
+          id="editForm<%= address._id %>"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="add-from">Edit Addrress</h1>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form
+                  class=""
+                  action="/update-address/<%= address._id %>"
+                  method="post"
+                >
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="name"
+                      name="name"
+                      value="<%= address.name %>"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input
+                      type="Number"
+                      class="form-control"
+                      id="phone"
+                      name="phone"
+                      value="<%= address.phone %>"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="houseNo" class="form-label">House No</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="houseNo"
+                      name="houseNo"
+                      value="<%= address.houseNo %>"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="city" class="form-label">City</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="city"
+                      name="city"
+                      value="<%= address.city %>"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="state" class="form-label">State</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="state"
+                      name="state"
+                      value="<%= address.state %>"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="pincode" class="form-label">Pincode</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="pincode"
+                      name="pincode"
+                      value="<%= address.pincode %>"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-dark w-50">
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
       <div
         class="modal fade"
         id="addressForm"
@@ -30,6 +264,9 @@
             </div>
             <div class="modal-body">
               <form class="" action="/add-address" method="post">
+                <div class="text-center">
+                  <h2>Add Address</h2>
+                </div>
                 <div class="mb-3">
                   <label for="name" class="form-label">Name</label>
                   <input
@@ -107,261 +344,130 @@
         </div>
       </div>
     </div>
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Phone</th>
-            <th scope="col">House</th>
-            <th scope="col">City</th>
-            <th scope="col">State</th>
-            <th scope="col">Pincode</th>
-            <th scope="col">Action</th>
-            <th scope="col">Select Address</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% addresses.forEach((address,i) => { %>
-          <tr>
-            <th scope="row"><%= i+1 %></th>
-            <td><%= address.name %></td>
-            <td><%= address.phone %></td>
-            <td><%= address.houseNo %></td>
-            <td><%= address.city %></td>
-            <td><%= address.state %></td>
-            <td>
-              <a
-                data-bs-toggle="modal"
-                data-bs-target="#editForm<%= address._id %>"
-                href="/edit-address/<%= address._id %>"
-                class="btn btn-dark"
-                ><i class="bi bi-pencil-square"></i
-              ></a>
-              <a
-                href="/delete-address/<%= address._id %>"
-                class="btn btn-danger"
-                ><i class="bi bi-trash-fill"></i
-              ></a>
-            </td>
-            <td><%= address.pincode %></td>
-            <td>
-              <a class="btn btn-dark" href="/select/<%= address._id %>"
-                >Select</a
-              >
-            </td>
-            <div
-              class="modal fade"
-              id="editForm<%= address._id %>"
-              tabindex="-1"
-              aria-labelledby="exampleModalLabel"
-              aria-hidden="true"
-            >
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="add-from">
-                      Edit Addrress
-                    </h1>
-                    <button
-                      type="button"
-                      class="btn-close"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                    ></button>
-                  </div>
-                  <div class="modal-body">
-                    <form
-                      class=""
-                      action="/update-address/<%= address._id %>"
-                      method="post"
-                    >
-                      <div class="mb-3">
-                        <label for="name" class="form-label">Name</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="name"
-                          name="name"
-                          value="<%= address.name %>"
-                          aria-describedby="emailHelp"
-                          required
-                        />
-                      </div>
-                      <div class="mb-3">
-                        <label for="phone" class="form-label">Phone</label>
-                        <input
-                          type="Number"
-                          class="form-control"
-                          id="phone"
-                          name="phone"
-                          value="<%= address.phone %>"
-                          aria-describedby="emailHelp"
-                          required
-                        />
-                      </div>
-                      <div class="mb-3">
-                        <label for="houseNo" class="form-label">House No</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="houseNo"
-                          name="houseNo"
-                          value="<%= address.houseNo %>"
-                          aria-describedby="emailHelp"
-                          required
-                        />
-                      </div>
-                      <div class="mb-3">
-                        <label for="city" class="form-label">City</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="city"
-                          name="city"
-                          value="<%= address.city %>"
-                          aria-describedby="emailHelp"
-                          required
-                        />
-                      </div>
-                      <div class="mb-3">
-                        <label for="state" class="form-label">State</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="state"
-                          name="state"
-                          value="<%= address.state %>"
-                          aria-describedby="emailHelp"
-                          required
-                        />
-                      </div>
-                      <div class="mb-3">
-                        <label for="pincode" class="form-label">Pincode</label>
-                        <input
-                          type="number"
-                          class="form-control"
-                          id="pincode"
-                          name="pincode"
-                          value="<%= address.pincode %>"
-                          aria-describedby="emailHelp"
-                          required
-                        />
-                      </div>
-                      <div class="text-center">
-                        <button type="submit" class="btn btn-dark w-50">
-                          Submit
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </tr>
-          <% }) %>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div
-    class="modal fade"
-    id="addressForm"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="add-from">Add Addrress</h1>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
+    <div class="payment col-md-3">
+      <div class="border rounded d-fixed">
+        <div class="border-bottom text-center p-2">
+          <h4>Shipping information</h4>
         </div>
-        <div class="modal-body">
-          <form class="" action="/add-address" method="post">
-            <div class="text-center">
-              <h2>Add Address</h2>
-            </div>
-            <div class="mb-3">
-              <label for="name" class="form-label">Name</label>
+        <div class="shipping-address py-2 px-4 border-bottom">
+          <p id="ship-address">Seclect Shipping Address</p>
+          <h6 id="ship-name"></h6>
+          <p id="ship-phone"></p>
+          <p id="ship-houseNo"></p>
+          <p id="ship-city"></p>
+          <p id="ship-state"></p>
+          <p id="ship-pincode"></p>
+        </div>
+        <div class="billing">
+          <div class="border-bottom text-center p-2">
+            <h4>Payment Method</h4>
+          </div>
+          <form
+            id="form"
+            action="/checkout"
+            method="post"
+            class="py-2 px-4 border-bottom"
+          >
+            <input id="addressId" type="text" class="hidden" name="addressId" />
+            <div class="form-check my-2">
               <input
-                type="text"
-                class="form-control"
-                id="name"
-                name="name"
-                aria-describedby="emailHelp"
-                required
+                class="form-check-input border-secondary"
+                type="radio"
+                name="paymentMethod"
+                id="flexRadioDefault1"
+                value="cash_On_Delivery"
               />
+              <label class="form-check-label" for="flexRadioDefault1">
+                Cash On delivery
+              </label>
             </div>
-            <div class="mb-3">
-              <label for="phone" class="form-label">Phone</label>
+            <div class="form-check my-2">
               <input
-                type="Number"
-                class="form-control"
-                id="phone"
-                name="phone"
-                aria-describedby="emailHelp"
-                required
+                class="form-check-input border-secondary"
+                type="radio"
+                name="paymentMethod"
+                value="creditCard"
+                id="flexRadioDefault2"
               />
+              <label class="form-check-label" for="flexRadioDefault2">
+                Credit Card
+              </label>
             </div>
-            <div class="mb-3">
-              <label for="houseNo" class="form-label">House No</label>
+            <div class="form-check my-2">
               <input
-                type="text"
-                class="form-control"
-                id="houseNo"
-                name="houseNo"
-                aria-describedby="emailHelp"
-                required
+                class="form-check-input border-secondary"
+                type="radio"
+                name="paymentMethod"
+                value="upi"
+                id="flexRadioDefault3"
               />
-            </div>
-            <div class="mb-3">
-              <label for="city" class="form-label">City</label>
-              <input
-                type="text"
-                class="form-control"
-                id="city"
-                name="city"
-                aria-describedby="emailHelp"
-                required
-              />
-            </div>
-            <div class="mb-3">
-              <label for="state" class="form-label">State</label>
-              <input
-                type="text"
-                class="form-control"
-                id="state"
-                name="state"
-                aria-describedby="emailHelp"
-                required
-              />
-            </div>
-            <div class="mb-3">
-              <label for="pincode" class="form-label">Pincode</label>
-              <input
-                type="number"
-                class="form-control"
-                id="pincode"
-                name="pincode"
-                aria-describedby="emailHelp"
-                required
-              />
-            </div>
-            <div class="text-center">
-              <button type="submit" class="btn btn-dark w-50">Submit</button>
+              <label class="form-check-label" for="flexRadioDefault2">
+                UPI
+              </label>
             </div>
           </form>
+          <div class="button my-2 text-center">
+            <button onclick="hanldeOrder()" class="btn btn-dark w-50">
+              Checkout
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </main>
-<script></script>
+<script>
+  function selectAddress(address) {
+    let shipAddress = document.getElementById("ship-address");
+    let name = document.getElementById("ship-name");
+    let phone = document.getElementById("ship-phone");
+    let houseNo = document.getElementById("ship-houseNo");
+    let city = document.getElementById("ship-city");
+    let state = document.getElementById("ship-state");
+    let pincode = document.getElementById("ship-pincode");
+    let addressid = document.getElementById("addressId");
+
+    address = JSON.parse(address);
+
+    if (address) {
+      shipAddress.innerText = "";
+      name.innerHTML = "Name : " + address.name;
+      phone.innerHTML = "Phone : " + address.phone;
+      houseNo.innerHTML = "Hounse No : " + address.houseNo;
+      city.innerHTML = "City : " + address.city;
+      state.innerHTML = "State : " + address.state;
+      pincode.innerHTML = "Pincode : " + address.pincode;
+      addressId.value = address._id;
+    }
+  }
+
+  function hanldeOrder() {
+    let addressId = document.getElementById("addressId").value;
+    let form = document.getElementById("form");
+    if (addressId) {
+      form.submit();
+    } else {
+      Swal.fire({
+        title: "Address!!!",
+        text: "You have Not selected shipping address",
+        icon: "warning",
+        confirmButtonText: "Ok",
+      });
+    }
+  }
+
+  document.getElementById("form").addEventListener("change", function (event) {
+    if (event.target.type === "radio") {
+      // Uncheck other radio buttons in the group
+      var radioButtons = document.querySelectorAll(
+        'input[name="' + event.target.name + '"]'
+      );
+      radioButtons.forEach(function (button) {
+        if (button !== event.target) {
+          button.checked = false;
+        }
+      });
+    }
+  });
+</script>
 <%- include("partials/footer") %>
