@@ -8,6 +8,9 @@ body {
 footer {
   background-color: #090125;
 }
+.sidebar{
+  height: 90vh;
+}
 
 footer {
   color: white;

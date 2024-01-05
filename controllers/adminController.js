@@ -3,6 +3,7 @@ const hashPassword = require("../helpers/helper");
 const UserModel = require("../models/userModel");
 const userModel = require("../models/userModel");
 
+
 const adminLoginPageController = async (req, res) => {
   if (!req.session.admin) {
     res.render("adminPages/adminLogin", { invalid: req.session.inValid });
@@ -147,6 +148,8 @@ const adminLogoutController = (req, res) => {
   }
 };
 
+
+
 module.exports = {
   adminLoginPageController,
   adminLoginController,
@@ -159,4 +162,5 @@ module.exports = {
   searchUserController,
   filterUserController,
   adminLogoutController,
+
 };

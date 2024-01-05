@@ -13,7 +13,7 @@ const getOrderPage = async (req, res) => {
   }
 };
 
-const checkoutController = async (req, res, next) => {
+const checkoutController = async (req, res) => {
   try {
     const user = req.session.user._id;
     const { addressId, paymentMethod } = req.body;
@@ -30,7 +30,8 @@ const checkoutController = async (req, res, next) => {
     // }
 
     const address = await AddressModel.findOne({ _id: addressId });
-    const products = await CartModel.find({ user }).populate("product");
+    let products = await CartModel.find({ user }).populate("product");
+    products = JSON.parse(JSON.stringify(products));
     let totalPrice = 0;
 
     for (let i = 0; i < products.length; i++) {
@@ -50,15 +51,15 @@ const checkoutController = async (req, res, next) => {
       totalPrice,
     }).save();
 
-
     req.session.ordereditems = order;
     const deleteCart = await CartModel.deleteMany({ user });
-    // next();
     res.redirect("/order-complete");
   } catch (error) {
     console.log("error in checkout", error);
     res.redirect("/cart");
   }
 };
+
+
 
 module.exports = { checkoutController, getOrderPage };

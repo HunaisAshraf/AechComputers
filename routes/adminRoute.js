@@ -19,6 +19,7 @@ const {
   addBannerController,
 } = require("../controllers/bannerControl");
 const upload = require("../helpers/multer");
+const { getOrderList, orderStatusController, filterStatusContoller, searchOrderContoller } = require("../controllers/adminOrderController");
 
 router.get("/admin-login", adminLoginPageController);
 
@@ -45,6 +46,14 @@ router.get("/banner-list", isAdmin, getBannerPage);
 router.get("/add-banner", isAdmin, getAddBannerPage);
 
 router.post("/add-banner", isAdmin, upload.any(), addBannerController);
+
+//order list
+
+router.get("/order-list", isAdmin, getOrderList);
+
+router.post("/update-status", isAdmin, orderStatusController);
+router.post("/filter-status", isAdmin, filterStatusContoller);
+router.post("/search-orders", isAdmin, searchOrderContoller);
 
 module.exports = router;
 

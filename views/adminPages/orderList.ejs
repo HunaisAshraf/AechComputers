@@ -1,0 +1,111 @@
+<%- include("partials/header") %>
+<section class="content col-md-10">
+  <div>
+    <h2>Order List</h2>
+    <div class="border rounded p-2">
+      <div class="search d-md-flex justify-content-between border-bottom p-2">
+        <form action="/search-orders" class="d-flex" method="post">
+          <input
+            type="text"
+            class="form-control rounded-start-pill w-100"
+            placeholder="search"
+            name="search"
+          />
+          <button type="submit" class="btn btn-dark rounded-end-pill">
+            <i class="bi bi-search text-white"></i>
+          </button>
+        </form>
+        <form action="/filter-status" method="post" id="filter" class="w-25">
+          <select
+            class="form-select rounded-pill w-100"
+            aria-label="Default select example"
+            onchange="handleSubmit(this.value)"
+          >
+            <option selected>Status</option>
+            <option value="pending">pending</option>
+            <option value="shipped">shipped</option>
+            <option value="delivered">delivered</option>
+          </select>
+          <input
+            type="text"
+            name="filter"
+            class="hidden"
+            id="selectedValue"
+            value=""
+          />
+        </form>
+      </div>
+      <div class="table-responsive content">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Price</th>
+              <th scope="col">Payment Method</th>
+              <th scope="col">Order Date</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% orders.forEach((order,i) => { %>
+
+            <tr id="<%= order._id %>">
+              <th scope="row"><%= order.orderNumber %></th>
+              <td><%= order.address.name %></td>
+              <td>
+                ₹ <%= new Intl.NumberFormat().format(order.totalPrice ) %>
+              </td>
+              <td><%= order.paymentMethod %></td>
+              <td><%= order.createdAt.toLocaleString() %></td>
+              <td>
+                <form action="/update-status" method="post" id="statusForm" class="w-100">
+                  <input
+                    type="text"
+                    class="hidden"
+                    name="orderId"
+                    value="<%= order._id %>"
+                  />
+                  <input
+                    type="text"
+                    class="hidden"
+                    name="selectedStatus"
+                    id="selectedStatus"
+                  />
+                  <select
+                    class="form-select rounded-pill w-50"
+                    aria-label="Default select example"
+                    onchange="updateStatus(this.value)"
+                  >
+                    <option selected><%= order.status %></option>
+                    <option value="pending">pending</option>
+                    <option value="shipped">shipped</option>
+                    <option value="delivered">delivered</option>
+                  </select>
+                </form>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  function updateStatus(val) {
+    let selectedStatus = document.getElementById("selectedStatus");
+    selectedStatus.value = val;
+
+    let form = document.getElementById("statusForm");
+    form.submit();
+  }
+  function handleSubmit(val) {
+    let selectedValue = document.getElementById("selectedValue");
+    selectedValue.value = val;
+
+    let form = document.getElementById("filter");
+    form.submit();
+  }
+</script>
+<%- include("partials/footer") %>
