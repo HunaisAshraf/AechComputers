@@ -1,5 +1,6 @@
 const { AddressModel } = require("../models/addressModel");
 const CartModel = require("../models/cartModel");
+const productModel = require("../models/productModel");
 
 const getCartPage = async (req, res) => {
   try {
@@ -26,12 +27,16 @@ const addToCartController = async (req, res) => {
     const product = req.params.id;
     const quantity = parseInt(req.body.quantity);
     const user = req.session.user._id;
-
+    const checkProduct = await productModel.findOne({ _id: product });
     const foundProduct = await CartModel.findOne({ product });
     const foundUser = await CartModel.findOne({ user });
 
     if (foundProduct && foundUser) {
-      foundProduct.quantity += quantity;
+      if (foundProduct.quantity + quantity <= checkProduct.quantity) {
+        foundProduct.quantity += quantity;
+      } else {
+        res.redirect(`/product/${product}`);
+      }
       foundProduct.save();
       res.redirect("/cart");
     } else {
@@ -40,8 +45,6 @@ const addToCartController = async (req, res) => {
         product,
         quantity,
       }).save();
-
-      console.log(cart);
 
       res.redirect("/cart");
     }
@@ -70,6 +73,19 @@ const updateCartController = async (req, res) => {
   } catch (error) {
     console.error("error in updating cart ", error);
     res.status(500).json({ success: false });
+  }
+};
+
+const deleteCartController = async (req, res) => {
+  try {
+    console.log(req.params);
+    const { id } = req.params;
+
+    const cart = await CartModel.findByIdAndDelete(id);
+
+    res.redirect("/cart");
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -135,12 +151,11 @@ const deleteAddressController = async (req, res) => {
   }
 };
 
-
-
 module.exports = {
   getCartPage,
   addToCartController,
   updateCartController,
+  deleteCartController,
   getAdressPage,
   addAdressController,
   updateAdressController,

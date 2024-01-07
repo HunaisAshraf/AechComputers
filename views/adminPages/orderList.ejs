@@ -25,6 +25,7 @@
             <option value="pending">pending</option>
             <option value="shipped">shipped</option>
             <option value="delivered">delivered</option>
+            <option value="cancelled">cancelled</option>
           </select>
           <input
             type="text"
@@ -45,11 +46,11 @@
               <th scope="col">Payment Method</th>
               <th scope="col">Order Date</th>
               <th scope="col">Status</th>
+              <th scope="col">More Details</th>
             </tr>
           </thead>
           <tbody>
             <% orders.forEach((order,i) => { %>
-
             <tr id="<%= order._id %>">
               <th scope="row"><%= order.orderNumber %></th>
               <td><%= order.address.name %></td>
@@ -58,8 +59,17 @@
               </td>
               <td><%= order.paymentMethod %></td>
               <td><%= order.createdAt.toLocaleString() %></td>
+              <% if(order.status === "cancelled") {%> 
+                
+                <td>cancelled</td>
+                <% }else{ %>
               <td>
-                <form action="/update-status" method="post" id="statusForm" class="w-100">
+                <form
+                  action="/update-status"
+                  method="post"
+                  id="statusForm"
+                  class="w-100"
+                >
                   <input
                     type="text"
                     class="hidden"
@@ -83,6 +93,12 @@
                     <option value="delivered">delivered</option>
                   </select>
                 </form>
+              </td>
+              <% } %>
+              <td>
+                <a href="/order-details/<%= order._id %>" class="btn btn-dark"
+                  >Details</a
+                >
               </td>
             </tr>
             <% }) %>

@@ -8,14 +8,16 @@ const {
   addAdressController,
   updateAdressController,
   deleteAddressController,
+  deleteCartController,
 } = require("../controllers/cartController");
-const { checkoutController, getOrderPage } = require("../controllers/orderController");
+const { checkoutController, getOrderPage, cancelOrderController } = require("../controllers/orderController");
 const router = express.Router();
 
 router.get("/cart", requireSignIn, getCartPage);
 
 router.post("/add-to-cart/:id", requireSignIn, addToCartController);
 router.post("/update-cart", requireSignIn, updateCartController);
+router.get("/delete-cart/:id", requireSignIn, deleteCartController);
 
 router.get("/address", requireSignIn, getAdressPage);
 router.post("/add-address", requireSignIn, addAdressController);
@@ -26,5 +28,6 @@ router.get("/delete-address/:id", requireSignIn, deleteAddressController);
 // orders route
 router.post("/checkout", requireSignIn, checkoutController);
 router.get("/order-complete", requireSignIn, getOrderPage);
+router.get("/order-cancel/:id", requireSignIn, cancelOrderController);
 
 module.exports = router;

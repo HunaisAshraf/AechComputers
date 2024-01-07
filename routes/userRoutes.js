@@ -19,13 +19,23 @@ const {
   updatePasswordController,
   getShopPage,
   getProductPage,
+  getUserProfileController,
+  filterCategoryPage,
+  filterProductByCAtegory,
+  filterProductByPrice,
+  editUserinfoController,
 } = require("../controllers/userController");
+const requireSignIn = require("../middlewares/userMiddleware");
 
 const router = express.Router();
 
 router.get("/", getHomeController);
 router.get("/shop", getShopPage);
+router.get("/shop/:id", filterCategoryPage);
+router.post("/filter-category", filterProductByCAtegory);
+router.post("/filter-price", filterProductByPrice);
 router.get("/product/:id", getProductPage);
+router.get("/profile",requireSignIn,getUserProfileController)
 
 //login routes
 router.get("/signin", getUserLoginController);
@@ -47,6 +57,8 @@ router.get("/update-password", getUpdatePasswordController);
 router.post("/update-password", updatePasswordController);
 router.get("/resend-forgetotp", sendForgetOtp);
 
+
+router.post("/edit-user",requireSignIn,editUserinfoController)
 //logout routes
 router.get("/logout", userLogoutController);
 

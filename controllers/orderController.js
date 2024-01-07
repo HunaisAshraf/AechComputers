@@ -60,6 +60,15 @@ const checkoutController = async (req, res) => {
   }
 };
 
+const cancelOrderController = async (req, res) => {
+  try {
+    const { id } = req.params;
 
+    const order = await OrderModel.findByIdAndUpdate(id,{status:"cancelled"})
+    res.redirect("/profile")
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-module.exports = { checkoutController, getOrderPage };
+module.exports = { checkoutController, getOrderPage,cancelOrderController };

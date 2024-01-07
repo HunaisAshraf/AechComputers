@@ -45,13 +45,23 @@ const searchOrderContoller = async (req, res) => {
   try {
     const { search } = req.body;
     const orders = await OrderModel.find({
-      $or: [
-        { "address.name": { $regex: search, $options: "i" } },
-      ],
+      $or: [{ "address.name": { $regex: search, $options: "i" } }],
     });
     req.session.orderList = orders;
 
     res.redirect("/order-list");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getOrderDetailsPage = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let order = await OrderModel.findOne({ _id: id }).populate("products");
+    order = JSON.parse(JSON.stringify(order));
+
+    res.render("adminPages/orderDetails", { order });
   } catch (error) {
     console.log(error);
   }
@@ -62,4 +72,5 @@ module.exports = {
   orderStatusController,
   filterStatusContoller,
   searchOrderContoller,
+  getOrderDetailsPage,
 };

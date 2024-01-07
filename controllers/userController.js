@@ -9,6 +9,8 @@ const otpSender = require("../helpers/sendOtpHelper");
 const userModel = require("../models/userModel");
 const CategoryModel = require("../models/categoryModel");
 const ProductModel = require("../models/productModel");
+const OrderModel = require("../models/orderModel");
+const { AddressModel } = require("../models/addressModel");
 
 const getHomeController = async (req, res) => {
   try {
@@ -26,11 +28,53 @@ const getHomeController = async (req, res) => {
 
 const getShopPage = async (req, res) => {
   try {
-    const products = await ProductModel.find();
+    let products;
+    if (req.session.products) {
+      products = req.session.products;
+    } else {
+      products = await ProductModel.find();
+    }
+    const categories = await CategoryModel.find();
     res.render("userPages/shopPage", {
       signIn: req.session.signIn,
       products,
+      categories,
     });
+    req.session.products = null;
+    req.session.save();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const filterCategoryPage = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const products = await ProductModel.find({ category: id });
+    req.session.products = products;
+    res.redirect("/shop");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const filterProductByCAtegory = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const products = await ProductModel.find({ category: id });
+    req.session.products = products;
+    res.redirect("/shop");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const filterProductByPrice = async (req, res) => {
+  try {
+    const price = Number(req.body.price);
+    const products = await ProductModel.find({ price: { $lte: price } });
+    req.session.products = products;
+    res.redirect("/shop");
   } catch (error) {
     console.log(error);
   }
@@ -112,6 +156,8 @@ const sendOtp = async (req, res, next) => {
 
     const otp = getOtp();
     req.session.otp = otp;
+
+    console.log(otp)
 
     const send = await otpSender(firstName, email, otp);
 
@@ -342,6 +388,32 @@ const updatePasswordController = async (req, res) => {
   }
 };
 
+const getUserProfileController = async (req, res) => {
+  try {
+    const order = await OrderModel.find({
+      user: req.session.user._id,
+    }).populate("products");
+
+    const address = await AddressModel.find({ user_id: req.session.user._id });
+    res.render("userPages/userProfile", {
+      signIn: req.session.signIn,
+      user: req.session.user,
+      order,
+      address,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const editUserinfoController = async(req,res)=>{
+try{
+  console.log(req.body)
+}catch(error){
+  console.log(error)
+}
+}
+
 const userLogoutController = (req, res) => {
   req.session.signIn = false;
   res.redirect("/");
@@ -367,4 +439,9 @@ module.exports = {
   userLogoutController,
   getShopPage,
   getProductPage,
+  getUserProfileController,
+  filterCategoryPage,
+  filterProductByCAtegory,
+  filterProductByPrice,
+  editUserinfoController
 };

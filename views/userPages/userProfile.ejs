@@ -1,6 +1,432 @@
 <%- include("partials/header") %>
-<main class="container-md">
-    
-</main>
+<main class="container-md my-2 d-flex">
+  <aside class="navbar sidebar col-md-2 rounded d-flex flex-column py-3">
+    <div class="links">
+      <h1 class="text-light">AECH</h1>
+      <div class="d-flex flex-column">
+        <p onclick="showUser()" class="link-light text-decoration-none my-1">
+          User Details
+        </p>
 
+        <p onclick="showAddress()" class="link-light text-decoration-none my-1">
+          Address
+        </p>
+
+        <p onclick="showOrders()" class="link-light text-decoration-none my-1">
+          Orders
+        </p>
+      </div>
+    </div>
+    <div>
+      <a href="/logout" class="btn btn-primary">Logout</a>
+    </div>
+  </aside>
+  <section class="w-100">
+    <div id="user" class="user mx-3 p-3 border">
+      <h1 class="text-center">Edit Details</h1>
+      <div class="d-flex justify-content-center">
+        <form action="/edit-user" method="post" class="w-50" id="edituser">
+          <input type="text" class="hidden" name="id" value="<%= user._id %>" />
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label"
+              >First Name</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              value="<%= user.firstName %>"
+              name="firstName"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Last Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="exampleInputEmail1"
+              name="lastName"
+              aria-describedby="emailHelp"
+              value="<%= user.lastName %>"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label"
+              >Email address</label
+            >
+            <input
+              type="email"
+              class="form-control"
+              id="exampleInputEmail1"
+              name="email"
+              aria-describedby="emailHelp"
+              value="<%= user.email %>"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Phone</label>
+            <input
+              type="number"
+              class="form-control"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              name="phone"
+              value="<%= user.phone %>"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="pass" class="form-label">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="pass"
+              name="password"
+              aria-describedby="emailHelp"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="confirmPass" class="form-label">Confirm Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="confirmPass"
+              aria-describedby="emailHelp"
+              required
+            />
+          </div>
+          <div class="text-center">
+            <button onclick="checkPassword()" class="btn btn-dark">
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div id="address" style="display: none" class="address mx-3 p-3 border">
+      <div class="head d-flex justify-content-between mb-5 border-bottom pb-3">
+        <h1>Address</h1>
+        <button
+          class="btn btn-dark"
+          data-bs-toggle="modal"
+          data-bs-target="#addressForm"
+        >
+          Add Address
+        </button>
+        <div
+          class="modal fade"
+          id="addressForm"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="add-from">Add Addrress</h1>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form class="" action="/add-address" method="post">
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="name"
+                      name="name"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input
+                      type="Number"
+                      class="form-control"
+                      id="phone"
+                      name="phone"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="houseNo" class="form-label">House No</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="houseNo"
+                      name="houseNo"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="city" class="form-label">City</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="city"
+                      name="city"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="state" class="form-label">State</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="state"
+                      name="state"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="pincode" class="form-label">Pincode</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="pincode"
+                      name="pincode"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-dark w-50">
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cards d-flex gap-2 my-4 justify-content-center">
+        <% address.forEach(address => { %>
+        <div class="card w-25">
+          <div class="card-body">
+            <h5 class="card-title"><%= address.name %></h5>
+            <p class="card-text"><%= address.phone %></p>
+            <p class="card-text"><%= address.houseNo %></p>
+            <p class="card-text"><%= address.city %></p>
+            <p class="card-text"><%= address.state %></p>
+            <p class="card-text"><%= address.pincode %></p>
+            <button
+              data-bs-toggle="modal"
+              data-bs-target="#editForm<%= address._id %>"
+              class="btn btn-dark"
+            >
+              <i class="bi bi-pencil-square"></i>
+            </button>
+            <a href="/delete-address/<%= address._id %>" class="btn btn-danger"
+              ><i class="bi bi-trash-fill"></i
+            ></a>
+          </div>
+        </div>
+        <div
+          class="modal fade"
+          id="editForm<%= address._id %>"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="add-from">Edit Addrress</h1>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form
+                  class=""
+                  action="/update-address/<%= address._id %>"
+                  method="post"
+                >
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="name"
+                      name="name"
+                      value="<%= address.name %>"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input
+                      type="Number"
+                      class="form-control"
+                      id="phone"
+                      name="phone"
+                      value="<%= address.phone %>"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="houseNo" class="form-label">House No</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="houseNo"
+                      name="houseNo"
+                      value="<%= address.houseNo %>"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="city" class="form-label">City</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="city"
+                      name="city"
+                      value="<%= address.city %>"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="state" class="form-label">State</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="state"
+                      name="state"
+                      value="<%= address.state %>"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="pincode" class="form-label">Pincode</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="pincode"
+                      name="pincode"
+                      value="<%= address.pincode %>"
+                      aria-describedby="emailHelp"
+                      required
+                    />
+                  </div>
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-dark w-50">
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+    <div id="orders" style="display: none" class="order mx-3 p-3 border">
+      <div class="text-center mb-5">
+        <h1>Orders</h1>
+      </div>
+      <div class="d-flex justify-content-evenly"></div>
+      <div class="m-5 px-4 table-responsive content">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Order Number</th>
+              <th scope="col">Price</th>
+              <th scope="col">status</th>
+              <th scope="col">Order Date</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% order.forEach(order => { %>
+
+            <tr>
+              <td><%= order.orderNumber %></td>
+              <td>₹ <%=new Intl.NumberFormat().format( order.totalPrice) %></td>
+              <td><%= order.status %></td>
+              <td><%= order.createdAt.toLocaleString() %></td>
+              <% if (order.status === "cancelled") { %>
+              <td>
+                <a
+                  href="/order-cancel/<%= order._id %>"
+                  class="btn btn-dark disabled"
+                  >Cancel</a
+                >
+              </td>
+              <% }else{ %>
+              <td>
+                <a href="/order-cancel/<%= order._id %>" class="btn btn-dark"
+                  >Cancel</a
+                >
+              </td>
+              <% } %>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+  function checkPassword() {
+    let pass = document.getElementById("pass").value;
+    let confirmPass = document.getElementById("ConfirmPass").value;
+
+    if (pass === confirmPass) {
+      console.log("ddd")
+      document.getElementById("edituser").submit();
+    } else {
+      Swal.fire({
+        title: "No match!!!",
+        text: "Password dosent match",
+        icon: "warning",
+        confirmButtonText: "Ok",
+      });
+    }
+  }
+
+  function showUser() {
+    document.getElementById("address").style.display = "none";
+    document.getElementById("orders").style.display = "none";
+    document.getElementById("user").style.display = "block";
+  }
+
+  function showAddress() {
+    document.getElementById("orders").style.display = "none";
+    document.getElementById("user").style.display = "none";
+    document.getElementById("address").style.display = "block";
+  }
+
+  function showOrders() {
+    document.getElementById("address").style.display = "none";
+    document.getElementById("user").style.display = "none";
+    document.getElementById("orders").style.display = "block";
+  }
+</script>
 <%- include("partials/footer") %>

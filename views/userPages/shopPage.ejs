@@ -1,11 +1,92 @@
 <%- include("partials/header") %>
-<main class="container-md">
-  <section>
+<main class="container-md d-flex">
+  <aside class="col-md-2 border my-5 fixed">
+    <h3 class="text-center my-3">Filter</h3>
+
+    <div class="mx-2">
+      <form action="/filter-category" method="post" id="categoryForm">
+        <h5 class="mb-3">Category</h5>
+        <% categories.forEach(category => { %>
+        <div class="form-check my-2">
+          <input
+            class="form-check-input border-secondary"
+            type="radio"
+            name="id"
+            id="flexRadioDefault1"
+            value="<%= category._id %>"
+            oninput="submitForm()"
+          />
+          <label class="form-check-label" for="flexRadioDefault1">
+            <%= category.categoryName %>
+          </label>
+        </div>
+        <% }); %>
+      </form>
+      <form action="/filter-price" method="post" class="my-3" id="priceForm">
+        <h5 class="mb-3">Price</h5>
+        <div class="form-check my-2">
+          <input
+            class="form-check-input border-secondary"
+            type="radio"
+            name="price"
+            id="flexRadioDefault1"
+            value="50000"
+            oninput="submitPrice()"
+          />
+          <label class="form-check-label" for="flexRadioDefault1">
+            ₹ 50,000
+          </label>
+        </div>
+        <div class="form-check my-2">
+          <input
+            class="form-check-input border-secondary"
+            type="radio"
+            name="price"
+            id="flexRadioDefault1"
+            value="100000"
+            oninput="submitPrice()"
+          />
+          <label class="form-check-label" for="flexRadioDefault1">
+            ₹ 1,00,000
+          </label>
+        </div>
+        <div class="form-check my-2">
+          <input
+            class="form-check-input border-secondary"
+            type="radio"
+            name="price"
+            id="flexRadioDefault1"
+            value="150000"
+            oninput="submitPrice()"
+          />
+          <label class="form-check-label" for="flexRadioDefault1">
+            ₹ 1,50,000
+          </label>
+        </div>
+        <div class="form-check my-2">
+          <input
+            class="form-check-input border-secondary"
+            type="radio"
+            name="price"
+            id="flexRadioDefault1"
+            value="200000"
+            oninput="submitPrice()"
+          />
+          <label class="form-check-label" for="flexRadioDefault1">
+            ₹ 2,00,000
+          </label>
+        </div>
+      </form>
+    </div>
+  </aside>
+  <section class="">
     <div class="p-3">
-      <h1 class="text-center">All products</h1>
+      <div class="head">
+        <h1 class="text-center">All products</h1>
+      </div>
       <div class="row">
         <% products.forEach(product => { %>
-        <div class="col-md-3 p-2">
+        <div class="col-md-4 p-2">
           <a
             href="/product/<%= product._id %>"
             class="text-decoration-none text-dark"
@@ -25,7 +106,7 @@
                     ₹ <%= new Intl.NumberFormat().format(product.price)%>
                   </p>
                 </div>
-                <a href="/hello" class="btn btn-dark">Add To Cart</a>
+                <!-- <a href="/hello" class="btn btn-dark">Add To Cart</a> -->
               </div>
             </div>
           </a>
@@ -36,4 +117,13 @@
     </div>
   </section>
 </main>
+
+<script>
+  function submitForm() {
+    document.getElementById("categoryForm").submit();
+  }
+  function submitPrice(){
+    document.getElementById("priceForm").submit()
+  }
+</script>
 <%- include("partials/footer") %>
