@@ -11,6 +11,7 @@ const {
   deleteCartController,
 } = require("../controllers/cartController");
 const { checkoutController, getOrderPage, cancelOrderController } = require("../controllers/orderController");
+const { paymentController } = require("../controllers/paymentController");
 const router = express.Router();
 
 router.get("/cart", requireSignIn, getCartPage);
@@ -29,5 +30,6 @@ router.get("/delete-address/:id", requireSignIn, deleteAddressController);
 router.post("/checkout", requireSignIn, checkoutController);
 router.get("/order-complete", requireSignIn, getOrderPage);
 router.get("/order-cancel/:id", requireSignIn, cancelOrderController);
+router.get("/payment",paymentController)
 
 module.exports = router;

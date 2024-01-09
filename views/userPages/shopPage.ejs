@@ -1,9 +1,13 @@
 <%- include("partials/header") %>
-<main class="container-md d-flex">
-  <aside class="col-md-2 border my-5 fixed">
-    <h3 class="text-center my-3">Filter</h3>
+<main class="container-md">
+  <div class="d-flex">
+  <aside id="filter" class="col-md-2 filter border my-5">
+    <div class="filter-toggle">
+      <h3 class="text-center my-3">Filter</h3>
+      <button class="close-btn btn" onclick="hideFilter()"><i class="bi bi-x-lg"></i></button>
+    </div>
 
-    <div class="mx-2">
+    <div class="mx-lg-2">
       <form action="/filter-category" method="post" id="categoryForm">
         <h5 class="mb-3">Category</h5>
         <% categories.forEach(category => { %>
@@ -79,19 +83,20 @@
       </form>
     </div>
   </aside>
-  <section class="">
+  <section class="all-products">
     <div class="p-3">
       <div class="head">
         <h1 class="text-center">All products</h1>
+        <button class="btn btn-dark filter-btn" onclick="showFilter()">Filter</button>
       </div>
       <div class="row">
         <% products.forEach(product => { %>
-        <div class="col-md-4 p-2">
+        <div class=" col-lg-4 col-md-6 p-2">
           <a
             href="/product/<%= product._id %>"
             class="text-decoration-none text-dark"
           >
-            <div class="card" style="width: 18rem">
+            <div class="card mx-auto shadow" style="width: 18rem">
               <img
                 src="uploads/<%= product.images[0] %>"
                 class="card-img-top"
@@ -116,14 +121,68 @@
       </div>
     </div>
   </section>
+</div>
 </main>
 
 <script>
   function submitForm() {
     document.getElementById("categoryForm").submit();
   }
-  function submitPrice(){
-    document.getElementById("priceForm").submit()
+  function submitPrice() {
+    document.getElementById("priceForm").submit();
+  }
+
+  function showFilter(){
+    document.getElementById("filter").style.display = "block"
+  }
+  function hideFilter(){
+    document.getElementById("filter").style.display = "none"
+
   }
 </script>
+
+<style>
+  .filter-btn{
+    display: none;
+  }
+  .filter{
+    display: block;
+    position: sticky;
+    top: 0;
+  }
+  .close-btn{
+    display: none;
+  }
+
+  .all-products{
+    /* margin-left: 250px; */
+  }
+
+  @media only screen and (max-width:1024px) {
+  .filter {
+    display: none;
+    /* position: fixed;
+    top: 0; */
+    position: absolute;
+    z-index: 1;
+    background-color: #ffffff;
+    width: 200px;
+  }
+  .filter-btn{
+    display: block;
+  }
+  .head{
+    display: flex;
+    justify-content: space-between;  
+  }
+  .filter-toggle{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .close-btn{
+    display: block;
+  }
+}
+</style>
 <%- include("partials/footer") %>

@@ -91,7 +91,7 @@ const deleteCartController = async (req, res) => {
 
 const getAdressPage = async (req, res) => {
   try {
-    const addresses = await AddressModel.find();
+    const addresses = await AddressModel.find({user_id:req.session.user._id});
     res.render("userPages/addresspage", {
       signIn: req.session.signIn,
       addresses,

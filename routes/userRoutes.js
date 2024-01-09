@@ -59,6 +59,7 @@ router.get("/resend-forgetotp", sendForgetOtp);
 
 
 router.post("/edit-user",requireSignIn,editUserinfoController)
+
 //logout routes
 router.get("/logout", userLogoutController);
 

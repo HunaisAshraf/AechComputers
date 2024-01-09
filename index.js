@@ -10,6 +10,7 @@ const adminRoute = require("./routes/adminRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const productRoute = require("./routes/productRoute");
 const cartRoute = require("./routes/cartRoute");
+const paypal = require("paypal-rest-sdk");
 
 const app = express();
 
@@ -17,6 +18,13 @@ dotenv.config();
 
 //connect to database
 connectDB();
+
+//configuring paypal
+paypal.configure({
+  mode: "sandbox",
+  client_id: process.env.PAYPAL_CLIENT_ID,
+  client_secret: process.env.PAYPAL_SECRET_KEY,
+});
 
 app.set("view engine", "ejs");
 

@@ -8,6 +8,10 @@ body {
 footer {
   background-color: #090125;
 }
+
+.navbar{
+  z-index: 2;
+}
 .sidebar{
   height: 90vh;
 }
@@ -45,3 +49,13 @@ main {
 .card p,.shipping-address p{
   margin: 0;
 }
+
+.lists{
+  margin-left: 260px;
+}
+
+/* @media only screen and (max-width: 700px) {
+  .lists{
+    margin-left: 0;
+  }
+} */
