@@ -1,59 +1,29 @@
-const paypal = require("paypal-rest-sdk")
+const Razorpay = require("razorpay");
+const dotenv = require("dotenv");
 
-var createPay = ( payment ) => {
-    return new Promise( ( resolve , reject ) => {
-        paypal.payment.create( payment , function( err , payment ) {
-         if ( err ) {
-             reject(err); 
-         }
-        else {
-            resolve(payment); 
-        }
-        }); 
-    });
-}			
+dotenv.config();
 
-const paymentController = async (req, res) => {
+var instance = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_SECRET,
+});
+
+const createOrder = async (req, res) => {
   try {
-    var payment = {
-      intent: "authorize",
-      payer: {
-        payment_method: "paypal",
-      },
-      redirect_urls: {
-        return_url: "http://127.0.0.1:3000/success",
-        cancel_url: "http://127.0.0.1:3000/err",
-      },
-      transactions: [
-        {
-          amount: {
-            total: 39.0,
-            currency: "USD",
-          },
-          description: " a book on mean stack ",
-        },
-      ],
-    };
-
-    createPay(payment)
-      .then((transaction) => {
-        var id = transaction.id;
-        var links = transaction.links;
-        var counter = links.length;
-        while (counter--) {
-          if (links[counter].method == "REDIRECT") {
-            // redirect to paypal where user approves the transaction
-            return res.redirect(links[counter].href);
-          }
-        }
+    const amount = Number(req.body.amount);
+    instance.orders
+      .create({
+        amount: amount,
+        currency: "INR",
+        receipt: "receipt#1",
       })
-      .catch((err) => {
-        console.log(err);
-        res.redirect("/err");
-      });
+      .then((order) => {
+        return res.send({ orderId: order.id });
+      })
+      .catch((err) => console.log(err));
   } catch (error) {
     console.log(error);
   }
 };
 
-module.exports = { paymentController };
+module.exports = { createOrder };

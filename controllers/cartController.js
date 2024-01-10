@@ -4,10 +4,12 @@ const productModel = require("../models/productModel");
 
 const getCartPage = async (req, res) => {
   try {
-    const { id } = req.session.user;
-    let cartProducts = await CartModel.find(id).populate("product");
+    let cartProducts = await CartModel.find({
+      user: req.session.user._id,
+    }).populate("product");
 
-    let totalPrice = 0;
+    let totalPrice =0;
+
     for (let product of cartProducts) {
       totalPrice += product?.product?.price * product?.quantity;
     }
@@ -91,10 +93,25 @@ const deleteCartController = async (req, res) => {
 
 const getAdressPage = async (req, res) => {
   try {
-    const addresses = await AddressModel.find({user_id:req.session.user._id});
+    const cart = await CartModel.find({
+      user: req.session.user._id,
+    }).populate("product");
+
+    console.log(cart);
+
+    let totalPrice = 0;
+
+    for (let product of cart) {
+      totalPrice += product?.product?.price * product?.quantity;
+    }
+
+    const addresses = await AddressModel.find({
+      user_id: req.session.user._id,
+    });
     res.render("userPages/addresspage", {
       signIn: req.session.signIn,
       addresses,
+      totalPrice,
     });
   } catch (error) {
     console.log(error);

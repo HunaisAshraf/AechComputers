@@ -15,24 +15,24 @@ const {
 const { isAdmin } = require("../middlewares/adminMiddlewares");
 const upload = require("../helpers/multer");
 
-router.get("/category-list", isAdmin, getCategoryListpage);
+// router.get("/category-list", isAdmin, getCategoryListpage);
 
-router.get("/add-category", isAdmin, getAddCategorypage);
+// router.get("/add-category", isAdmin, getAddCategorypage);
 
-router.post("/add-category", isAdmin, upload.any(), AddCategoryController);
+// router.post("/add-category", isAdmin, upload.any(), AddCategoryController);
 
-router.get("/delete-category/:id", isAdmin, deleteCategoryController);
+// router.get("/delete-category/:id", isAdmin, deleteCategoryController);
 
-router.get("/block-category/:id", isAdmin, blockCategoryController);
+// router.get("/block-category/:id", isAdmin, blockCategoryController);
 
-router.get("/unblock-category/:id", isAdmin, unblockCategoryController);
+// router.get("/unblock-category/:id", isAdmin, unblockCategoryController);
 
-router.get("/edit-category/:id", isAdmin, getEditCategoryPage);
+// router.get("/edit-category/:id", isAdmin, getEditCategoryPage);
 
-router.post("/edit-category", isAdmin, upload.any(), editCategoryController);
+// router.post("/edit-category", isAdmin, upload.any(), editCategoryController);
 
-router.post("/search-category", isAdmin, searchCategoryController);
+// router.post("/search-category", isAdmin, searchCategoryController);
 
-router.post("/filter-category", isAdmin, filterCategoryController);
+// router.post("/filter-category", isAdmin, filterCategoryController);
 
 module.exports = router;

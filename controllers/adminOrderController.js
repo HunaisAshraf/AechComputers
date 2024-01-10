@@ -55,7 +55,7 @@ const searchOrderContoller = async (req, res) => {
   }
 };
 
-const getOrderDetailsPage = async (req, res) => {
+const getAdminOrderDetailsPage = async (req, res) => {
   try {
     const { id } = req.params;
     let order = await OrderModel.findOne({ _id: id }).populate("products");
@@ -72,5 +72,5 @@ module.exports = {
   orderStatusController,
   filterStatusContoller,
   searchOrderContoller,
-  getOrderDetailsPage,
+  getAdminOrderDetailsPage,
 };
