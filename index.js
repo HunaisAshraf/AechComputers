@@ -7,10 +7,9 @@ const path = require("node:path");
 const session = require("express-session");
 const userRoute = require("./routes/userRoutes");
 const adminRoute = require("./routes/adminRoute");
-const categoryRoute = require("./routes/categoryRoute");
-const productRoute = require("./routes/productRoute");
-const cartRoute = require("./routes/cartRoute");
-const paypal = require("paypal-rest-sdk");
+// const categoryRoute = require("./routes/categoryRoute");
+// const productRoute = require("./routes/productRoute");
+// const cartRoute = require("./routes/cartRoute");
 
 const app = express();
 
@@ -18,13 +17,6 @@ dotenv.config();
 
 //connect to database
 connectDB();
-
-//configuring paypal
-paypal.configure({
-  mode: "sandbox",
-  client_id: process.env.PAYPAL_CLIENT_ID,
-  client_secret: process.env.PAYPAL_SECRET_KEY,
-});
 
 app.set("view engine", "ejs");
 
@@ -49,9 +41,9 @@ app.use("/product", express.static("public"));
 //routes
 app.use(userRoute);
 app.use(adminRoute);
-app.use(categoryRoute);
-app.use(productRoute);
-app.use(cartRoute);
+// app.use(categoryRoute);
+// app.use(productRoute);
+// app.use(cartRoute);
 app.use("/*", (req, res) => {
   res.render("userPages/404", { signIn: req.session.signIn });
 });

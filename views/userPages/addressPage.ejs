@@ -350,38 +350,39 @@
           <h4>Shipping information</h4>
         </div>
         <div class="shipping-address py-2 px-4 border-bottom">
-          <p id="ship-address">Seclect Shipping Address</p>
-          <h6 id="ship-name"></h6>
-          <p id="ship-phone"></p>
-          <p id="ship-houseNo"></p>
-          <p id="ship-city"></p>
-          <p id="ship-state"></p>
-          <p id="ship-pincode"></p>
+          <!-- <p id="ship-address">Seclect Shipping Address</p> -->
+          <h6 id="ship-name">Name : <%= addresses[0].name %></h6>
+          <p id="ship-phone">Phone : <%= addresses[0].phone %></p>
+          <p id="ship-houseNo">House No : <%= addresses[0].houseNo %></p>
+          <p id="ship-city">City : <%= addresses[0].city %></p>
+          <p id="ship-state">State : <%= addresses[0].State %></p>
+          <p id="ship-pincode">Pincode : <%= addresses[0].pincode %></p>
         </div>
         <div class="billing">
           <div class="border-bottom text-center p-2">
             <h4>Payment Method</h4>
           </div>
-          <form
-            id="form"
-            action="/checkout"
-            method="post"
-            class="py-2 px-4 border-bottom"
-          >
-            <input id="addressId" type="text" class="hidden" name="addressId" />
+          <form id="form" class="py-2 px-4 border-bottom">
+            <input
+              id="addressId"
+              type="text"
+              class="hidden"
+              name="addressId"
+              value="<%= addresses[0]._id %>"
+            />
             <div class="form-check my-2">
               <input
                 class="form-check-input border-secondary"
                 type="radio"
                 name="paymentMethod"
                 id="flexRadioDefault1"
-                value="cash_On_Delivery"
+                value="cashOnDelivery"
               />
               <label class="form-check-label" for="flexRadioDefault1">
                 Cash On delivery
               </label>
             </div>
-            <div class="form-check my-2">
+            <!-- <div class="form-check my-2">
               <input
                 class="form-check-input border-secondary"
                 type="radio"
@@ -392,7 +393,7 @@
               <label class="form-check-label" for="flexRadioDefault2">
                 Credit Card
               </label>
-            </div>
+            </div> -->
             <div class="form-check my-2">
               <input
                 class="form-check-input border-secondary"
@@ -416,6 +417,7 @@
     </div>
   </section>
 </main>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
   function selectAddress(address) {
     let shipAddress = document.getElementById("ship-address");
@@ -430,7 +432,6 @@
     address = JSON.parse(address);
 
     if (address) {
-      shipAddress.innerText = "";
       name.innerHTML = "Name : " + address.name;
       phone.innerHTML = "Phone : " + address.phone;
       houseNo.innerHTML = "Hounse No : " + address.houseNo;
@@ -441,33 +442,92 @@
     }
   }
 
-  function hanldeOrder() {
+  async function hanldeOrder() {
     let addressId = document.getElementById("addressId").value;
     let form = document.getElementById("form");
-    if (addressId) {
-      form.submit();
+    let paymentMethod = form.paymentMethod.value;
+    console.log(paymentMethod);
+
+    if (paymentMethod === "cashOnDelivery") {
+      let data = await fetch("/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          paymentMethod,
+          addressId,
+        }),
+      });
+      let res = await data.json();
+      if (res.success) {
+        window.location.href = "/order-complete";
+      }
+    } else if (paymentMethod === "upi") {
+      try {
+        let price = "<%= Number(totalPrice) %>";
+        let data = await fetch("/create-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: price * 100,
+          }),
+        });
+        let json = await data.json();
+        if (json.orderId) {
+          let orderId = json.orderId;
+          let options = {
+            key: "rzp_test_kJcOHKnrrkyPtJ", // Enter the Key ID generated from the Dashboard
+            amount: "<%=Number(totalPrice)*100%>", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            currency: "INR",
+            name: "Aech", //your business name
+            description: "Test Transaction",
+            image: "https://cdn.razorpay.com/logos/MkXOdj1zs2GhLl_original.png",
+            order_id: orderId,
+            callback_url: "/checkout",
+            prefill: {
+              //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
+              name: "Gaurav Kumar", //your customer's name
+              email: "gaurav.kumar@example.com",
+              contact: "9000090000", //Provide the customer's phone number for better conversion rates
+            },
+            notes: {
+              address: addressId,
+            },
+            theme: {
+              color: "#455163",
+            },
+          };
+          let rzp1 = new Razorpay(options);
+          rzp1.open();
+          e.preventDefault();
+        }
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       Swal.fire({
-        title: "Address!!!",
-        text: "You have Not selected shipping address",
+        title: "Select Payment Method!!!",
+        text: "You have to select a payment method",
         icon: "warning",
         confirmButtonText: "Ok",
       });
     }
   }
 
-  document.getElementById("form").addEventListener("change", function (event) {
-    if (event.target.type === "radio") {
-      // Uncheck other radio buttons in the group
-      var radioButtons = document.querySelectorAll(
-        'input[name="' + event.target.name + '"]'
-      );
-      radioButtons.forEach(function (button) {
-        if (button !== event.target) {
-          button.checked = false;
-        }
-      });
-    }
-  });
+  // document.getElementById("form").addEventListener("change", function (event) {
+  //   if (event.target.type === "radio") {
+  //     // Uncheck other radio buttons in the group
+  //     var radioButtons = document.querySelectorAll(
+  //       'input[name="' + event.target.name + '"]'
+  //     );
+  //     radioButtons.forEach(function (button) {
+  //       if (button !== event.target) {
+  //         button.checked = false;
+  //       }
+  //     });
+  //   }
+  // });
 </script>
 <%- include("partials/footer") %>
+
+<!-- action="/checkout"
+method="post" -->

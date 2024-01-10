@@ -2,6 +2,16 @@ const { AddressModel } = require("../models/addressModel");
 const CartModel = require("../models/cartModel");
 const OrderModel = require("../models/orderModel");
 
+const Razorpay = require("razorpay");
+const dotenv = require("dotenv");
+
+dotenv.config();
+
+var instance = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_SECRET,
+});
+
 const getOrderPage = async (req, res) => {
   try {
     res.render("userPages/orderConfirm", {
@@ -16,18 +26,18 @@ const getOrderPage = async (req, res) => {
 const checkoutController = async (req, res) => {
   try {
     const user = req.session.user._id;
-    const { addressId, paymentMethod } = req.body;
-    // console.log(req.body);
-    // let paymentMethod;
-    // if (cashOnDelivery) {
-    //   paymentMethod = "cash_on_delivery";
-    // }
-    // if (creditCard) {
-    //   paymentMethod = "creditcard";
-    // }
-    // if (upi) {
-    //   paymentMethod = "upi";
-    // }
+    let { addressId, paymentMethod } = req.body;
+    let paid;
+
+    if (paymentMethod === "cashOnDelivery") {
+      paid = false;
+    } else {
+      let order = await instance.payments.fetch(req.body.razorpay_payment_id);
+      console.log(order);
+      paid = true;
+      addressId = order.notes.address;
+      paymentMethod = order.method;
+    }
 
     const address = await AddressModel.findOne({ _id: addressId });
     let products = await CartModel.find({ user }).populate("product");
@@ -50,10 +60,15 @@ const checkoutController = async (req, res) => {
       paymentMethod,
       totalPrice,
     }).save();
-
+    console.log("ordered product ; ", order);
     req.session.ordereditems = order;
     const deleteCart = await CartModel.deleteMany({ user });
-    res.redirect("/order-complete");
+
+    if (paymentMethod === "cashOnDelivery") {
+      res.status(200).json({ success: true });
+    } else {
+      res.redirect("/order-complete");
+    }
   } catch (error) {
     console.log("error in checkout", error);
     res.redirect("/cart");
@@ -64,11 +79,17 @@ const cancelOrderController = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const order = await OrderModel.findByIdAndUpdate(id,{status:"cancelled"})
-    res.redirect("/profile")
+    const order = await OrderModel.findByIdAndUpdate(id, {
+      status: "cancelled",
+    });
+    res.redirect("/profile");
   } catch (error) {
     console.log(error);
   }
 };
 
-module.exports = { checkoutController, getOrderPage,cancelOrderController };
+module.exports = {
+  checkoutController,
+  getOrderPage,
+  cancelOrderController,
+};

@@ -10,26 +10,29 @@ const {
   deleteAddressController,
   deleteCartController,
 } = require("../controllers/cartController");
-const { checkoutController, getOrderPage, cancelOrderController } = require("../controllers/orderController");
+const { checkoutController, getOrderPage, cancelOrderController, createOrder } = require("../controllers/orderController");
 const { paymentController } = require("../controllers/paymentController");
 const router = express.Router();
 
-router.get("/cart", requireSignIn, getCartPage);
+// router.get("/cart", requireSignIn, getCartPage);
+// router.post("/add-to-cart/:id", requireSignIn, addToCartController);
+// router.post("/update-cart", requireSignIn, updateCartController);
+// router.get("/delete-cart/:id", requireSignIn, deleteCartController);
 
-router.post("/add-to-cart/:id", requireSignIn, addToCartController);
-router.post("/update-cart", requireSignIn, updateCartController);
-router.get("/delete-cart/:id", requireSignIn, deleteCartController);
 
-router.get("/address", requireSignIn, getAdressPage);
-router.post("/add-address", requireSignIn, addAdressController);
-router.post("/update-address/:id", requireSignIn, updateAdressController);
-router.get("/delete-address/:id", requireSignIn, deleteAddressController);
+// router.get("/address", requireSignIn, getAdressPage);
+// router.post("/add-address", requireSignIn, addAdressController);
+// router.post("/update-address/:id", requireSignIn, updateAdressController);
+// router.get("/delete-address/:id", requireSignIn, deleteAddressController);
 
 
 // orders route
-router.post("/checkout", requireSignIn, checkoutController);
-router.get("/order-complete", requireSignIn, getOrderPage);
-router.get("/order-cancel/:id", requireSignIn, cancelOrderController);
-router.get("/payment",paymentController)
+// router.post("/checkout", requireSignIn, checkoutController);
+// router.get("/order-complete", requireSignIn, getOrderPage);
+// router.get("/order-cancel/:id", requireSignIn, cancelOrderController);
+
+
+// router.post("/createOrder", requireSignIn, createOrder);
+// router.get("/payment",paymentController)
 
 module.exports = router;
