@@ -1,5 +1,6 @@
 const Razorpay = require("razorpay");
 const dotenv = require("dotenv");
+const WalletModel = require("../models/walletModel")
 
 dotenv.config();
 
@@ -26,4 +27,15 @@ const createOrder = async (req, res) => {
   }
 };
 
-module.exports = { createOrder };
+
+const getWalletBalance = async(req,res)=>{
+  try{
+    const wallet = await WalletModel.findOne({user:req.session.user._id})
+    console.log(wallet)
+    res.json({balance:wallet.balance})
+  }catch(error){
+    console.log(error)
+  }
+}
+
+module.exports = { createOrder,getWalletBalance };

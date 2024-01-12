@@ -403,11 +403,22 @@
                 id="flexRadioDefault3"
               />
               <label class="form-check-label" for="flexRadioDefault2">
-                UPI
+                Online Payment
               </label>
             </div>
+            <div class="form-check my-2">
+              <input
+                class="form-check-input border-secondary"
+                type="radio"
+                name="paymentMethod"
+                value="wallet"
+                id="wallet"
+              />
+              <label class="form-check-label" for="wallet"> Wallet </label>
+            </div>
+            <p id="wallet-balance"></p>
           </form>
-          <div class="button my-2 text-center">
+          <div id="checkout-btn" class="button my-2 text-center">
             <button onclick="hanldeOrder()" class="btn btn-dark w-50">
               Checkout
             </button>
@@ -419,6 +430,19 @@
 </main>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
+  let walletBalance;
+  let totalPrice = "<%= Number(totalPrice) %>";
+  document.getElementById("wallet").addEventListener("change", async () => {
+    const data = await fetch("/wallet-balance");
+    const json = await data.json();
+    walletBalance = json.balance;
+    document.getElementById(
+      "wallet-balance"
+    ).innerText = `Wallet balance : ${new Intl.NumberFormat("en-IN").format(
+      walletBalance
+    )}`;
+  });
+
   function selectAddress(address) {
     let shipAddress = document.getElementById("ship-address");
     let name = document.getElementById("ship-name");
@@ -455,6 +479,7 @@
         body: JSON.stringify({
           paymentMethod,
           addressId,
+          totalPrice
         }),
       });
       let res = await data.json();
@@ -480,17 +505,18 @@
             currency: "INR",
             name: "Aech", //your business name
             description: "Test Transaction",
-            image: "https://cdn.razorpay.com/logos/MkXOdj1zs2GhLl_original.png",
+            // image: "https://cdn.razorpay.com/logos/MkXOdj1zs2GhLl_original.png",
             order_id: orderId,
             callback_url: "/checkout",
             prefill: {
               //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
-              name: "Gaurav Kumar", //your customer's name
-              email: "gaurav.kumar@example.com",
-              contact: "9000090000", //Provide the customer's phone number for better conversion rates
+              name: "hunais", //your customer's name
+              email: "hunais@example.com",
+              contact: "9000000000", //Provide the customer's phone number for better conversion rates
             },
             notes: {
               address: addressId,
+              totalPrice:price
             },
             theme: {
               color: "#455163",
@@ -502,6 +528,29 @@
         }
       } catch (error) {
         console.log(error);
+      }
+    } else if (paymentMethod === "wallet") {
+      if (walletBalance === 0 || walletBalance < "<%=Number(totalPrice) %>") {
+        Swal.fire({
+          title: "Insufficient Balance!!!",
+          text: "You don't have enough balance in wallet",
+          icon: "warning",
+          confirmButtonText: "Ok",
+        });
+      } else {
+        let data = await fetch("/checkout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            paymentMethod,
+            addressId,
+            totalPrice
+          }),
+        });
+        let res = await data.json();
+        if (res.success) {
+          window.location.href = "/order-complete";
+        }
       }
     } else {
       Swal.fire({

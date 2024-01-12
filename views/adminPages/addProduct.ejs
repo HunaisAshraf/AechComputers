@@ -12,60 +12,56 @@
           action="/add-product"
           method="post"
           enctype="multipart/form-data"
+          id="form"
         >
           <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label"
-              >Product Name</label
-            >
+            <label for="name" class="form-label">Product Name</label>
             <input
               type="text"
               class="form-control"
-              id="exampleInputPassword1"
+              id="name"
               name="productName"
               required
             />
           </div>
           <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Price</label>
+            <label for="price" class="form-label">Price</label>
             <input
               type="number"
               class="form-control"
-              id="exampleInputPassword1"
+              id="price"
               name="price"
               required
             />
           </div>
           <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label"
-              >Category</label
-            >
-            <select class="form-select" name="category" id="">
+            <label for="category" class="form-label">Category</label>
+            <select class="form-select" name="category" id="category">
               <option selected>Category</option>
               <% categories.forEach(category => { %>
-              <option value="<%= category._id %>"><%= category.categoryName %></option>
+              <option value="<%= category._id %>">
+                <%= category.categoryName %>
+              </option>
               <% }) %>
             </select>
           </div>
           <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label"
-              >Quantity</label
-            >
+            <label for="quantity" class="form-label">Quantity</label>
             <input
               type="number"
               class="form-control"
-              id="exampleInputPassword1"
+              id="quantity"
               name="quantity"
               required
             />
+            <p class="text-danger" id="errMsg"></p>
           </div>
           <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label"
-              >Description</label
-            >
+            <label for="description" class="form-label">Description</label>
             <input
               type="text"
               class="form-control"
-              id="exampleInputPassword1"
+              id="description"
               name="description"
               required
             />
@@ -73,13 +69,11 @@
           <div class="mb-3">
             <div id="imageDiv" class="d-flex"></div>
             <div>
-              <label for="exampleInputPassword1" class="form-label"
-                >Image</label
-              >
+              <label for="image" class="form-label">Image</label>
               <input
                 type="file"
                 class="form-control"
-                id="exampleInputPassword1"
+                id="image"
                 name="images"
                 accept="image/*"
                 multiple
@@ -89,7 +83,9 @@
             </div>
           </div>
           <div class="text-center">
-            <button class="btn btn-dark">Add Product</button>
+            <button type="button" class="btn btn-dark" onclick="handlesubmit()">
+              Add Product
+            </button>
           </div>
         </form>
       </div>
@@ -106,6 +102,16 @@
         image.style.margin = "20px";
         image.style.borderRadius = "5px";
         imageDiv.appendChild(image);
+      }
+    }
+
+    function handlesubmit() {
+      let quantity = document.getElementById("quantity").value;
+      if (quantity < 1) {
+        document.getElementById("errMsg").innerText =
+          "Quantity must be atleast one";
+      } else {
+        document.getElementById("form").submit();
       }
     }
   </script>

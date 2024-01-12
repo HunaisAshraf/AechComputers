@@ -107,7 +107,13 @@
           </p>
         </div>
         <div class="text-center my-3">
-          <a href="/address" class="btn btn-dark w-50">Place Order</a>
+          <% if (cartProducts.length >0) { %>
+           
+            <a href="/address" class="btn btn-dark w-50">Place Order</a>
+            <% }else{ %>
+              
+              <a href="/address" class="btn btn-dark w-50 disabled">Place Order</a>
+        <%  } %>
         </div>
       </div>
     </div>

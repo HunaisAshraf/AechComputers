@@ -26,9 +26,25 @@ const {
   editUserinfoController,
 } = require("../controllers/userController");
 const requireSignIn = require("../middlewares/userMiddleware");
-const { cancelOrderController, getOrderPage, checkoutController } = require("../controllers/orderController");
-const { getCartPage, addToCartController, updateCartController, deleteCartController, getAdressPage, addAdressController, updateAdressController, deleteAddressController } = require("../controllers/cartController");
-const { createOrder } = require("../controllers/paymentController");
+const {
+  cancelOrderController,
+  getOrderPage,
+  checkoutController,
+} = require("../controllers/orderController");
+const {
+  getCartPage,
+  addToCartController,
+  updateCartController,
+  deleteCartController,
+  getAdressPage,
+  addAdressController,
+  updateAdressController,
+  deleteAddressController,
+} = require("../controllers/cartController");
+const {
+  createOrder,
+  getWalletBalance,
+} = require("../controllers/paymentController");
 
 const router = express.Router();
 
@@ -38,7 +54,7 @@ router.get("/shop/:id", filterCategoryPage);
 router.post("/filter-category", filterProductByCAtegory);
 router.post("/filter-price", filterProductByPrice);
 router.get("/product/:id", getProductPage);
-router.get("/profile",requireSignIn,getUserProfileController)
+router.get("/profile", requireSignIn, getUserProfileController);
 
 //login routes
 router.get("/signin", getUserLoginController);
@@ -66,22 +82,20 @@ router.post("/add-to-cart/:id", requireSignIn, addToCartController);
 router.post("/update-cart", requireSignIn, updateCartController);
 router.get("/delete-cart/:id", requireSignIn, deleteCartController);
 
-
 //address
 router.get("/address", requireSignIn, getAdressPage);
 router.post("/add-address", requireSignIn, addAdressController);
 router.post("/update-address/:id", requireSignIn, updateAdressController);
 router.get("/delete-address/:id", requireSignIn, deleteAddressController);
 
-
 //order and payment
 router.post("/checkout", requireSignIn, checkoutController);
 router.get("/order-complete", requireSignIn, getOrderPage);
 router.get("/order-cancel/:id", requireSignIn, cancelOrderController);
-router.post("/create-order",requireSignIn,createOrder)
+router.post("/create-order", requireSignIn, createOrder);
+router.get("/wallet-balance", requireSignIn, getWalletBalance);
 
-
-router.post("/edit-user",requireSignIn,editUserinfoController)
+router.post("/edit-user", requireSignIn, editUserinfoController);
 
 //logout routes
 router.get("/logout", userLogoutController);
