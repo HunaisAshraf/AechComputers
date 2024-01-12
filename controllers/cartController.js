@@ -8,7 +8,7 @@ const getCartPage = async (req, res) => {
       user: req.session.user._id,
     }).populate("product");
 
-    let totalPrice =0;
+    let totalPrice = 0;
 
     for (let product of cartProducts) {
       totalPrice += product?.product?.price * product?.quantity;
@@ -97,8 +97,6 @@ const getAdressPage = async (req, res) => {
       user: req.session.user._id,
     }).populate("product");
 
-    console.log(cart);
-
     let totalPrice = 0;
 
     for (let product of cart) {
@@ -108,11 +106,18 @@ const getAdressPage = async (req, res) => {
     const addresses = await AddressModel.find({
       user_id: req.session.user._id,
     });
-    res.render("userPages/addresspage", {
-      signIn: req.session.signIn,
-      addresses,
-      totalPrice,
-    });
+
+    console.log(addresses);
+
+    if (addresses.length > 0) {
+      res.render("userPages/addresspage", {
+        signIn: req.session.signIn,
+        addresses,
+        totalPrice,
+      });
+    } else {
+      res.render("userPages/addAddress", { signIn: req.session.signIn });
+    }
   } catch (error) {
     console.log(error);
   }

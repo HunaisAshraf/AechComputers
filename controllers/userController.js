@@ -11,6 +11,7 @@ const CategoryModel = require("../models/categoryModel");
 const ProductModel = require("../models/productModel");
 const OrderModel = require("../models/orderModel");
 const { AddressModel } = require("../models/addressModel");
+const WalletModel = require("../models/walletModel");
 
 const getHomeController = async (req, res) => {
   try {
@@ -28,13 +29,19 @@ const getHomeController = async (req, res) => {
 
 const getShopPage = async (req, res) => {
   try {
-    let products;
+    let allProducts;
     if (req.session.products) {
-      products = req.session.products;
+      allProducts = req.session.products;
     } else {
-      products = await ProductModel.find();
+      allProducts = await ProductModel.find().populate("category");
     }
-    const categories = await CategoryModel.find();
+    let products = allProducts.filter((product) => {
+      if (product.category.isAvailable && product.isListed) {
+        return product;
+      }
+    });
+    console.log(products);
+    const categories = await CategoryModel.find({ isAvailable: true });
     res.render("userPages/shopPage", {
       signIn: req.session.signIn,
       products,
@@ -157,7 +164,7 @@ const sendOtp = async (req, res, next) => {
     const otp = getOtp();
     req.session.otp = otp;
 
-    console.log(otp)
+    console.log(otp);
 
     const send = await otpSender(firstName, email, otp);
 
@@ -270,7 +277,13 @@ const addUser = async (req, res, next) => {
       phone,
       password: hashedPassword,
     }).save();
-    console.log(user);
+    req.session.user = user;
+    req.session.signIn = true;
+
+    await new WalletModel({
+      user: req.session.user._id,
+    }).save();
+
     res.redirect("/signin");
   } catch (error) {
     console.log(error);
@@ -406,13 +419,13 @@ const getUserProfileController = async (req, res) => {
   }
 };
 
-const editUserinfoController = async(req,res)=>{
-try{
-  console.log(req.body)
-}catch(error){
-  console.log(error)
-}
-}
+const editUserinfoController = async (req, res) => {
+  try {
+    console.log(req.body);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const userLogoutController = (req, res) => {
   req.session.signIn = false;
@@ -443,5 +456,5 @@ module.exports = {
   filterCategoryPage,
   filterProductByCAtegory,
   filterProductByPrice,
-  editUserinfoController
+  editUserinfoController,
 };
