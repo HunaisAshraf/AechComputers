@@ -1,8 +1,7 @@
 const AdminModel = require("../models/adminModel");
 const hashPassword = require("../helpers/helper");
 const UserModel = require("../models/userModel");
-const userModel = require("../models/userModel");
-
+const OrderModel = require("../models/orderModel");
 
 const adminLoginPageController = async (req, res) => {
   if (!req.session.admin) {
@@ -14,8 +13,18 @@ const adminLoginPageController = async (req, res) => {
   req.session.save();
 };
 
-const getHomeController = async (req, res) => {
-  res.render("adminPages/adminDashboard", { user: req.session.adminInfo });
+const getAdminDashboard = async (req, res) => {
+  try {
+    const order = await OrderModel.find();
+    const totalRevenue = order.reduce((acc, curr) => acc+= curr.totalPrice,0);
+
+    res.render("adminPages/adminDashboard", {
+      user: req.session.adminInfo,
+      revenue: totalRevenue,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const adminLoginController = async (req, res) => {
@@ -148,12 +157,10 @@ const adminLogoutController = (req, res) => {
   }
 };
 
-
-
 module.exports = {
   adminLoginPageController,
   adminLoginController,
-  getHomeController,
+  getAdminDashboard,
   userListPageController,
   userListController,
   blockUserController,
@@ -162,5 +169,4 @@ module.exports = {
   searchUserController,
   filterUserController,
   adminLogoutController,
-
 };

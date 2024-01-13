@@ -30,6 +30,7 @@ const getHomeController = async (req, res) => {
 const getShopPage = async (req, res) => {
   try {
     let allProducts;
+    console.log("asdfasdfadsfsad", req.session.products);
     if (req.session.products) {
       allProducts = req.session.products;
     } else {
@@ -57,6 +58,7 @@ const getShopPage = async (req, res) => {
 const filterCategoryPage = async (req, res) => {
   try {
     const { id } = req.params;
+
     const products = await ProductModel.find({ category: id });
     req.session.products = products;
     res.redirect("/shop");
@@ -68,7 +70,10 @@ const filterCategoryPage = async (req, res) => {
 const filterProductByCAtegory = async (req, res) => {
   try {
     const { id } = req.body;
-    const products = await ProductModel.find({ category: id });
+    console.log(id);
+    const products = await ProductModel.find({ category: id }).populate(
+      "category"
+    );
     req.session.products = products;
     res.redirect("/shop");
   } catch (error) {
@@ -79,7 +84,9 @@ const filterProductByCAtegory = async (req, res) => {
 const filterProductByPrice = async (req, res) => {
   try {
     const price = Number(req.body.price);
-    const products = await ProductModel.find({ price: { $lte: price } });
+    const products = await ProductModel.find({
+      price: { $lte: price },
+    }).populate("category");
     req.session.products = products;
     res.redirect("/shop");
   } catch (error) {
@@ -408,16 +415,26 @@ const getUserProfileController = async (req, res) => {
     }).populate("products");
 
     const address = await AddressModel.find({ user_id: req.session.user._id });
+    const wallet = await WalletModel.findOne({ user: req.session.user._id });
     res.render("userPages/userProfile", {
       signIn: req.session.signIn,
       user: req.session.user,
       order,
       address,
+      wallet
     });
   } catch (error) {
     console.log(error);
   }
 };
+
+const getUserProfileAddressController = async(req,res)=>{
+  try{
+
+  }catch(error){
+    console.log(error)
+  }
+}
 
 const editUserinfoController = async (req, res) => {
   try {
@@ -457,4 +474,5 @@ module.exports = {
   filterProductByCAtegory,
   filterProductByPrice,
   editUserinfoController,
+  getUserProfileAddressController
 };

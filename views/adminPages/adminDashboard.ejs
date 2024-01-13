@@ -1,4 +1,114 @@
 <%- include("partials/header") %>
-<section class="content lists col-md-10"></section>
+
+<style>
+  .card {
+    height: 100px;
+    width: 200px;
+    margin-bottom: 30px;
+    padding: 10px;
+  }
+  .one {
+    background-color: #ddefe0;
+  }
+  .two {
+    background-color: #f4ecdd;
+  }
+  .three {
+    background-color: #efdada;
+  }
+  .four {
+    background-color: #dee0ef;
+  }
+  .chart {
+    height: 400px;
+    width: 600px;
+  }
+
+  @media only screen and (max-width: 990px) {
+    .dashboard {
+      display: flex;
+      flex-direction: column-reverse;
+    }
+    .cards{
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        /* flex-direction: row; */
+    }
+  }
+</style>
+
+<section class="content lists col-md-10 border rounded p-2">
+  <h2>Dashboard</h2>
+  <div class="dashboard row">
+    <div class="charts col-lg-7">
+      <div class="chart">
+        <canvas id="bar" class=""></canvas>
+      </div>
+      <div class="chart">
+        <canvas id="pie" class=""></canvas>
+      </div>
+    </div>
+    <div class="cards ms-5 col-lg-4">
+      <div class="card one">
+        <h6>Total Revenue</h6>
+        <p><%= new Intl.NumberFormat().format( revenue) %></p>
+      </div>
+      <div class="card two"></div>
+      <div class="card three"></div>
+      <div class="card four"></div>
+    </div>
+  </div>
+  <div></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const bar = document.getElementById("bar");
+    const pie = document.getElementById("pie");
+
+    new Chart(bar, {
+      type: "bar",
+      data: {
+        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        datasets: [
+          {
+            label: "# of Votes",
+            data: [12, 19, 3, 5, 2, 3],
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        // maintainAspectRatio:false,
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+    new Chart(pie, {
+      type: "pie",
+      data: {
+        labels: ["aaa", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        datasets: [
+          {
+            label: "# of Votes",
+            data: [12, 19, 3, 5, 2, 3],
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        // maintainAspectRatio:false,
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+  </script>
+</section>
 
 <%- include("partials/footer") %>

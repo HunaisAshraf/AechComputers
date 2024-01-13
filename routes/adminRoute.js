@@ -11,6 +11,7 @@ const {
   deleteUserController,
   searchUserController,
   filterUserController,
+  getAdminDashboard,
 } = require("../controllers/adminController");
 const { isAdmin } = require("../middlewares/adminMiddlewares");
 const {
@@ -45,7 +46,7 @@ const { getCategoryListpage, getAddCategorypage, AddCategoryController, deleteCa
 //admin login
 router.get("/admin-login", adminLoginPageController);
 router.post("/admin-login", adminLoginController);
-router.get("/admin-dashboard", isAdmin, getHomeController);
+router.get("/admin-dashboard", isAdmin, getAdminDashboard);
 router.get("/admin-logout", adminLogoutController);
 
 //user list
