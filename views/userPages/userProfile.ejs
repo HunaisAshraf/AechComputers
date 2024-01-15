@@ -14,7 +14,7 @@
   </nav>
 
   <aside
-    class="navbar d-none sidebar col-md-2 rounded d-md-flex flex-column py-3 "
+    class="navbar d-none sidebar col-md-2 rounded d-md-flex flex-column py-3"
   >
     <div class="links">
       <h1 class="text-light">AECH</h1>
@@ -23,13 +23,13 @@
           User Details
         </p>
 
-        <p onclick="showAddress()" class="link-light text-decoration-none my-1">
+        <!-- <p onclick="showAddress()" class="link-light text-decoration-none my-1">
           Address
         </p>
 
         <p onclick="showOrders()" class="link-light text-decoration-none my-1">
           Orders
-        </p>
+        </p> -->
       </div>
     </div>
     <div>
@@ -434,6 +434,56 @@
           </div>
         </div>
         <% }) %>
+      </div>
+    </div>
+    <div class="m-5 px-4 table-responsive content border">
+      <div class="">
+        <h4>Orders</h4>
+        <div class="m-5 px-4 table-responsive content">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Order Number</th>
+                <th scope="col">Price</th>
+                <th scope="col">status</th>
+                <th scope="col">Order Date</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% order.forEach(order => { %>
+
+              <tr>
+                <td><%= order.orderNumber %></td>
+                <td>
+                  ₹ <%=new Intl.NumberFormat().format( order.totalPrice) %>
+                </td>
+                <td><%= order.status %></td>
+                <td><%= order.createdAt.toLocaleString() %></td>
+                <% if (order.status === "cancelled") { %>
+                <td>
+                  <a
+                    href="/order-cancel/<%= order._id %>"
+                    class="btn btn-dark disabled"
+                    >Cancel</a
+                  >
+                </td>
+                <% }else{ %>
+                <td>
+                  <button
+                    onclick="confirmCancel(this)"
+                    value="<%= order._id %>"
+                    class="btn btn-dark"
+                  >
+                    Cancel
+                  </button>
+                </td>
+                <% } %>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
     <!-- <div id="orders" style="display: none" class="order mx-3 p-3 border">

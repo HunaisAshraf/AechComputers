@@ -2,6 +2,7 @@ const AdminModel = require("../models/adminModel");
 const hashPassword = require("../helpers/helper");
 const UserModel = require("../models/userModel");
 const OrderModel = require("../models/orderModel");
+const ProductModel = require("../models/productModel");
 
 const adminLoginPageController = async (req, res) => {
   if (!req.session.admin) {
@@ -16,11 +17,99 @@ const adminLoginPageController = async (req, res) => {
 const getAdminDashboard = async (req, res) => {
   try {
     const order = await OrderModel.find();
-    const totalRevenue = order.reduce((acc, curr) => acc+= curr.totalPrice,0);
-
+    const orderCount = order.length;
+    const revenue = order.reduce((acc, curr) => (acc += curr.totalPrice), 0);
+    const productCount = await ProductModel.find().count();
+    const userCount = await UserModel.find().count();
+    const paymentMethod = await OrderModel.aggregate([
+      {
+        $group: {
+          _id: "$paymentMethod",
+          amount: {
+            $sum: "$totalPrice",
+          },
+        },
+      },
+    ]);
     res.render("adminPages/adminDashboard", {
       user: req.session.adminInfo,
-      revenue: totalRevenue,
+      revenue,
+      orderCount,
+      productCount,
+      userCount,
+      payMethod: JSON.stringify(paymentMethod),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const chartDataController = async (req, res) => {
+  try {
+    const order = await OrderModel.find();
+    const orderCount = order.length;
+    const revenue = order.reduce((acc, curr) => (acc += curr.totalPrice), 0);
+    const productCount = await ProductModel.find().count();
+    const userCount = await UserModel.find().count();
+    const paymentMethod = await OrderModel.aggregate([
+      {
+        $group: {
+          _id: "$paymentMethod",
+          amount: {
+            $sum: "$totalPrice",
+          },
+          count:{
+            $sum:1
+          }
+        },
+      },
+    ]);
+    const category = await OrderModel.aggregate([
+      {
+        $unwind:"$products"
+      },
+      {
+        $group: {
+          _id: "$products.product.category",
+          amount: {
+            $sum: "$totalPrice",
+          },
+          count:{
+            $sum:1
+          }
+        },
+        
+      },
+      {
+        $lookup: {
+            from: "categories",
+            localField: "products.product.category",
+            foreignField: "_id",
+            as: "categoryInfo"
+        }
+    },
+    {
+        $unwind: "$categoryInfo"
+    },
+    {
+        $project: {
+            _id: 0,
+            categoryName: "$categoryInfo.categoryName",
+            totalQuantity: 1,
+            totalPrice: 1
+        }
+    }
+    ]);
+
+
+
+    res.json({
+      orderCount,
+      revenue,
+      productCount,
+      userCount,
+      paymentMethod,
+      category
     });
   } catch (error) {
     console.log(error);
@@ -169,4 +258,5 @@ module.exports = {
   searchUserController,
   filterUserController,
   adminLogoutController,
+  chartDataController,
 };

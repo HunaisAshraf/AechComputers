@@ -28,12 +28,12 @@ const checkoutController = async (req, res) => {
   try {
     const user = req.session.user._id;
     let { addressId, paymentMethod, totalPrice } = req.body;
-    console.log("ffffffffffffffffffffffff", req.body);
+
     let paid;
 
     if (paymentMethod === "cashOnDelivery") {
       paid = false;
-    } else if (paymentMethod === "wallet") {
+    } else if (paymentMethod === "localWallet") {
       const wallet = await WalletModel.findOne({ user: req.session.user._id });
       wallet.balance -= totalPrice;
       wallet.save();
@@ -49,11 +49,6 @@ const checkoutController = async (req, res) => {
     const address = await AddressModel.findOne({ _id: addressId });
     let products = await CartModel.find({ user }).populate("product");
     products = JSON.parse(JSON.stringify(products));
-    // let totalPrice = 0;
-
-    // for (let i = 0; i < products.length; i++) {
-    //   totalPrice += products[i].product.price * products[i].quantity;
-    // }
 
     const allOrders = await OrderModel.find();
 
@@ -67,11 +62,11 @@ const checkoutController = async (req, res) => {
       paymentMethod,
       totalPrice,
     }).save();
-    console.log("ordered product ; ", order);
+
     req.session.ordereditems = order;
     const deleteCart = await CartModel.deleteMany({ user });
 
-    if (paymentMethod === "wallet" || paymentMethod === "cashOnDelivery") {
+    if (paymentMethod === "localWallet" || paymentMethod === "cashOnDelivery") {
       res.status(200).json({ success: true });
     } else {
       res.redirect("/order-complete");

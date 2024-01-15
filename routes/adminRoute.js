@@ -12,6 +12,7 @@ const {
   searchUserController,
   filterUserController,
   getAdminDashboard,
+  chartDataController,
 } = require("../controllers/adminController");
 const { isAdmin } = require("../middlewares/adminMiddlewares");
 const {
@@ -47,6 +48,7 @@ const { getCategoryListpage, getAddCategorypage, AddCategoryController, deleteCa
 router.get("/admin-login", adminLoginPageController);
 router.post("/admin-login", adminLoginController);
 router.get("/admin-dashboard", isAdmin, getAdminDashboard);
+router.get("/chart-data",isAdmin,chartDataController)
 router.get("/admin-logout", adminLogoutController);
 
 //user list

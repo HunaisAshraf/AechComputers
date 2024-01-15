@@ -411,7 +411,7 @@
                 class="form-check-input border-secondary"
                 type="radio"
                 name="paymentMethod"
-                value="wallet"
+                value="localWallet"
                 id="wallet"
               />
               <label class="form-check-label" for="wallet"> Wallet </label>
@@ -470,7 +470,6 @@
     let addressId = document.getElementById("addressId").value;
     let form = document.getElementById("form");
     let paymentMethod = form.paymentMethod.value;
-    console.log(paymentMethod);
 
     if (paymentMethod === "cashOnDelivery") {
       let data = await fetch("/checkout", {
@@ -529,7 +528,7 @@
       } catch (error) {
         console.log(error);
       }
-    } else if (paymentMethod === "wallet") {
+    } else if (paymentMethod === "localWallet") {
       if (walletBalance === 0 || walletBalance < "<%=Number(totalPrice) %>") {
         Swal.fire({
           title: "Insufficient Balance!!!",

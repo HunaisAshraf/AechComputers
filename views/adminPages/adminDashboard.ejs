@@ -29,11 +29,11 @@
       display: flex;
       flex-direction: column-reverse;
     }
-    .cards{
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        /* flex-direction: row; */
+    .cards {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      /* flex-direction: row; */
     }
   }
 </style>
@@ -52,61 +52,86 @@
     <div class="cards ms-5 col-lg-4">
       <div class="card one">
         <h6>Total Revenue</h6>
-        <p><%= new Intl.NumberFormat().format( revenue) %></p>
+        <p class="ms-3">
+          ₹ <%= new Intl.NumberFormat("en-IN").format( revenue) %>
+        </p>
       </div>
-      <div class="card two"></div>
-      <div class="card three"></div>
-      <div class="card four"></div>
+      <div class="card two">
+        <h6>Total Orders Placed</h6>
+        <p class="ms-3"><%= orderCount %></p>
+      </div>
+      <% console.log(JSON.parse(payMethod)) %> <% console.log(payMethod) %>
+      <div class="card three">
+        <h6>Total Product</h6>
+        <p class="ms-3"><%= productCount %></p>
+      </div>
+      <div class="card four">
+        <h6>Total User</h6>
+        <p class="ms-3"><%= userCount %></p>
+      </div>
     </div>
   </div>
   <div></div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    const bar = document.getElementById("bar");
-    const pie = document.getElementById("pie");
+    document.addEventListener("DOMContentLoaded", async function () {
+      let data = await fetch("/chart-data");
+      let json = await data.json();
+      console.log(json);
+      console.log(json.paymentMethod);
+      const label = json.paymentMethod.map((item) => item._id);
+      const amount = json.paymentMethod.map((item) => item.amount);
+      const count = json.paymentMethod.map((item) => item.count);
+      console.log(amount, label);
 
-    new Chart(bar, {
-      type: "bar",
-      data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-        datasets: [
-          {
-            label: "# of Votes",
-            data: [12, 19, 3, 5, 2, 3],
-            borderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        // maintainAspectRatio:false,
-        scales: {
-          y: {
-            beginAtZero: true,
+      const bar = document.getElementById("bar");
+      const pie = document.getElementById("pie");
+
+      let paymentLabel = [];
+
+      new Chart(bar, {
+        type: "bar",
+        data: {
+          labels: [...label],
+          datasets: [
+            {
+              label: "# of orders",
+              data: [...amount],
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          // maintainAspectRatio:false,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
           },
         },
-      },
-    });
-    new Chart(pie, {
-      type: "pie",
-      data: {
-        labels: ["aaa", "Blue", "Yellow", "Green", "Purple", "Orange"],
-        datasets: [
-          {
-            label: "# of Votes",
-            data: [12, 19, 3, 5, 2, 3],
-            borderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        // maintainAspectRatio:false,
-        scales: {
-          y: {
-            beginAtZero: true,
+      });
+      new Chart(pie, {
+        type: "pie",
+        data: {
+          labels: [...label],
+          datasets: [
+            {
+              label: "# of payment",
+              data: [...count],
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          // maintainAspectRatio:false,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
           },
         },
-      },
+      });
     });
   </script>
 </section>

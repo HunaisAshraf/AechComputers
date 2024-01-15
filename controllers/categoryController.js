@@ -117,17 +117,18 @@ const editCategoryController = async (req, res) => {
 
     const findCat = await CategoryModel.findOne({ _id: id });
 
-    const category = await CategoryModel.updateOne(
-      { _id: id },
-      { $set: { categoryName, description } }
-    );
-    if (image) {
+    if (!findCat || findCat._id === id) {
       const category = await CategoryModel.updateOne(
         { _id: id },
-        { $set: { image } }
+        { $set: { categoryName, description } }
       );
+      if (image) {
+        const category = await CategoryModel.updateOne(
+          { _id: id },
+          { $set: { image } }
+        );
+      }
     }
-
     res.redirect("category-list");
   } catch (error) {
     console.log("error in updating category ", error);
