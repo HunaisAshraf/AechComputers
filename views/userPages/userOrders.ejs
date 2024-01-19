@@ -1,0 +1,120 @@
+<%- include("partials/header") %>
+<style>
+  .name > div {
+    width: 45%;
+  }
+</style>
+<main class="container-md my-2 d-lg-flex">
+  <nav class="navbar d-lg-none rounded px-5">
+    <a href="/user/profile" class="text-decoration-none text-white">Profile</a>
+
+    <a href="/user/address" class="text-decoration-none text-white">Address</a>
+
+    <a href="/user/orders" class="text-decoration-none text-white">Orders</a>
+  </nav>
+
+  <aside
+    class="navbar d-none sidebar col-md-2 rounded d-lg-flex flex-column py-3"
+  >
+    <div class="links">
+      <h1 class="text-light">AECH</h1>
+      <div class="d-flex flex-column">
+        <a href="/user/profile" class="link-light text-decoration-none my-1">
+          User Details
+        </a>
+
+        <a href="/user/address" class="link-light text-decoration-none my-1">
+          Address
+        </a>
+        <a href="/user/orders" class="link-light text-decoration-none my-1">
+          Orders
+        </a>
+      </div>
+    </div>
+    <div>
+      <a href="/logout" class="btn btn-primary">Logout</a>
+    </div>
+  </aside>
+  <section class="w-100">
+    <div class="order">
+      <div class="text-center mb-5">
+        <h1>Orders</h1>
+      </div>
+      <div class="d-flex justify-content-evenly"></div>
+      <div class="m-5 px-4 table-responsive content">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Order Number</th>
+              <th scope="col">Price</th>
+              <th scope="col">status</th>
+              <th scope="col">Order Date</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% order.forEach(order => { %>
+
+            <tr>
+              <td><%= order.orderNumber %></td>
+              <td>₹ <%=new Intl.NumberFormat().format( order.totalPrice) %></td>
+              <td><%= order.status %></td>
+              <td><%= order.createdAt.toLocaleString() %></td>
+              <% if (order.status === "cancelled") { %>
+              <td>
+                <a
+                  href="/order-cancel/<%= order._id %>"
+                  class="btn btn-dark disabled"
+                  >Cancel</a
+                >
+              </td>
+              <% }else{ %>
+              <td>
+                <button
+                  onclick="confirmCancel(this)"
+                  value="<%= order._id %>"
+                  class="btn btn-dark"
+                >
+                  Cancel
+                </button>
+              </td>
+              <% } %>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  function confirmCancel(elem) {
+    Swal.fire({
+      title: "Do you want to cancel order?",
+      showCancelButton: true,
+      confirmButtonText: "Save",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = `/order-cancel/${elem.value}`;
+      }
+    });
+  }
+  function checkPassword() {
+    let pass = document.getElementById("pass").value;
+    let confirmPass = document.getElementById("ConfirmPass").value;
+
+    if (pass === confirmPass) {
+      console.log("ddd");
+      document.getElementById("edituser").submit();
+    } else {
+      Swal.fire({
+        title: "No match!!!",
+        text: "Password dosent match",
+        icon: "warning",
+        confirmButtonText: "Ok",
+      });
+    }
+  }
+</script>
+<%- include("partials/footer") %>

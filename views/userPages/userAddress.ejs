@@ -1,0 +1,393 @@
+<%- include("partials/header") %>
+<style>
+  .name > div {
+    width: 45%;
+  }
+</style>
+<main class="container-md my-2 d-lg-flex">
+  <nav class="navbar d-lg-none rounded px-5">
+    <a href="/user/profile" class="text-decoration-none text-white">Profile</a>
+
+    <a href="/user/address" class="text-decoration-none text-white">Address</a>
+
+    <a href="/user/orders" class="text-decoration-none text-white">Orders</a>
+  </nav>
+
+  <aside
+    class="navbar d-none sidebar col-md-2 rounded d-lg-flex flex-column py-3"
+  >
+    <div class="links">
+      <h1 class="text-light">AECH</h1>
+      <div class="d-flex flex-column">
+        <a href="/user/profile" class="link-light text-decoration-none my-1">
+          User Details
+        </a>
+
+        <a href="/user/address" class="link-light text-decoration-none my-1">
+          Address
+        </a>
+        <a href="/user/orders" class="link-light text-decoration-none my-1">
+          Orders
+        </a>
+
+      </div>
+    </div>
+    <div>
+      <a href="/logout" class="btn btn-primary">Logout</a>
+    </div>
+  </aside>
+  <section class="w-100">
+    <div id="address" class="address mx-3 p-3 border">
+      <div class="head d-flex justify-content-between mb-5 border-bottom pb-3">
+        <h1>Address</h1>
+        <button
+          class="btn btn-dark"
+          data-bs-toggle="modal"
+          data-bs-target="#addressForm"
+        >
+          Add Address
+        </button>
+        <div
+          class="modal fade"
+          id="addressForm"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="add-from">Add Addrress</h1>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form id="form">
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="name"
+                      name="name"
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="phone"
+                      name="phone"
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="houseNo" class="form-label">House No</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="houseNo"
+                      name="houseNo"
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="city" class="form-label">City</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="city"
+                      name="city"
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="state" class="form-label">State</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="state"
+                      name="state"
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="pincode" class="form-label">Pincode</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="pincode"
+                      name="pincode"
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-dark w-50">
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cards row gap-4 my-4 justify-content-center flex-wrap">
+        <% address.forEach(address => { %>
+        <div class="card col-md-3 shadow">
+          <div class="card-body">
+            <h5 class="card-title"><%= address.name %></h5>
+            <p class="card-text"><%= address.phone %></p>
+            <p class="card-text"><%= address.houseNo %></p>
+            <p class="card-text"><%= address.city %></p>
+            <p class="card-text"><%= address.state %></p>
+            <p class="card-text"><%= address.pincode %></p>
+            <div class="mt-3">
+              <button
+                data-bs-toggle="modal"
+                data-bs-target="#editForm<%= address._id %>"
+                class="btn btn-dark"
+              >
+                <i class="bi bi-pencil-square"></i>
+              </button>
+              <a
+                href="/delete-address/<%= address._id %>"
+                class="btn btn-danger"
+                ><i class="bi bi-trash-fill"></i
+              ></a>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal fade"
+          id="editForm<%= address._id %>"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="add-from">Edit Addrress</h1>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form id="updateAddressForm<%= address._id %>">
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="name"
+                      name="name"
+                      value="<%= address.name %>"
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="phone"
+                      name="phone"
+                      value="<%= address.phone %>"
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="houseNo" class="form-label">House No</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="houseNo"
+                      name="houseNo"
+                      value="<%= address.houseNo %>"
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="city" class="form-label">City</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="city"
+                      name="city"
+                      value="<%= address.city %>"
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="state" class="form-label">State</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="state"
+                      name="state"
+                      value="<%= address.state %>"
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="pincode" class="form-label">Pincode</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="pincode"
+                      name="pincode"
+                      value="<%= address.pincode %>"
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-dark w-50">
+                      Submit
+                    </button>
+                  </div>
+                </form>
+
+                <script>
+                  $("#updateAddressForm<%= address._id %>").validate({
+                    rules: {
+                      name: {
+                        required: true,
+                        pattern: /^[a-zA-Z ]+$/,
+                      },
+                      phone: {
+                        required: true,
+                        minlength: 10,
+                        maxlength: 10,
+                      },
+                      houseNo: {
+                        required: true,
+                        pattern: /^[a-zA-Z0-9]/,
+                      },
+                      city: {
+                        required: true,
+                        pattern: /^[a-zA-Z ]+$/,
+                      },
+                      state: {
+                        required: true,
+                        pattern: /^[a-zA-Z ]+$/,
+                      },
+                      pincode: {
+                        required: true,
+                        minlength: 6,
+                      },
+                    },
+                  });
+                </script>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  $("#form").validate({
+    rules: {
+      name: {
+        required: true,
+        pattern: /^[a-zA-Z ]+$/,
+      },
+      phone: {
+        required: true,
+        minlength: 10,
+        maxlength: 10,
+      },
+      houseNo: {
+        required: true,
+        pattern: /^[a-zA-Z0-9]/,
+      },
+      city: {
+        required: true,
+        pattern: /^[a-zA-Z ]+$/,
+      },
+      state: {
+        required: true,
+        pattern: /^[a-zA-Z ]+$/,
+      },
+      pincode: {
+        required: true,
+        minlength: 6,
+      },
+    },
+    submitHandler: async function (form) {
+      try {
+        let name = form.name.value;
+        let phone = form.phone.value;
+        let houseNo = form.houseNo.value;
+        let city = form.city.value;
+        let state = form.state.value;
+        let pincode = form.pincode.value;
+
+        const data = await fetch("/add-address", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name,
+            phone,
+            houseNo,
+            city,
+            state,
+            pincode,
+          }),
+        });
+
+        const json = await data.json();
+
+        if (json.success) {
+          window.location.reload();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  });
+</script>
+
+<script>
+  function confirmCancel(elem) {
+    Swal.fire({
+      title: "Do you want to cancel order?",
+      showCancelButton: true,
+      confirmButtonText: "Save",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = `/order-cancel/${elem.value}`;
+      }
+    });
+  }
+  function checkPassword() {
+    let pass = document.getElementById("pass").value;
+    let confirmPass = document.getElementById("ConfirmPass").value;
+
+    if (pass === confirmPass) {
+      console.log("ddd");
+      document.getElementById("edituser").submit();
+    } else {
+      Swal.fire({
+        title: "No match!!!",
+        text: "Password dosent match",
+        icon: "warning",
+        confirmButtonText: "Ok",
+      });
+    }
+  }
+</script>
+<%- include("partials/footer") %>

@@ -4,32 +4,31 @@
     width: 45%;
   }
 </style>
-<main class="container-md my-2 d-md-flex">
-  <nav class="navbar d-md-none rounded px-5">
-    <a href="" class="text-decoration-none text-white">Profile</a>
+<main class="container-md my-2 d-lg-flex">
+  <nav class="navbar d-lg-none rounded px-5">
+    <a href="/user/profile" class="text-decoration-none text-white">Profile</a>
 
-    <a href="" class="text-decoration-none text-white">Address</a>
+    <a href="/user/address" class="text-decoration-none text-white">Address</a>
 
-    <a href="" class="text-decoration-none text-white">Orders</a>
+    <a href="/user/orders" class="text-decoration-none text-white">Orders</a>
   </nav>
 
   <aside
-    class="navbar d-none sidebar col-md-2 rounded d-md-flex flex-column py-3"
+    class="navbar d-none sidebar col-md-2 rounded d-lg-flex flex-column py-3"
   >
     <div class="links">
       <h1 class="text-light">AECH</h1>
       <div class="d-flex flex-column">
-        <p onclick="showUser()" class="link-light text-decoration-none my-1">
+        <a href="/user/profile" class="link-light text-decoration-none my-1">
           User Details
-        </p>
+        </a>
 
-        <!-- <p onclick="showAddress()" class="link-light text-decoration-none my-1">
+        <a href="/user/address" class="link-light text-decoration-none my-1">
           Address
-        </p>
-
-        <p onclick="showOrders()" class="link-light text-decoration-none my-1">
+        </a>
+        <a href="/user/orders" class="link-light text-decoration-none my-1">
           Orders
-        </p> -->
+        </a>
       </div>
     </div>
     <div>
@@ -40,7 +39,190 @@
     <div class="user mx-3 p-3 border">
       <div class="head d-flex justify-content-between border-bottom pb-3 mb-3">
         <h2 class="m-0">Profile</h2>
-        <button class="btn btn-dark">Edit user</button>
+        <div>
+          <button
+            type="button"
+            class="btn btn-dark"
+            data-bs-toggle="modal"
+            data-bs-target="#editUser"
+          >
+            Edit user
+          </button>
+          <button
+            type="button"
+            class="btn btn-dark"
+            data-bs-toggle="modal"
+            data-bs-target="#editPassword"
+          >
+            Change Password
+          </button>
+        </div>
+        <!-- Modal -->
+        <div
+          class="modal fade"
+          id="editUser"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5 text-center" id="exampleModalLabel">
+                  Edit User
+                </h1>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <!-- action="/edit-user" method="post" -->
+                <form id="editUserForm">
+                  <input
+                    type="text"
+                    class="hidden"
+                    name="id"
+                    id="id"
+                    value="<%= user._id %>"
+                  />
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label"
+                      >First Name</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="exampleInputEmail1"
+                      aria-describedby="emailHelp"
+                      value="<%= user.firstName %>"
+                      name="firstName"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label"
+                      >Last Name</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="exampleInputEmail1"
+                      name="lastName"
+                      aria-describedby="emailHelp"
+                      value="<%= user.lastName %>"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label"
+                      >Email address</label
+                    >
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="exampleInputEmail1"
+                      name="email"
+                      aria-describedby="emailHelp"
+                      value="<%= user.email %>"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label"
+                      >Phone</label
+                    >
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="exampleInputEmail1"
+                      aria-describedby="emailHelp"
+                      name="phone"
+                      value="<%= user.phone %>"
+                    />
+                  </div>
+
+                  <div class="text-center">
+                    <button class="btn btn-dark">Submit</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal fade"
+          id="editPassword"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5 text-center" id="exampleModalLabel">
+                  Change Password
+                </h1>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form id="editPasswordForm">
+                  <input
+                    type="text"
+                    class="hidden"
+                    name="id"
+                    id="id"
+                    value="<%= user._id %>"
+                    required
+                  />
+                  <div class="mb-3">
+                    <label for="currentPassword" class="form-label"
+                      >Current Password</label
+                    >
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="currentPassword"
+                      name="currentPassword"
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="newPassword" class="form-label"
+                      >New Password</label
+                    >
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="newPassword"
+                      name="newPassword"
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="confirmPassword" class="form-label"
+                      >Confirm Password</label
+                    >
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="text-center">
+                    <button class="btn btn-dark">Submit</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="personal border-bottom my-3">
         <h4 class="my-3">Personal Info</h4>
@@ -112,504 +294,137 @@
         </div>
       </div>
     </div>
-    <!-- <div id="user" class="user mx-3 p-3 border">
-      <h1 class="text-center">Edit Details</h1>
-      <div class="d-flex justify-content-center">
-        <form action="/edit-user" method="post" class="w-50" id="edituser">
-          <input type="text" class="hidden" name="id" value="<%= user._id %>" />
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label"
-              >First Name</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              value="<%= user.firstName %>"
-              name="firstName"
-              required
-            />
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Last Name</label>
-            <input
-              type="text"
-              class="form-control"
-              id="exampleInputEmail1"
-              name="lastName"
-              aria-describedby="emailHelp"
-              value="<%= user.lastName %>"
-              required
-            />
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label"
-              >Email address</label
-            >
-            <input
-              type="email"
-              class="form-control"
-              id="exampleInputEmail1"
-              name="email"
-              aria-describedby="emailHelp"
-              value="<%= user.email %>"
-              required
-            />
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Phone</label>
-            <input
-              type="number"
-              class="form-control"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              name="phone"
-              value="<%= user.phone %>"
-              required
-            />
-          </div>
-          <div class="mb-3">
-            <label for="pass" class="form-label">Password</label>
-            <input
-              type="password"
-              class="form-control"
-              id="pass"
-              name="password"
-              aria-describedby="emailHelp"
-              required
-            />
-          </div>
-          <div class="mb-3">
-            <label for="confirmPass" class="form-label">Confirm Password</label>
-            <input
-              type="password"
-              class="form-control"
-              id="confirmPass"
-              aria-describedby="emailHelp"
-              required
-            />
-          </div>
-          <div class="text-center">
-            <button onclick="checkPassword()" class="btn btn-dark">
-              Submit
-            </button>
-          </div>
-        </form>
-      </div>
-    </div> -->
-    <div id="address" class="address mx-3 p-3 border">
-      <div class="head d-flex justify-content-between mb-5 border-bottom pb-3">
-        <h1>Address</h1>
-        <button
-          class="btn btn-dark"
-          data-bs-toggle="modal"
-          data-bs-target="#addressForm"
-        >
-          Add Address
-        </button>
-        <div
-          class="modal fade"
-          id="addressForm"
-          tabindex="-1"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="add-from">Add Addrress</h1>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="modal-body">
-                <form id="form">
-                  <div class="mb-3">
-                    <label for="name" class="form-label">Name</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="name"
-                      name="name"
-                      aria-describedby="emailHelp"
-                      
-                    />
-                  </div>
-                  <div class="mb-3">
-                    <label for="phone" class="form-label">Phone</label>
-                    <input
-                      type="number"
-                      class="form-control"
-                      id="phone"
-                      name="phone"
-                      aria-describedby="emailHelp"
-                      
-                    />
-                  </div>
-                  <div class="mb-3">
-                    <label for="houseNo" class="form-label">House No</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="houseNo"
-                      name="houseNo"
-                      aria-describedby="emailHelp"
-                      
-                    />
-                  </div>
-                  <div class="mb-3">
-                    <label for="city" class="form-label">City</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="city"
-                      name="city"
-                      aria-describedby="emailHelp"
-                      
-                    />
-                  </div>
-                  <div class="mb-3">
-                    <label for="state" class="form-label">State</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="state"
-                      name="state"
-                      aria-describedby="emailHelp"
-                      
-                    />
-                  </div>
-                  <div class="mb-3">
-                    <label for="pincode" class="form-label">Pincode</label>
-                    <input
-                      type="number"
-                      class="form-control"
-                      id="pincode"
-                      name="pincode"
-                      aria-describedby="emailHelp"
-                      
-                    />
-                  </div>
-                  <div class="text-center">
-                    <button type="submit" class="btn btn-dark w-50">
-                      Submit
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="cards d-flex gap-2 my-4 justify-content-center">
-        <% address.forEach(address => { %>
-        <div class="card w-25">
-          <div class="card-body">
-            <h5 class="card-title"><%= address.name %></h5>
-            <p class="card-text"><%= address.phone %></p>
-            <p class="card-text"><%= address.houseNo %></p>
-            <p class="card-text"><%= address.city %></p>
-            <p class="card-text"><%= address.state %></p>
-            <p class="card-text"><%= address.pincode %></p>
-            <button
-              data-bs-toggle="modal"
-              data-bs-target="#editForm<%= address._id %>"
-              class="btn btn-dark"
-            >
-              <i class="bi bi-pencil-square"></i>
-            </button>
-            <a href="/delete-address/<%= address._id %>" class="btn btn-danger"
-              ><i class="bi bi-trash-fill"></i
-            ></a>
-          </div>
-        </div>
-        <div
-          class="modal fade"
-          id="editForm<%= address._id %>"
-          tabindex="-1"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="add-from">Edit Addrress</h1>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="modal-body">
-                <form
-                  class=""
-                  action="/update-address/<%= address._id %>"
-                  method="post"
-                >
-                  <div class="mb-3">
-                    <label for="name" class="form-label">Name</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="name"
-                      name="name"
-                      value="<%= address.name %>"
-                      aria-describedby="emailHelp"
-                      required
-                    />
-                  </div>
-                  <div class="mb-3">
-                    <label for="phone" class="form-label">Phone</label>
-                    <input
-                      type="Number"
-                      class="form-control"
-                      id="phone"
-                      name="phone"
-                      value="<%= address.phone %>"
-                      aria-describedby="emailHelp"
-                      required
-                    />
-                  </div>
-                  <div class="mb-3">
-                    <label for="houseNo" class="form-label">House No</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="houseNo"
-                      name="houseNo"
-                      value="<%= address.houseNo %>"
-                      aria-describedby="emailHelp"
-                      required
-                    />
-                  </div>
-                  <div class="mb-3">
-                    <label for="city" class="form-label">City</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="city"
-                      name="city"
-                      value="<%= address.city %>"
-                      aria-describedby="emailHelp"
-                      required
-                    />
-                  </div>
-                  <div class="mb-3">
-                    <label for="state" class="form-label">State</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="state"
-                      name="state"
-                      value="<%= address.state %>"
-                      aria-describedby="emailHelp"
-                      required
-                    />
-                  </div>
-                  <div class="mb-3">
-                    <label for="pincode" class="form-label">Pincode</label>
-                    <input
-                      type="number"
-                      class="form-control"
-                      id="pincode"
-                      name="pincode"
-                      value="<%= address.pincode %>"
-                      aria-describedby="emailHelp"
-                      required
-                    />
-                  </div>
-                  <div class="text-center">
-                    <button type="submit" class="btn btn-dark w-50">
-                      Submit
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-        <% }) %>
-      </div>
-    </div>
-    <div class="m-5 px-4 table-responsive content border">
-      <div class="">
-        <h4>Orders</h4>
-        <div class="m-5 px-4 table-responsive content">
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Order Number</th>
-                <th scope="col">Price</th>
-                <th scope="col">status</th>
-                <th scope="col">Order Date</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% order.forEach(order => { %>
-
-              <tr>
-                <td><%= order.orderNumber %></td>
-                <td>
-                  ₹ <%=new Intl.NumberFormat().format( order.totalPrice) %>
-                </td>
-                <td><%= order.status %></td>
-                <td><%= order.createdAt.toLocaleString() %></td>
-                <% if (order.status === "cancelled") { %>
-                <td>
-                  <a
-                    href="/order-cancel/<%= order._id %>"
-                    class="btn btn-dark disabled"
-                    >Cancel</a
-                  >
-                </td>
-                <% }else{ %>
-                <td>
-                  <button
-                    onclick="confirmCancel(this)"
-                    value="<%= order._id %>"
-                    class="btn btn-dark"
-                  >
-                    Cancel
-                  </button>
-                </td>
-                <% } %>
-              </tr>
-              <% }) %>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <!-- <div id="orders" style="display: none" class="order mx-3 p-3 border">
-      <div class="text-center mb-5">
-        <h1>Orders</h1>
-      </div>
-      <div class="d-flex justify-content-evenly"></div>
-      <div class="m-5 px-4 table-responsive content">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Order Number</th>
-              <th scope="col">Price</th>
-              <th scope="col">status</th>
-              <th scope="col">Order Date</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% order.forEach(order => { %>
-
-            <tr>
-              <td><%= order.orderNumber %></td>
-              <td>₹ <%=new Intl.NumberFormat().format( order.totalPrice) %></td>
-              <td><%= order.status %></td>
-              <td><%= order.createdAt.toLocaleString() %></td>
-              <% if (order.status === "cancelled") { %>
-              <td>
-                <a
-                  href="/order-cancel/<%= order._id %>"
-                  class="btn btn-dark disabled"
-                  >Cancel</a
-                >
-              </td>
-              <% }else{ %>
-              <td>
-                <button
-                  onclick="confirmCancel(this)"
-                  value="<%= order._id %>"
-                  class="btn btn-dark"
-                >
-                  Cancel
-                </button>
-              </td>
-              <% } %>
-            </tr>
-            <% }) %>
-          </tbody>
-        </table>
-      </div>
-    </div> -->
   </section>
 </main>
-<script
-  src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-  integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-></script>
-<script
-  src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"
-  integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-></script>
-<script
-  src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"
-  integrity="sha512-TiQST7x/0aMjgVTcep29gi+q5Lk5gVTUPE9XgN0g96rwtjEjLpod4mlBRKWHeBcvGBAEvJBmfDqh2hfMMmg+5A=="
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-></script>
 <script>
-  $("#form").validate({
+  $("#editUserForm").validate({
     rules: {
-      name: {
+      firstName: {
         required: true,
-        pattern: /^[a-zA-Z ]+$/,
+        pattern: /^[A-Za-z]+$/,
+      },
+      lastName: {
+        required: true,
+        pattern: /^[A-Za-z]+$/,
+      },
+      email: {
+        required: true,
+        email: true,
       },
       phone: {
         required: true,
         minlength: 10,
         maxlength: 10,
       },
-      houseNo: {
-        required: true,
-        pattern: /^[a-zA-Z0-9]/,
-      },
-      city: {
-        required: true,
-        pattern: /^[a-zA-Z ]+$/,
-      },
-      state: {
-        required: true,
-        pattern: /^[a-zA-Z ]+$/,
-      },
-      pincode: {
-        required: true,
+      password: {
         minlength: 6,
+        // pattern: /^(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      },
+      confirmPassword: {
+        equalTo: "#password",
       },
     },
-    submitHandler: async function (form) {
+    submitHandler: async function (form, event) {
       try {
-        let name = form.name.value;
+        event.preventDefault();
+        let id = form.id.value;
+        let firstName = form.firstName.value;
+        let lastName = form.lastName.value;
+        let email = form.email.value;
         let phone = form.phone.value;
-        let houseNo = form.houseNo.value;
-        let city = form.city.value;
-        let state = form.state.value;
-        let pincode = form.pincode.value;
 
-        const data = await fetch("/add-address", {
+        const data = await fetch("/user/edit-user", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            name,
+            id,
+            firstName,
+            lastName,
+            email,
             phone,
-            houseNo,
-            city,
-            state,
-            pincode,
           }),
         });
 
         const json = await data.json();
 
-        if(json.success){
-          window.location.reload()
+        if (json.success) {
+          Swal.fire({
+            title: "Success",
+            text: "User Info updated succesfully",
+            icon: "success",
+            confirmButtonText: "OK",
+          }).then((result) => {
+            window.location.href = "/user/profile";
+          });
+        } else {
+          Swal.fire({
+            title: "Failed!!",
+            text: "Failed to update UserInfo",
+            icon: "error",
+            confirmButtonText: "OK",
+          }).then((result) => {
+            window.location.reload();
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  });
+</script>
+<!-- // pattern: /^(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, -->
+<script>
+  $("#editPasswordForm").validate({
+    rules: {
+      currentPassword: {
+        required: true,
+      },
+      newPassword: {
+        minlength: 6,
+        required: true,
+      },
+      confirmPassword: {
+        equalTo: "#newPassword",
+        required: true,
+      },
+    },
+    submitHandler: async function (form, event) {
+      try {
+        event.preventDefault();
+        let id = form.id.value;
+        let currentPassword = form.currentPassword.value;
+        let newPassword = form.newPassword.value;
+
+        const data = await fetch("/user/edit-password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id,
+            currentPassword,
+            newPassword,
+          }),
+        });
+
+        const json = await data.json();
+
+        if (json.success) {
+          Swal.fire({
+            title: "Success",
+            text: "Password updated succesfully",
+            icon: "success",
+            confirmButtonText: "OK",
+          }).then((result) => {
+            window.location.reload();
+          });
+        } else {
+          Swal.fire({
+            title: "Failed!!",
+            text: "Failed to update password",
+            icon: "error",
+            confirmButtonText: "OK",
+          }).then((result) => {
+            window.location.reload();
+          });
         }
       } catch (error) {
         console.log(error);
@@ -628,40 +443,6 @@
         window.location.href = `/order-cancel/${elem.value}`;
       }
     });
-  }
-  function checkPassword() {
-    let pass = document.getElementById("pass").value;
-    let confirmPass = document.getElementById("ConfirmPass").value;
-
-    if (pass === confirmPass) {
-      console.log("ddd");
-      document.getElementById("edituser").submit();
-    } else {
-      Swal.fire({
-        title: "No match!!!",
-        text: "Password dosent match",
-        icon: "warning",
-        confirmButtonText: "Ok",
-      });
-    }
-  }
-
-  function showUser() {
-    document.getElementById("address").style.display = "none";
-    document.getElementById("orders").style.display = "none";
-    document.getElementById("user").style.display = "block";
-  }
-
-  function showAddress() {
-    document.getElementById("orders").style.display = "none";
-    document.getElementById("user").style.display = "none";
-    document.getElementById("address").style.display = "block";
-  }
-
-  function showOrders() {
-    document.getElementById("address").style.display = "none";
-    document.getElementById("user").style.display = "none";
-    document.getElementById("orders").style.display = "block";
   }
 </script>
 <%- include("partials/footer") %>

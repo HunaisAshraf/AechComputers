@@ -24,6 +24,9 @@ const {
   filterProductByCAtegory,
   filterProductByPrice,
   editUserinfoController,
+  getUserAddressController,
+  getUserOrdersController,
+  editUserPasswordController,
 } = require("../controllers/userController");
 const { requireSignIn } = require("../middlewares/userMiddleware");
 const {
@@ -54,7 +57,11 @@ router.get("/shop/:id", filterCategoryPage);
 router.post("/filter-category", filterProductByCAtegory);
 router.post("/filter-price", filterProductByPrice);
 router.get("/product/:id", getProductPage);
-router.get("/profile", requireSignIn,  getUserProfileController);
+router.get("/user/profile", requireSignIn,  getUserProfileController);
+router.get("/user/address", requireSignIn,  getUserAddressController);
+router.get("/user/orders", requireSignIn,  getUserOrdersController);
+router.post("/user/edit-user", requireSignIn,  editUserinfoController);
+router.post("/user/edit-password", requireSignIn,  editUserPasswordController);
 
 //login routes
 router.get("/signin", getUserLoginController);
@@ -110,7 +117,7 @@ router.get(
 router.post("/create-order", requireSignIn,  createOrder);
 router.get("/wallet-balance", requireSignIn,  getWalletBalance);
 
-router.post("/edit-user", requireSignIn,  editUserinfoController);
+
 
 //logout routes
 router.get("/logout", userLogoutController);

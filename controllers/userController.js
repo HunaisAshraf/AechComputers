@@ -411,35 +411,76 @@ const updatePasswordController = async (req, res) => {
 
 const getUserProfileController = async (req, res) => {
   try {
-    const order = await OrderModel.find({
-      user: req.session.user._id,
-    }).populate("products");
-
-    const address = await AddressModel.find({ user_id: req.session.user._id });
     const wallet = await WalletModel.findOne({ user: req.session.user._id });
     res.render("userPages/userProfile", {
       signIn: req.session.signIn,
       user: req.session.user,
-      order,
-      address,
-      wallet
+      wallet,
     });
   } catch (error) {
     console.log(error);
   }
 };
 
-const getUserProfileAddressController = async(req,res)=>{
-  try{
-
-  }catch(error){
-    console.log(error)
+const getUserAddressController = async (req, res) => {
+  try {
+    const address = await AddressModel.find({ user_id: req.session.user._id });
+    res.render("userPages/userAddress", {
+      signIn: req.session.signIn,
+      address,
+    });
+  } catch (error) {
+    console.log(error);
   }
-}
+};
+const getUserOrdersController = async (req, res) => {
+  try {
+    const order = await OrderModel.find({
+      user: req.session.user._id,
+    }).populate("products");
+    res.render("userPages/userOrders", { signIn: req.session.signIn, order });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const editUserinfoController = async (req, res) => {
   try {
-    console.log(req.body);
+    const { id, firstName, lastName, email, phone } = req.body;
+    await userModel.findByIdAndUpdate(id, {
+      firstName,
+      lastName,
+      email,
+      phone,
+    });
+    const user = await userModel.findOne({ _id: req.session.user._id });
+
+    req.session.user = user;
+    res.status(200).send({ success: true });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ success: false });
+  }
+};
+
+const editUserPasswordController = async (req, res) => {
+  try {
+    const { id, currentPassword, newPassword } = req.body;
+
+    const passwordMatch = await comparePassword(
+      currentPassword,
+      req.session.user.password
+    );
+
+    if (!passwordMatch) {
+      res.status(400).send({ success: false });
+    } else {
+      const hashedPassword = await hashPassword(newPassword);
+      await userModel.findByIdAndUpdate(id, {
+        password: hashedPassword,
+      });
+      res.status(200).send({ success: true });
+    }
   } catch (error) {
     console.log(error);
   }
@@ -475,5 +516,7 @@ module.exports = {
   filterProductByCAtegory,
   filterProductByPrice,
   editUserinfoController,
-  getUserProfileAddressController
+  getUserAddressController,
+  getUserOrdersController,
+  editUserPasswordController,
 };
