@@ -150,6 +150,7 @@ const userLoginController = async (req, res) => {
 
     req.session.user = user;
     req.session.signIn = true;
+    // req.session.notBlocked = user.isBlocked;
     res.redirect("/");
   } catch (error) {
     console.log(error);

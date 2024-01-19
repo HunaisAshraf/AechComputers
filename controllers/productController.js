@@ -79,8 +79,8 @@ const editProductController = async (req, res) => {
     const { productName, price, category, quantity, description, id } =
       req.body;
     const images = req.files.map((m) => m.filename);
-
-    console.log(id);
+    console.log(req.files);
+    console.log(images);
 
     await ProductModel.updateOne(
       { _id: id },
@@ -95,37 +95,39 @@ const editProductController = async (req, res) => {
       }
     );
 
-    if (req.files[0]) {
-      await ProductModel.updateOne(
-        { _id: id },
-        {
-          $set: { ["images.0"]: req.files[0].filename },
-        }
-      );
-    }
-    if (req.files[1]) {
-      await ProductModel.updateOne(
-        { _id: id },
-        {
-          $set: { ["images.1"]: req.files[1].filename },
-        }
-      );
-    }
-    if (req.files[2]) {
-      await ProductModel.updateOne(
-        { _id: id },
-        {
-          $set: { ["images.2"]: req.files[2].filename },
-        }
-      );
-    }
-    if (req.files[3]) {
-      await ProductModel.updateOne(
-        { _id: id },
-        {
-          $set: { ["images.3"]: req.files[3].filename },
-        }
-      );
+    for (let i = 0; i < req.files.length; i++) {
+      if (req.files[i].fieldname === "image1") {
+        await ProductModel.updateOne(
+          { _id: id },
+          {
+            $set: { ["images.0"]: req.files[i].filename },
+          }
+        );
+      }
+      if (req.files[i].fieldname === "image2") {
+        await ProductModel.updateOne(
+          { _id: id },
+          {
+            $set: { ["images.1"]: req.files[i].filename },
+          }
+        );
+      }
+      if (req.files[i].fieldname === "image3") {
+        await ProductModel.updateOne(
+          { _id: id },
+          {
+            $set: { ["images.2"]: req.files[i].filename },
+          }
+        );
+      }
+      if (req.files[i].fieldname === "image4") {
+        await ProductModel.updateOne(
+          { _id: id },
+          {
+            $set: { ["images.3"]: req.files[i].filename },
+          }
+        );
+      }
     }
 
     res.redirect("/product-list");

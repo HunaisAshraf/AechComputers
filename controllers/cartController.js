@@ -107,10 +107,8 @@ const getAdressPage = async (req, res) => {
       user_id: req.session.user._id,
     });
 
-    console.log(addresses);
-
     if (addresses.length > 0) {
-      res.render("userPages/addresspage", {
+      res.render("userPages/checkoutPage", {
         signIn: req.session.signIn,
         addresses,
         totalPrice,
@@ -137,9 +135,11 @@ const addAdressController = async (req, res) => {
       state,
       pincode,
     }).save();
-    res.redirect("/address");
+    // res.redirect("/address");
+    res.status(200).send({ success: true });
   } catch (error) {
     console.log(error);
+    res.status(500).send({ success: false, error });
   }
 };
 

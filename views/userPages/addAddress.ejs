@@ -1,9 +1,10 @@
 <%- include("partials/header") %>
 <main class="container-md">
-  <section class=" d-flex m-3 p-3 border justify-content-center">
+  <section class="d-flex m-3 p-3 border justify-content-center">
     <div class="w-50">
       <h1>Add Address</h1>
-      <form class="" action="/add-address" method="post">
+      <!-- class="" action="/add-address" method="post" -->
+      <form id="form">
         <div class="mb-3">
           <label for="name" class="form-label">Name</label>
           <input
@@ -12,18 +13,16 @@
             id="name"
             name="name"
             aria-describedby="emailHelp"
-            required
           />
         </div>
         <div class="mb-3">
           <label for="phone" class="form-label">Phone</label>
           <input
-            type="Number"
+            type="number"
             class="form-control"
             id="phone"
             name="phone"
             aria-describedby="emailHelp"
-            required
           />
         </div>
         <div class="mb-3">
@@ -34,7 +33,6 @@
             id="houseNo"
             name="houseNo"
             aria-describedby="emailHelp"
-            required
           />
         </div>
         <div class="mb-3">
@@ -45,7 +43,6 @@
             id="city"
             name="city"
             aria-describedby="emailHelp"
-            required
           />
         </div>
         <div class="mb-3">
@@ -56,7 +53,6 @@
             id="state"
             name="state"
             aria-describedby="emailHelp"
-            required
           />
         </div>
         <div class="mb-3">
@@ -67,7 +63,6 @@
             id="pincode"
             name="pincode"
             aria-describedby="emailHelp"
-            required
           />
         </div>
         <div class="text-center">
@@ -77,4 +72,84 @@
     </div>
   </section>
 </main>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+  integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"
+  integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"
+  integrity="sha512-TiQST7x/0aMjgVTcep29gi+q5Lk5gVTUPE9XgN0g96rwtjEjLpod4mlBRKWHeBcvGBAEvJBmfDqh2hfMMmg+5A=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+<script>
+  $("#form").validate({
+    rules: {
+      name: {
+        required: true,
+        pattern: /^[a-zA-Z ]+$/,
+      },
+      phone: {
+        required: true,
+        minlength: 10,
+        maxlength: 10,
+      },
+      houseNo: {
+        required: true,
+        pattern: /^[a-zA-Z0-9]/,
+      },
+      city: {
+        required: true,
+        pattern: /^[a-zA-Z ]+$/,
+      },
+      state: {
+        required: true,
+        pattern: /^[a-zA-Z ]+$/,
+      },
+      pincode: {
+        required: true,
+        minlength: 6,
+      },
+    },
+    submitHandler: async function (form) {
+      try {
+        let name = form.name.value;
+        let phone = form.phone.value;
+        let houseNo = form.houseNo.value;
+        let city = form.city.value;
+        let state = form.state.value;
+        let pincode = form.pincode.value;
+
+        const data = await fetch("/add-address", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name,
+            phone,
+            houseNo,
+            city,
+            state,
+            pincode,
+          }),
+        });
+
+        const json = await data.json();
+        if(json.success){
+          window.location.reload()
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  });
+
+</script>
 <%- include("partials/footer") %>

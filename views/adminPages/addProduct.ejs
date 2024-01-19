@@ -1,5 +1,9 @@
 <%- include("partials/header") %>
-
+<style>
+  .error {
+    color: #f00;
+  }
+</style>
 <section class="content lists col-md-10">
   <div class="box border rounded p-2">
     <div class="border-bottom">
@@ -21,23 +25,16 @@
               class="form-control"
               id="name"
               name="productName"
-              required
             />
           </div>
           <div class="mb-3">
             <label for="price" class="form-label">Price</label>
-            <input
-              type="number"
-              class="form-control"
-              id="price"
-              name="price"
-              required
-            />
+            <input type="number" class="form-control" id="price" name="price" />
           </div>
           <div class="mb-3">
             <label for="category" class="form-label">Category</label>
             <select class="form-select" name="category" id="category">
-              <option selected>Category</option>
+              <option value="">Category</option>
               <% categories.forEach(category => { %>
               <option value="<%= category._id %>">
                 <%= category.categoryName %>
@@ -52,7 +49,6 @@
               class="form-control"
               id="quantity"
               name="quantity"
-              required
             />
             <p class="text-danger" id="errMsg"></p>
           </div>
@@ -83,18 +79,42 @@
             </div>
           </div>
           <div class="text-center">
-            <button type="button" class="btn btn-dark" onclick="handlesubmit()">
-              Add Product
-            </button>
+            <button type="submit" class="btn btn-dark">Add Product</button>
           </div>
         </form>
       </div>
     </div>
   </div>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+    integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"
+    integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"
+    integrity="sha512-TiQST7x/0aMjgVTcep29gi+q5Lk5gVTUPE9XgN0g96rwtjEjLpod4mlBRKWHeBcvGBAEvJBmfDqh2hfMMmg+5A=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
   <script>
     function loadFile(event) {
       let imageDiv = document.getElementById("imageDiv");
+      imageDiv.innerText = "";
 
+      const maxImages = 4;
+      const files = event.target.files;
+      if (files.length > maxImages) {
+        alert(`Please select only up to ${maxImages} images.`);
+        document.getElementById("image").value = ""; // Clear the file input
+        return;
+      }
       for (let i = 0; i < 4; i++) {
         let image = document.createElement("img");
         image.src = URL.createObjectURL(event.target.files[i]);
@@ -104,17 +124,46 @@
         imageDiv.appendChild(image);
       }
     }
-
-    function handlesubmit() {
-      let quantity = document.getElementById("quantity").value;
-      if (quantity < 1) {
-        document.getElementById("errMsg").innerText =
-          "Quantity must be atleast one";
-      } else {
-        document.getElementById("form").submit();
-      }
-    }
+    $(document).ready(function () {
+      $("#form").validate({
+        rules: {
+          productName: {
+            required: true,
+            pattern: /^[a-zA-Z]/,
+          },
+          price: {
+            required: true,
+            minlength: 1,
+          },
+          quantity: {
+            required: true,
+            minlength: 1,
+          },
+          description: {
+            required: true,
+            pattern: /^[a-zA-Z]/,
+          },
+          category: {
+            required: true,
+          },
+          images: {
+            required: true,
+            maxLength: 4,
+          },
+        },
+      });
+    });
+    // function handlesubmit() {
+    // let quantity = document.getElementById("quantity").value;
+    // if (quantity < 1) {
+    //   document.getElementById("errMsg").innerText =
+    //     "Quantity must be atleast one";
+    // } else {
+    //   document.getElementById("form").submit();
+    // }
+    // }
   </script>
 </section>
 
 <%- include("partials/footer") %>
+<!-- [a-zA-Z0-9\s!@#$%^&*()-_+=<>?.,;:'"/\\\[\]{}`~]*$ -->

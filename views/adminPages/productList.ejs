@@ -80,28 +80,21 @@
             </td>
             <% } %>
             <td>
-              <!-- <a href="/edit-product/<%= product._id %>" class="btn btn-dark"
-                >Edit</a
-              > -->
-              <!-- <a
-                href="/delete-product/<%= product._id %>"
-                class="btn btn-danger"
-                >Delete</a
-              > -->
+              
               <a href="/edit-product/<%= product._id %>" class="btn btn-dark"
                 >Edit</a
               >
-              <button
+              <!-- <button
                 type="button"
                 class="btn btn-danger"
                 data-bs-toggle="modal"
                 data-bs-target="#delete-<%= product._id %>"
               >
                 Delete
-              </button>
+              </button> -->
             </td>
           </tr>
-          <div
+          <!-- <div
             class="modal fade"
             id="delete-<%= product._id %>"
             tabindex="-1"
@@ -129,7 +122,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
           <% }) %>
         </tbody>
       </table>

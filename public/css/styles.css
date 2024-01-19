@@ -59,3 +59,7 @@ main {
     margin-left: 0;
   }
 }
+
+.error {
+  color: #f00;
+}

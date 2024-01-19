@@ -58,15 +58,15 @@ const chartDataController = async (req, res) => {
           amount: {
             $sum: "$totalPrice",
           },
-          count:{
-            $sum:1
-          }
+          count: {
+            $sum: 1,
+          },
         },
       },
     ]);
     const category = await OrderModel.aggregate([
       {
-        $unwind:"$products"
+        $unwind: "$products",
       },
       {
         $group: {
@@ -74,34 +74,31 @@ const chartDataController = async (req, res) => {
           amount: {
             $sum: "$totalPrice",
           },
-          count:{
-            $sum:1
-          }
+          count: {
+            $sum: 1,
+          },
         },
-        
       },
       {
         $lookup: {
-            from: "categories",
-            localField: "products.product.category",
-            foreignField: "_id",
-            as: "categoryInfo"
-        }
-    },
-    {
-        $unwind: "$categoryInfo"
-    },
-    {
+          from: "categories",
+          localField: "products.product.category",
+          foreignField: "_id",
+          as: "categoryInfo",
+        },
+      },
+      {
+        $unwind: "$categoryInfo",
+      },
+      {
         $project: {
-            _id: 0,
-            categoryName: "$categoryInfo.categoryName",
-            totalQuantity: 1,
-            totalPrice: 1
-        }
-    }
+          _id: 0,
+          categoryName: "$categoryInfo.categoryName",
+          totalQuantity: 1,
+          totalPrice: 1,
+        },
+      },
     ]);
-
-
 
     res.json({
       orderCount,
@@ -109,7 +106,7 @@ const chartDataController = async (req, res) => {
       productCount,
       userCount,
       paymentMethod,
-      category
+      category,
     });
   } catch (error) {
     console.log(error);
@@ -178,6 +175,7 @@ const blockUserController = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await UserModel.findByIdAndUpdate(id, { isBlocked: true });
+
     res.redirect("/user-list");
   } catch (error) {
     console.log(error);
