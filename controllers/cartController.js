@@ -31,7 +31,7 @@ const addToCartController = async (req, res) => {
     const user = req.session.user._id;
     const checkProduct = await productModel.findOne({ _id: product });
     const foundProduct = await CartModel.findOne({ product });
-    const foundUser = await CartModel.findOne({ user });
+    const foundUser = await CartModel.findOne({ user:req.session.user._id });
 
     if (foundProduct && foundUser) {
       if (foundProduct.quantity + quantity <= checkProduct.quantity) {
@@ -157,9 +157,11 @@ const updateAdressController = async (req, res) => {
       state,
       pincode,
     });
-    res.redirect("/address");
+    res.status(200).send({success:true})
+    // res.redirect("/address");
   } catch (error) {
     console.log("error in updating address ", error);
+    res.status(500).send({success:false})
   }
 };
 
@@ -167,9 +169,11 @@ const deleteAddressController = async (req, res) => {
   try {
     const { id } = req.params;
     const address = await AddressModel.findByIdAndDelete(id);
-    res.redirect("/address");
+    // res.redirect("/address");
+    res.status(200).send({success:true})
   } catch (error) {
     console.log("error in deleting address ", error);
+    res.status(500).send({success:false})
   }
 };
 

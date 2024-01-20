@@ -125,9 +125,12 @@
             >
               <i class="bi bi-pencil-square"></i>
             </button>
-            <a href="/delete-address/<%= address._id %>" class="btn btn-danger"
-              ><i class="bi bi-trash-fill"></i
-            ></a>
+            <button
+              onclick="handleDelete('<%=address._id %>')"
+              class="btn btn-danger"
+            >
+              <i class="bi bi-trash-fill"></i>
+            </button>
           </div>
         </div>
         <div
@@ -149,11 +152,13 @@
                 ></button>
               </div>
               <div class="modal-body">
-                <form
-                  class=""
-                  action="/update-address/<%= address._id %>"
-                  method="post"
-                >
+                <form id="updateAddressForm<%= address._id %>">
+                  <input
+                    type="text"
+                    value="<%= address._id %>"
+                    class="hidden"
+                    name="id"
+                  />
                   <div class="mb-3">
                     <label for="name" class="form-label">Name</label>
                     <input
@@ -169,7 +174,7 @@
                   <div class="mb-3">
                     <label for="phone" class="form-label">Phone</label>
                     <input
-                      type="Number"
+                      type="number"
                       class="form-control"
                       id="phone"
                       name="phone"
@@ -227,11 +232,73 @@
                     />
                   </div>
                   <div class="text-center">
-                    <button type="submit" class="btn btn-dark w-50">
-                      Submit
-                    </button>
+                    <button class="btn btn-dark w-50">Submit</button>
                   </div>
                 </form>
+                <script>
+                  $("#updateAddressForm<%= address._id %>").validate({
+                    rules: {
+                      name: {
+                        required: true,
+                        pattern: /^[a-zA-Z ]+$/,
+                      },
+                      phone: {
+                        required: true,
+                        minlength: 10,
+                        maxlength: 10,
+                      },
+                      houseNo: {
+                        required: true,
+                        pattern: /^[a-zA-Z0-9]/,
+                      },
+                      city: {
+                        required: true,
+                        pattern: /^[a-zA-Z ]+$/,
+                      },
+                      state: {
+                        required: true,
+                        pattern: /^[a-zA-Z ]+$/,
+                      },
+                      pincode: {
+                        required: true,
+                        minlength: 6,
+                      },
+                    },
+                    submitHandler: async function (form, event) {
+                      try {
+                        event.preventDefault();
+                        let id = form.id.value;
+                        let name = form.name.value;
+                        let phone = form.phone.value;
+                        let houseNo = form.houseNo.value;
+                        let city = form.city.value;
+                        let state = form.state.value;
+                        let pincode = form.pincode.value;
+
+                        const data = await fetch("/update-address/" + id, {
+                          method: "PUT",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({
+                            name,
+                            phone,
+                            houseNo,
+                            city,
+                            state,
+                            pincode,
+                          }),
+                        });
+
+                        const json = await data.json();
+
+                        if (json.success) {
+                          window.location.reload();
+                        }
+                      } catch (error) {
+                        console.log(error);
+                      }
+                    },
+                  });
+                </script>
               </div>
             </div>
           </div>
@@ -250,14 +317,14 @@
           <p id="ship-phone">Phone : <%= addresses[0].phone %></p>
           <p id="ship-houseNo">House No : <%= addresses[0].houseNo %></p>
           <p id="ship-city">City : <%= addresses[0].city %></p>
-          <p id="ship-state">State : <%= addresses[0].State %></p>
+          <p id="ship-state">State : <%= addresses[0].state %></p>
           <p id="ship-pincode">Pincode : <%= addresses[0].pincode %></p>
         </div>
         <div class="billing">
           <div class="border-bottom text-center p-2">
             <h4>Payment Method</h4>
           </div>
-          <form id="form" class="py-2 px-4 border-bottom">
+          <form id="checkout" class="py-2 px-4 border-bottom">
             <input
               id="addressId"
               type="text"
@@ -382,8 +449,8 @@
 
         const json = await data.json();
 
-        if(json.success){
-          window.location.reload()
+        if (json.success) {
+          window.location.reload();
         }
       } catch (error) {
         console.log(error);
@@ -430,9 +497,13 @@
   }
 
   async function hanldeOrder() {
+
     let addressId = document.getElementById("addressId").value;
-    let form = document.getElementById("form");
+
+    let form = document.getElementById("checkout");
     let paymentMethod = form.paymentMethod.value;
+
+
 
     if (paymentMethod === "cashOnDelivery") {
       let data = await fetch("/checkout", {
@@ -520,6 +591,48 @@
         text: "You have to select a payment method",
         icon: "warning",
         confirmButtonText: "Ok",
+      });
+    }
+  }
+
+  async function handleDelete(id) {
+    try {
+      Swal.fire({
+        title: "Do you want to Delete address?",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          deleteAddress(id);
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function deleteAddress(id) {
+    const data = await fetch("/delete-address/" + id, {
+      method: "DELETE",
+    });
+    const json = await data.json();
+    if (json.success) {
+      Swal.fire({
+        title: "Deleted!!",
+        text: "Address Deleted succesfully",
+        icon: "success",
+        confirmButtonText: "OK",
+      }).then((result) => {
+        window.location.reload();
+      });
+    } else {
+      Swal.fire({
+        title: "Failed!!",
+        text: "Failed to delete Address",
+        icon: "error",
+        confirmButtonText: "OK",
+      }).then((result) => {
+        window.location.reload();
       });
     }
   }
