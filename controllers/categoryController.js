@@ -34,44 +34,36 @@ const AddCategoryController = async (req, res) => {
   try {
     const { categoryName, description } = req.body;
     const image = req.files[0].filename;
-
-    if (categoryName === "") {
-      req.session.noValidInfo = true;
-      res.redirect("/add-category");
-    }
-    if (description === "") {
-      req.session.noValidInfo = true;
-      res.redirect("/add-category");
-    }
-
+    
     const categories = await CategoryModel.findOne({ categoryName });
 
     if (categories) {
-      req.session.categoryExist = true;
-      res.redirect("/add-category");
+      return res.status(500).send({ success: false, categoryExist: true });
     } else {
       const newCategory = await new CategoryModel({
         categoryName,
         description,
         image,
       }).save();
-      res.redirect("/category-list");
+
+      return res.status(200).send({ success: true });
     }
   } catch (error) {
     console.log(error);
+    res.status(500).send({ success: false });
   }
 };
 
-const deleteCategoryController = async (req, res) => {
-  try {
-    const { id } = req.params;
+// const deleteCategoryController = async (req, res) => {
+//   try {
+//     const { id } = req.params;
 
-    const user = await CategoryModel.findByIdAndDelete(id);
-    res.redirect("/category-list");
-  } catch (error) {
-    console.log("error in deleting category ", error);
-  }
-};
+//     const user = await CategoryModel.findByIdAndDelete(id);
+//     res.redirect("/category-list");
+//   } catch (error) {
+//     console.log("error in deleting category ", error);
+//   }
+// };
 
 const blockCategoryController = async (req, res) => {
   try {
@@ -115,9 +107,10 @@ const editCategoryController = async (req, res) => {
     const { categoryName, description, id } = req.body;
     const image = req.files[0]?.filename;
 
-    const findCat = await CategoryModel.findOne({ _id: id });
+    const findCat = await CategoryModel.findOne({ categoryName });
 
-    if (!findCat || findCat._id === id) {
+    if (!findCat || String(findCat._id) === id) {
+      console.log("sdasfafs");
       const category = await CategoryModel.updateOne(
         { _id: id },
         { $set: { categoryName, description } }
@@ -128,10 +121,13 @@ const editCategoryController = async (req, res) => {
           { $set: { image } }
         );
       }
+      return res.status(200).send({ success: true });
+    } else {
+      return res.status(500).send({ success: false, categoryExist: true });
     }
-    res.redirect("category-list");
   } catch (error) {
     console.log("error in updating category ", error);
+    return res.status(500).send({ success: false });
   }
 };
 
@@ -172,7 +168,6 @@ module.exports = {
   getCategoryListpage,
   getAddCategorypage,
   AddCategoryController,
-  deleteCategoryController,
   blockCategoryController,
   unblockCategoryController,
   getEditCategoryPage,

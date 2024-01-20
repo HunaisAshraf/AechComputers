@@ -5,26 +5,34 @@
   >
     <div class="w-50 shadow p-5">
       <h2 class="text-center my-3">Add Banner</h2>
-
-      <form action="/add-Banner" method="post" enctype="multipart/form-data">
+      <!-- action="/add-Banner" method="post" -->
+      <form enctype="multipart/form-data">
         <div class="mb-3">
-          <img id="image" alt="" class="rounded mb-3" height="420" />
+          <div
+            class="img-container my-3 row align-items-center"
+            style="height: 350px"
+          >
+            <img id="image" alt="" class="rounded mb-3" />
+            <img src="" class="img-fluid" id="croppedImg" alt="" />
+          </div>
+
           <div>
             <input
               type="file"
               class="form-control"
-              id="image"
+              id="input-img"
               aria-describedby="emailHelp"
               name="image"
               accept="image/*"
-              onchange="loadFile(event)"
               required
+              onchange="loadFile(event)"
             />
           </div>
         </div>
-        <img src="" id="croppedImg" alt="" />
         <div class="text-center">
-          <button type="submit" class="btn btn-dark w-50">Submit</button>
+          <button type="button" id="cropButton" class="btn btn-dark w-50">
+            Submit
+          </button>
         </div>
       </form>
     </div>
@@ -33,19 +41,65 @@
 <script>
   function loadFile(event) {
     let image = document.getElementById("image");
+    let croppedImg = document.getElementById("croppedImg");
+    let inputImg = document.getElementById("input-img");
+    image.src = null;
+    croppedImg.src = "";
 
     image.src = URL.createObjectURL(event.target.files[0]);
 
-    const cropper = new Cropper(image, {
+    let cropper = new Cropper(image, {
+      aspectRatio: 3 / 1,
       autoCrop: false,
-      ready() {
-        this.cropper.crop();
-      },
     });
 
-    console.log(cropper);
+    document.getElementById("cropButton").addEventListener(
+      "click",
+      function () {
+        // Get the cropped canvas data
+        const canvas = cropper.getCroppedCanvas();
 
-    document.getElementById("croppedImg").src = croppe;
+        // Set the source of the cropped image
+        croppedImg.src = canvas.toDataURL("image/png");
+
+        canvas.toBlob(function (blob) {
+          const file = new File([blob], "croppedImg.png", {
+            type: "image/png",
+          });
+
+          const formData = new FormData();
+          formData.append("image", file);
+
+          fetch("/add-Banner", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data);
+
+              if (data.success) {
+                Swal.fire({
+                  title: "Added!!",
+                  text: "Banner Added succesfully",
+                  icon: "success",
+                  confirmButtonText: "OK",
+                }).then((result) => {
+                  window.location.href = "/banner-list";
+                });
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        });
+
+        cropper.destroy();
+        // Optionally, you can also remove the original image
+        image.style.display = "none";
+      },
+      "image/png"
+    );
   }
 </script>
 <%- include("partials/footer") %>

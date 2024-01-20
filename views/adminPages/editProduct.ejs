@@ -12,6 +12,7 @@
           action="/edit-product"
           method="post"
           enctype="multipart/form-data"
+          id="form"
         >
           <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label"
@@ -168,6 +169,35 @@
     </div>
   </div>
   <script>
+    $(document).ready(function () {
+      $("#form").validate({
+        rules: {
+          productName: {
+            required: true,
+            pattern: /^[a-zA-Z]/,
+          },
+          price: {
+            required: true,
+            minlength: 1,
+          },
+          quantity: {
+            required: true,
+            minlength: 1,
+          },
+          description: {
+            required: true,
+            pattern: /^[a-zA-Z]/,
+          },
+          category: {
+            required: true,
+          },
+          images: {
+            required: true,
+            maxLength: 4,
+          },
+        },
+      });
+    });
     function loadImage1(e) {
       let img = document.getElementById("img1");
       img.src = URL.createObjectURL(e.target.files[0]);

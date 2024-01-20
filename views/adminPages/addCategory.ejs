@@ -15,13 +15,18 @@
       </div>
       <% } %>
 
-      <form action="/add-category" method="post" enctype="multipart/form-data">
+      <form
+        action="/add-category"
+        method="post"
+        enctype="multipart/form-data"
+        id="form"
+      >
         <div class="mb-3">
           <label for="category" class="form-label">Category Name</label>
           <input
             type="text"
             class="form-control"
-            id="category"
+            id="categoryName"
             aria-describedby="emailHelp"
             name="categoryName"
             required
@@ -40,14 +45,13 @@
             required
           />
         </div>
-        <div class="mb-3 d-flex gap-3">
-          <img id="image" class="rounded" alt="" height="120" />
+        <div class="mb-3">
           <div>
             <label for="image" class="form-label">Category Image</label>
             <input
               type="file"
               class="form-control"
-              id="image"
+              id="input-img"
               aria-describedby="emailHelp"
               name="image"
               accept="image/*"
@@ -55,20 +59,126 @@
               required
             />
           </div>
+          <div
+            class="img-container my-3 row align-items-center"
+            style="height: 350px"
+          >
+            <img id="image" alt="" class="rounded mb-3" />
+            <img src="" class="img-fluid" id="croppedImg" alt="" />
+          </div>
         </div>
         <div class="text-center">
-          <button type="submit" class="btn btn-dark w-50">Submit</button>
+          <button id="cropButton" type="button" class="btn btn-dark w-50">
+            Submit
+          </button>
         </div>
       </form>
     </div>
   </div>
+
+  <script>
+    $("#form").validate({
+      rules: {
+        categoryName: {
+          required: true,
+          pattern: /^[a-zA-Z ]+$/,
+        },
+        description: {
+          required: true,
+          pattern: /^[a-zA-Z ]+$/,
+        },
+        image: {
+          required: true,
+        },
+      },
+    });
+  </script>
   <script>
     function loadFile(event) {
+      // let image = document.getElementById("image");
+      // image.src = URL.createObjectURL(event.target.files[0]);
       let image = document.getElementById("image");
-
-      console.log( URL.createObjectURL(event.target.files[0]));
+      let croppedImg = document.getElementById("croppedImg");
+      let inputImg = document.getElementById("input-img");
+      let categoryName = document.getElementById("categoryName").value;
+      let description = document.getElementById("description").value;
+      image.src = null;
+      croppedImg.src = "";
 
       image.src = URL.createObjectURL(event.target.files[0]);
+
+      let cropper = new Cropper(image, {
+        aspectRatio: 4 / 3,
+        autoCrop: false,
+      });
+
+      document.getElementById("cropButton").addEventListener(
+        "click",
+        function () {
+          // Get the cropped canvas data
+          const canvas = cropper.getCroppedCanvas();
+
+          // Set the source of the cropped image
+          croppedImg.src = canvas.toDataURL("image/png");
+
+          canvas.toBlob(function (blob) {
+            const file = new File([blob], "croppedImg.png", {
+              type: "image/png",
+            });
+
+            const formData = new FormData();
+            formData.append("image", file);
+            formData.append("categoryName", categoryName);
+            formData.append("description", description);
+
+            fetch("/add-category", {
+              method: "POST",
+              body: formData,
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                console.log(data.success);
+
+                if (data.success) {
+                  Swal.fire({
+                    title: "Added!!",
+                    text: "Banner Added succesfully",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                  }).then((result) => {
+                    window.location.href = "/category-list";
+                  });
+                } else if (data.categoryExist) {
+                  Swal.fire({
+                    title: "Already Exist!!",
+                    text: "Category Already Exist!!!!",
+                    icon: "warning",
+                    confirmButtonText: "OK",
+                  }).then((result) => {
+                    window.location.href = "/category-list";
+                  });
+                } else {
+                  Swal.fire({
+                    title: "Failed!!",
+                    text: "Failed to add category",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                  }).then((result) => {
+                    window.location.href = "/category-list";
+                  });
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          });
+
+          cropper.destroy();
+          // Optionally, you can also remove the original image
+          image.style.display = "none";
+        },
+        "image/png"
+      );
     }
   </script>
 </section>

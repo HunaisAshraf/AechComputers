@@ -30,7 +30,6 @@ const getHomeController = async (req, res) => {
 const getShopPage = async (req, res) => {
   try {
     let allProducts;
-    console.log("asdfasdfadsfsad", req.session.products);
     if (req.session.products) {
       allProducts = req.session.products;
     } else {
@@ -41,7 +40,6 @@ const getShopPage = async (req, res) => {
         return product;
       }
     });
-    console.log(products);
     const categories = await CategoryModel.find({ isAvailable: true });
     res.render("userPages/shopPage", {
       signIn: req.session.signIn,

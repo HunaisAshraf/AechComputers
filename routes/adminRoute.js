@@ -41,14 +41,24 @@ const {
   unblockProductController,
   searchproductController,
 } = require("../controllers/productController");
-const { getCategoryListpage, getAddCategorypage, AddCategoryController, deleteCategoryController, blockCategoryController, unblockCategoryController, getEditCategoryPage, editCategoryController, searchCategoryController, filterCategoryController } = require("../controllers/categoryController");
-
+const {
+  getCategoryListpage,
+  getAddCategorypage,
+  AddCategoryController,
+  deleteCategoryController,
+  blockCategoryController,
+  unblockCategoryController,
+  getEditCategoryPage,
+  editCategoryController,
+  searchCategoryController,
+  filterCategoryController,
+} = require("../controllers/categoryController");
 
 //admin login
 router.get("/admin-login", adminLoginPageController);
 router.post("/admin-login", adminLoginController);
 router.get("/admin-dashboard", isAdmin, getAdminDashboard);
-router.get("/chart-data",isAdmin,chartDataController)
+router.get("/chart-data", isAdmin, chartDataController);
 router.get("/admin-logout", adminLogoutController);
 
 //user list
@@ -85,13 +95,11 @@ router.post("/filter-status", isAdmin, filterStatusContoller);
 router.post("/search-orders", isAdmin, searchOrderContoller);
 router.get("/order-details/:id", getAdminOrderDetailsPage);
 
-
 //category list
 
 router.get("/category-list", isAdmin, getCategoryListpage);
 router.get("/add-category", isAdmin, getAddCategorypage);
 router.post("/add-category", isAdmin, upload.any(), AddCategoryController);
-router.get("/delete-category/:id", isAdmin, deleteCategoryController);
 router.get("/block-category/:id", isAdmin, blockCategoryController);
 router.get("/unblock-category/:id", isAdmin, unblockCategoryController);
 router.get("/edit-category/:id", isAdmin, getEditCategoryPage);
@@ -101,5 +109,6 @@ router.post("/filter-category", isAdmin, filterCategoryController);
 
 module.exports = router;
 
+// router.get("/delete-category/:id", isAdmin, deleteCategoryController);
 // router.get("/user-list", isAdmin, userListPageController);
 // userListPageController,
