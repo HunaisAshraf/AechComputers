@@ -3,6 +3,10 @@
   .error {
     color: #f00;
   }
+  #imageDiv img {
+    height: 300px;
+    width: 330px;
+  }
 </style>
 <section class="content lists col-md-10">
   <div class="box border rounded p-2">
@@ -11,19 +15,13 @@
     </div>
     <div class="mt-2">
       <div class="w-100 d-flex align-items-center justify-content-center">
-        <form
-          class="w-75"
-          action="/add-product"
-          method="post"
-          enctype="multipart/form-data"
-          id="form"
-        >
+        <form class="w-75" enctype="multipart/form-data" id="form">
           <div class="mb-3">
             <label for="name" class="form-label">Product Name</label>
             <input
               type="text"
               class="form-control"
-              id="name"
+              id="productName"
               name="productName"
             />
           </div>
@@ -63,7 +61,7 @@
             />
           </div>
           <div class="mb-3">
-            <div id="imageDiv" class="d-flex"></div>
+            <div id="imageDiv" class="d-flex flex-wrap gap-5"></div>
             <div>
               <label for="image" class="form-label">Image</label>
               <input
@@ -79,7 +77,10 @@
             </div>
           </div>
           <div class="text-center">
-            <button type="submit" class="btn btn-dark">Add Product</button>
+            <!-- <button type="submit" class="btn btn-dark">Add Product</button> -->
+            <button type="button" id="cropButton" class="btn btn-dark">
+              crop
+            </button>
           </div>
         </form>
       </div>
@@ -87,9 +88,10 @@
   </div>
 
   <script>
+    let crop = [];
     function loadFile(event) {
       let imageDiv = document.getElementById("imageDiv");
-      imageDiv.innerText = "";
+      imageDiv.innerHTML = "";
 
       const maxImages = 4;
       const files = event.target.files;
@@ -98,15 +100,112 @@
         document.getElementById("image").value = ""; // Clear the file input
         return;
       }
-      for (let i = 0; i < 4; i++) {
-        let image = document.createElement("img");
-        image.src = URL.createObjectURL(event.target.files[i]);
-        image.style.height = "120px";
-        image.style.margin = "20px";
-        image.style.borderRadius = "5px";
-        imageDiv.appendChild(image);
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+          // Create an image element and set its source to the selected file
+          const div = document.createElement("div");
+          div.style.height = "300px";
+          div.style.width = "300px";
+          const img = new Image();
+          img.src = e.target.result;
+          img.style.margin = "30px";
+
+          // Append the image to the container
+          div.appendChild(img);
+          imageDiv.appendChild(div);
+
+          // Initialize Cropper.js on the image
+          const cropper = new Cropper(img, {
+            aspectRatio: 4 / 3, // Set the aspect ratio as needed
+            viewMode: 1, // Set the view mode as needed
+          });
+
+          // Store the cropper instance in the croppers array
+          crop.push(cropper);
+        };
+
+        reader.readAsDataURL(file);
       }
+      document.getElementById("cropButton").addEventListener(
+        "click",
+        function () {
+          console.log("clicked");
+          let croppedImage = [];
+          let productName = document.getElementById("productName").value;
+          let price = document.getElementById("price").value;
+          let category = document.getElementById("category").value;
+          let quantity = document.getElementById("quantity").value;
+          let description = document.getElementById("description").value;
+
+          let promises = [];
+
+          const formData = new FormData();
+          formData.append("productName", productName);
+          formData.append("price", price);
+          formData.append("category", category);
+          formData.append("quantity", quantity);
+          formData.append("description", description);
+
+          for (let i = 0; i < crop.length; i++) {
+            const canvas = crop[i].getCroppedCanvas();
+
+            let promise = new Promise((resolve) => {
+              canvas.toBlob(function (blob) {
+                const file = new File([blob], i + "croppedImg.png", {
+                  type: "image/png",
+                });
+                formData.append(`image${i}`, file);
+                resolve();
+              });
+            });
+
+            promises.push(promise);
+          }
+
+          // Wait for all promises to resolve before making the fetch call
+          Promise.all(promises).then(() => {
+            fetch("/add-product", {
+              method: "POST",
+              body: formData,
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                console.log(data.success);
+
+                if (data.success) {
+                  Swal.fire({
+                    title: "Added!!",
+                    text: "Product Added succesfully",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                  }).then((result) => {
+                    window.location.href = "/product-list";
+                  });
+                } else {
+                  Swal.fire({
+                    title: "Failed!!",
+                    text: "Failed to add category",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                  }).then((result) => {
+                    window.location.href = "/category-list";
+                  });
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          });
+        },
+        "image/png"
+      );
     }
+
     $(document).ready(function () {
       $("#form").validate({
         rules: {
@@ -131,22 +230,13 @@
           },
           images: {
             required: true,
-            maxLength: 4,
+            // maxlength: 4,
           },
         },
       });
     });
-    // function handlesubmit() {
-    // let quantity = document.getElementById("quantity").value;
-    // if (quantity < 1) {
-    //   document.getElementById("errMsg").innerText =
-    //     "Quantity must be atleast one";
-    // } else {
-    //   document.getElementById("form").submit();
-    // }
-    // }
   </script>
 </section>
 
 <%- include("partials/footer") %>
-<!-- [a-zA-Z0-9\s!@#$%^&*()-_+=<>?.,;:'"/\\\[\]{}`~]*$ -->
+

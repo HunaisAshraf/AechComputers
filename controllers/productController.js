@@ -30,6 +30,8 @@ const getAddProductPage = async (req, res) => {
 
 const addProductController = async (req, res) => {
   try {
+    console.log(req.body);
+    console.log(req.files);
     const { productName, price, category, quantity, description } = req.body;
     const images = req.files.map((m) => m.filename);
 
@@ -41,9 +43,10 @@ const addProductController = async (req, res) => {
       description,
       images,
     }).save();
-    res.redirect("/product-list");
+    res.status(200).send({ success: true });
   } catch (error) {
     console.log("error in adding product ", error);
+    res.status(500).send({ success: false });
   }
 };
 
