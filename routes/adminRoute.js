@@ -45,7 +45,6 @@ const {
   getCategoryListpage,
   getAddCategorypage,
   AddCategoryController,
-  deleteCategoryController,
   blockCategoryController,
   unblockCategoryController,
   getEditCategoryPage,
@@ -53,6 +52,7 @@ const {
   searchCategoryController,
   filterCategoryController,
 } = require("../controllers/categoryController");
+const { getCouponPage, addCouponController, editCouponController, editCouponStatusController } = require("../controllers/couponController");
 
 //admin login
 router.get("/admin-login", adminLoginPageController);
@@ -106,6 +106,13 @@ router.get("/edit-category/:id", isAdmin, getEditCategoryPage);
 router.post("/edit-category", isAdmin, upload.any(), editCategoryController);
 router.post("/search-category", isAdmin, searchCategoryController);
 router.post("/filter-category", isAdmin, filterCategoryController);
+
+//coupon 
+
+router.get("/coupon-list",isAdmin,getCouponPage)
+router.post("/add-coupon",isAdmin,addCouponController)
+router.post("/edit-coupon",isAdmin,editCouponController)
+router.patch("/coupon/change-status",isAdmin,editCouponStatusController)
 
 module.exports = router;
 

@@ -2,6 +2,7 @@ const { AddressModel } = require("../models/addressModel");
 const CartModel = require("../models/cartModel");
 const OrderModel = require("../models/orderModel");
 const WalletModel = require("../models/walletModel");
+const CouponModel = require("../models/couponModel");
 
 const Razorpay = require("razorpay");
 const dotenv = require("dotenv");
@@ -77,6 +78,23 @@ const checkoutController = async (req, res) => {
   }
 };
 
+const applyCouponController = async (req, res) => {
+  try {
+    const { couponCode } = req.body;
+    const coupon = await CouponModel.findOne({ couponCode });
+    console.log(coupon);
+
+    if (coupon) {
+      res.status(200).json({ success: true, coupon });
+    } else {
+      res.status(500).json({ success: false });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false });
+  }
+};
+
 const cancelOrderController = async (req, res) => {
   try {
     const { id } = req.params;
@@ -108,4 +126,5 @@ module.exports = {
   checkoutController,
   getOrderPage,
   cancelOrderController,
+  applyCouponController,
 };

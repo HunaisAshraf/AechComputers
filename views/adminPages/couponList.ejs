@@ -1,0 +1,333 @@
+<%- include("partials/header") %>
+
+<section class="content lists col-md-10">
+  <div class="border rounded p-2">
+    <div
+      class="search border-bottom p-2 d-flex justify-content-between align-items-center"
+    >
+      <h2>Coupon List</h2>
+      <button
+        type="button"
+        class="btn btn-dark"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal"
+      >
+        Add Coupon
+      </button>
+      <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-body">
+              <form id="add-coupon">
+                <div class="head my-3 text-center">
+                  <h3>Add Coupon</h3>
+                </div>
+                <div class="mb-3">
+                  <label for="code" class="form-label">Coupon Code</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="couponCode"
+                    name="couponCode"
+                    aria-describedby="emailHelp"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="discountAmount" class="form-label"
+                    >Discount Amount</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="discountAmount"
+                    name="discountAmount"
+                    aria-describedby="emailHelp"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="startDate" class="form-label">Start Date</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="startDate"
+                    name="startDate"
+                    aria-describedby="emailHelp"
+                  />
+                </div>
+
+                <div class="mb-3">
+                  <label for="endDate" class="form-label">End Date</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="endDate"
+                    name="endDate"
+                    aria-describedby="emailHelp"
+                  />
+                </div>
+                <div class="text-center mt-3">
+                  <button type="submit" class="btn btn-dark">Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive content p-3">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Code</th>
+            <th scope="col">Discount Amount</th>
+            <th scope="col">start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">Status</th>
+            <th scope="col">Edit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% coupons.forEach((coupon,i) => { %>
+
+          <tr id="<%= coupon._id %>">
+            <th scope="row"><%= i+1 %></th>
+            <td><%= coupon.couponCode%></td>
+            <td><%= coupon.discountAmount %></td>
+            <td><%= coupon.startDate.toLocaleString() %></td>
+            <td><%= coupon.endDate.toLocaleString() %></td>
+            <% if(coupon.isAvailable){ %>
+
+            <td>
+              <button
+                onclick="changeStatus('<%=coupon._id%>')"
+                class="btn btn-success"
+              >
+                Available
+              </button>
+            </td>
+
+            <% }else{ %>
+            <td>
+              <button
+                onclick="changeStatus('<%=coupon._id%>')"
+                class="btn btn-danger"
+              >
+                Not Available
+              </button>
+            </td>
+            <% } %>
+
+            <td>
+              <button
+                type="button"
+                class="btn btn-dark"
+                data-bs-toggle="modal"
+                data-bs-target="#edit-coupon-<%= coupon._id %>"
+              >
+                Edit
+              </button>
+            </td>
+          </tr>
+          <div
+            class="modal fade"
+            id="edit-coupon-<%= coupon._id %>"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <form
+                    action="/edit-coupon"
+                    method="post"
+                    id="edit-coupon<%= coupon._id %>"
+                  >
+                    <div class="head my-3 text-center">
+                      <h3>Edit Coupon</h3>
+                    </div>
+                    <input
+                      type="text"
+                      class="hidden"
+                      id="id"
+                      name="id"
+                      aria-describedby="emailHelp"
+                      value="<%=coupon._id%>"
+                    />
+                    <div class="mb-3">
+                      <label for="code" class="form-label">Coupon Code</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="couponCode"
+                        name="couponCode"
+                        aria-describedby="emailHelp"
+                        value="<%=coupon.couponCode%>"
+                        required
+                      />
+                    </div>
+                    <div class="mb-3">
+                      <label for="discountAmount" class="form-label"
+                        >Discount Amount</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="discountAmount"
+                        min="1"
+                        name="discountAmount"
+                        aria-describedby="emailHelp"
+                        value="<%=coupon.discountAmount%>"
+                        required
+                      />
+                    </div>
+                    <div class="mb-3">
+                      <label for="startDate" class="form-label"
+                        >Start Date</label
+                      >
+                      <input
+                        type="date"
+                        class="form-control"
+                        id="startDate"
+                        name="startDate"
+                        aria-describedby="emailHelp"
+                        value="<%=coupon.startDate.toISOString().split('T')[0]%>"
+                        required
+                      />
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="endDate" class="form-label">End Date</label>
+                      <input
+                        type="date"
+                        class="form-control"
+                        id="endDate"
+                        name="endDate"
+                        aria-describedby="emailHelp"
+                        value="<%=coupon.startDate.toISOString().split('T')[0]%>"
+                        required
+                      />
+                    </div>
+                    <div class="text-center mt-3">
+                      <button type="submit" class="btn btn-dark">Submit</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<script>
+  $("#add-coupon").validate({
+    rules: {
+      couponCode: {
+        required: true,
+        pattern: /^[A-Z][A-Z0-9]*$/,
+      },
+      discountAmount: {
+        required: true,
+      },
+      startDate: {
+        required: true,
+      },
+      endDate: {
+        required: true,
+      },
+    },
+    submitHandler: async function (form, event) {
+      try {
+        event.preventDefault();
+        // const formData = new FormData(form);
+
+        const formData = {
+          id: form.id.value,
+          couponCode: form.couponCode.value,
+          discountAmount: form.discountAmount.value,
+          startDate: form.startDate.value,
+          endDate: form.endDate.value,
+        };
+
+        const data = await fetch("/add-coupon", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+
+        const json = await data.json();
+
+        if (json.success) {
+          Swal.fire({
+            title: "Added!!",
+            text: "Coupon Added succesfully",
+            icon: "success",
+            confirmButtonText: "OK",
+          }).then((result) => {
+            window.location.reload();
+          });
+        } else {
+          Swal.fire({
+            title: "Failed!!",
+            text: "failed to add coupon",
+            icon: "error",
+            confirmButtonText: "OK",
+          }).then((result) => {
+            window.location.reload();
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  });
+
+  async function changeStatus(id) {
+    try {
+      const data = await fetch("/coupon/change-status", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
+      });
+
+      const json = await data.json();
+      if (json.success) {
+        Swal.fire({
+          title: "Changed!!",
+          text: "Coupon Status changed succesfully",
+          icon: "success",
+          confirmButtonText: "OK",
+        }).then((result) => {
+          window.location.reload();
+        });
+      } else {
+        Swal.fire({
+          title: "changed!!",
+          text: "failed to change coupon status",
+          icon: "error",
+          confirmButtonText: "OK",
+        }).then((result) => {
+          window.location.reload();
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+</script>
+
+<%- include("partials/footer") %>

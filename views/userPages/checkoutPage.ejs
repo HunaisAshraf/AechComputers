@@ -324,7 +324,33 @@
           <div class="border-bottom text-center p-2">
             <h4>Payment Method</h4>
           </div>
-          <form id="checkout" class="py-2 px-4 border-bottom">
+          <div class="py-2 px-5">
+            <p id="checkout-original-amount">
+              Total Price : ₹ <%= new Intl.NumberFormat("en-IN").format(
+              totalPrice) %>
+            </p>
+            <p id="checkout-discount-amount"></p>
+          </div>
+          <form>
+            <div class="coupon p-2 border-bottom">
+              <div class="d-flex">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="couponCode"
+                  placeholder="Apply Coupoun"
+                />
+                <button
+                  type="button"
+                  onclick="applyCoupon()"
+                  class="btn btn-outline-dark"
+                >
+                  Apply
+                </button>
+              </div>
+            </div>
+          </form>
+          <form id="checkout" class="py-2 px-1 border-bottom">
             <input
               id="addressId"
               type="text"
@@ -473,6 +499,71 @@
     )}`;
   });
 
+  async function applyCoupon() {
+    try {
+      const couponCode = document.getElementById("couponCode").value;
+      const data = await fetch("/apply-coupon", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ couponCode }),
+      });
+
+      const json = await data.json();
+
+      let currDate;
+      let startDate;
+      let endDate;
+      if (json.success) {
+        currDate = new Date();
+        startDate = new Date(json.coupon.startDate);
+        endDate = new Date(json.coupon.endDate);
+      }
+
+      if (!json.success || !json.coupon.isAvailable || currDate < startDate) {
+        Swal.fire({
+          title: "Not Valid!!",
+          text: "Coupon applied is not valid",
+          icon: "warning",
+        });
+      } else if (currDate > endDate) {
+        Swal.fire({
+          title: "Expired!!",
+          text: "Coupon expired",
+          icon: "warning",
+        });
+      } else if (json.success) {
+        console.log("lasjdf");
+        totalPrice -= json.coupon.discountAmount;
+
+        let originalAmountElement = document.getElementById(
+          "checkout-original-amount"
+        );
+
+        let styles = {
+          textDecoration: "line-through",
+          color: "red",
+          fontSize: "18px",
+        };
+
+        Object.assign(originalAmountElement.style, styles);
+
+        document.getElementById(
+          "checkout-discount-amount"
+        ).innerText = ` Total Price : ₹ ${new Intl.NumberFormat("en-IN").format(
+          totalPrice
+        )}`;
+        Swal.fire({
+          title: "Applied!!",
+          text: "Coupon applied succesfully",
+          icon: "success",
+        });
+      } else {
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   function selectAddress(address) {
     let shipAddress = document.getElementById("ship-address");
     let name = document.getElementById("ship-name");
@@ -497,13 +588,10 @@
   }
 
   async function hanldeOrder() {
-
     let addressId = document.getElementById("addressId").value;
 
     let form = document.getElementById("checkout");
     let paymentMethod = form.paymentMethod.value;
-
-
 
     if (paymentMethod === "cashOnDelivery") {
       let data = await fetch("/checkout", {
@@ -521,7 +609,7 @@
       }
     } else if (paymentMethod === "upi") {
       try {
-        let price = "<%= Number(totalPrice) %>";
+        let price = totalPrice;
         let data = await fetch("/create-order", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -534,7 +622,7 @@
           let orderId = json.orderId;
           let options = {
             key: "rzp_test_kJcOHKnrrkyPtJ", // Enter the Key ID generated from the Dashboard
-            amount: "<%=Number(totalPrice)*100%>", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            amount: totalPrice * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
             currency: "INR",
             name: "Aech", //your business name
             description: "Test Transaction",
@@ -563,7 +651,7 @@
         console.log(error);
       }
     } else if (paymentMethod === "localWallet") {
-      if (walletBalance === 0 || walletBalance < "<%=Number(totalPrice) %>") {
+      if (walletBalance === 0 || walletBalance < totalPrice) {
         Swal.fire({
           title: "Insufficient Balance!!!",
           text: "You don't have enough balance in wallet",

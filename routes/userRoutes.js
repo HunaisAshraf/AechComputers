@@ -33,6 +33,7 @@ const {
   cancelOrderController,
   getOrderPage,
   checkoutController,
+  applyCouponController,
 } = require("../controllers/orderController");
 const {
   getCartPage,
@@ -97,6 +98,7 @@ router.delete("/delete-address/:id", requireSignIn, deleteAddressController);
 
 //order and payment
 router.post("/checkout", requireSignIn, checkoutController);
+router.post("/apply-coupon", requireSignIn, applyCouponController);
 router.get("/order-complete", requireSignIn, getOrderPage);
 router.get(
   "/order-cancel/:id",
