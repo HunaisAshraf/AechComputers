@@ -50,13 +50,15 @@
               <th scope="col">status</th>
               <th scope="col">Order Date</th>
               <th scope="col">Action</th>
+              <th scope="col">Details</th>
+              <th scope="col">Invoice</th>
             </tr>
           </thead>
           <tbody>
-            <% order.forEach(order => { %>
+            <% order.forEach((order,i) => { %>
 
             <tr>
-              <td><%= order.orderNumber %></td>
+              <td><%= i+1 %></td>
               <td>₹ <%=new Intl.NumberFormat().format( order.totalPrice) %></td>
               <td><%= order.status %></td>
               <td><%= order.createdAt.toLocaleString() %></td>
@@ -65,7 +67,7 @@
                 <a
                   href="/order-cancel/<%= order._id %>"
                   class="btn btn-dark disabled"
-                  >Cancel</a
+                  >Canceled</a
                 >
               </td>
               <% }else if (order.status === "delivered"){ %>
@@ -85,6 +87,11 @@
                 </button>
               </td>
               <% } %>
+              <td>
+                <a href="/user/orders/<%= order._id%>" class="btn btn-dark"
+                  >Order Details</a
+                >
+              </td>
               <td>
                 <a href="/invoice/<%= order._id%>" class="btn btn-dark"
                   >Download Invoice</a

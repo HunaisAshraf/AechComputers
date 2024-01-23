@@ -1,0 +1,70 @@
+<%- include("partials/header") %>
+<section class="content lists col-md-10">
+  <div>
+    <div class="border rounded p-2">
+      <div class="search d-md-flex justify-content-between border-bottom p-2">
+        <h2>Sales Report</h2>
+        <a href="/download-sales-report" class="btn btn-dark">Download Report</a>
+      </div>
+      <div class="table-responsive content">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Products</th>
+              <th scope="col">Price</th>
+              <th scope="col">Payment Method</th>
+              <th scope="col">Order Date</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% orders.forEach((order,i) => { %>
+
+            <tr id="<%= order._id %>">
+              <th scope="row"><%= order.orderNumber %></th>
+              <td><%= order.address.name %></td>
+              <td>
+                <ul>
+                  <% order.products.forEach(product => { %>
+                  <li><%= product.product.productName %></li>
+                  <% }) %>
+                </ul>
+              </td>
+              <td>₹ <%= new Intl.NumberFormat().format(order.totalPrice) %></td>
+              <td><%= order.paymentMethod %></td>
+              <td><%= order.createdAt.toLocaleString() %></td>
+              <td><%= order.status %></td>
+              <% }) %>
+            </tr>
+          </tbody>
+
+          <tbody></tbody>
+        </table>
+        <div class="d-flex justify-content-center py-3">
+          <nav aria-label="Page navigation example">
+            <ul class="pagination"></ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  function updateStatus(val) {
+    let selectedStatus = document.getElementById("selectedStatus");
+    selectedStatus.value = val;
+
+    let form = document.getElementById("statusForm");
+    form.submit();
+  }
+  function handleSubmit(val) {
+    let selectedValue = document.getElementById("selectedValue");
+    selectedValue.value = val;
+
+    let form = document.getElementById("filter");
+    form.submit();
+  }
+</script>
+<%- include("partials/footer") %>

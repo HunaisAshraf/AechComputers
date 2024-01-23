@@ -55,7 +55,7 @@ function generateCustomerInformation(doc, order) {
 function generateBody(doc, order) {
   generateHr(doc, 90);
 
-  doc.fontSize(15).text("Product Information", 210, 170);
+  doc.fontSize(15).text("Invoice", 210, 170);
 
   doc.font("Helvetica-Bold").fontSize(14).text("Product", 50, 240);
   doc.text("Quantity", 250, 240);
@@ -64,17 +64,17 @@ function generateBody(doc, order) {
   doc.moveDown();
   generateHr(doc, 260);
 
-  order.products.forEach((product, index) => {
-    doc.fontSize(10).text(product.product.productName, 50);
-    doc.text(product.quantity.toString(), 250, doc.y);
+  order.products.forEach((product, i) => {
+    doc.fontSize(10).text(product.product.productName, 50,260+((i+1)*20));
+    doc.text(product.quantity.toString(), 250, 260+((i+1)*20));
     doc.text(
       formatCurrency(product.product.price * product.quantity),
       350,
-      doc.y,
+      260+((i+1)*20),
       { width: 100, align: "right" }
     );
 
-    if (index !== order.products.length - 1) {
+    if (i !== order.products.length - 1) {
       doc.moveDown();
     }
   });

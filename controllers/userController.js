@@ -51,14 +51,14 @@ const getShopPage = async (req, res) => {
         return product;
       }
     });
-    
+
     const categories = await CategoryModel.find({ isAvailable: true });
     res.render("userPages/shopPage", {
       signIn: req.session.signIn,
       products,
       categories,
       count,
-      limit
+      limit,
     });
     req.session.products = null;
     req.session.save();
@@ -475,6 +475,17 @@ const getUserOrdersController = async (req, res) => {
   }
 };
 
+const getUserOrdersDetailsController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let order = await OrderModel.findOne({ _id: id }).populate("products");
+    order = JSON.parse(JSON.stringify(order));
+    res.render("userPages/orderDetails", { order, signIn: req.session.signIn });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const editUserinfoController = async (req, res) => {
   try {
     const { id, firstName, lastName, email, phone } = req.body;
@@ -551,4 +562,5 @@ module.exports = {
   getUserOrdersController,
   editUserPasswordController,
   searchUserProductController,
+  getUserOrdersDetailsController,
 };

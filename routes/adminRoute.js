@@ -13,6 +13,8 @@ const {
   filterUserController,
   getAdminDashboard,
   chartDataController,
+  getSalesReport,
+  downloadSalesReport,
 } = require("../controllers/adminController");
 const { isAdmin } = require("../middlewares/adminMiddlewares");
 const {
@@ -113,6 +115,11 @@ router.get("/coupon-list",isAdmin,getCouponPage)
 router.post("/add-coupon",isAdmin,addCouponController)
 router.post("/edit-coupon",isAdmin,editCouponController)
 router.patch("/coupon/change-status",isAdmin,editCouponStatusController)
+
+//salesReport
+
+router.get("/sales-report",isAdmin,getSalesReport)
+router.get("/download-sales-report",isAdmin,downloadSalesReport)
 
 module.exports = router;
 

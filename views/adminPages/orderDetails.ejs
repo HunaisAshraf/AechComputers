@@ -4,6 +4,7 @@
     <h1>Order Number # <%= order.orderNumber %></h1>
     <p>OrderId # <%= order._id %></p>
   </div>
+  <% console.log(order) %>
   <div class="d-flex justify-content-evenly">
     <div class="address">
       <p class="m-0">Name : <%= order.address.name %></p>
@@ -25,6 +26,7 @@
       <thead>
         <tr>
           <th scope="col">Name</th>
+          <th scope="col">Image</th>
           <th scope="col">Price</th>
           <th scope="col">Quantity</th>
           <th scope="col">Order Date</th>
@@ -33,11 +35,11 @@
       <tbody>
         <% order.products.forEach(prod => { %>
         <tr>
-
           <td><%= prod.product.productName %></td>
+          <td><img src="/uploads/<%= prod.product.images[0] %>" height="70" alt="" /></td>
           <td>₹ <%= new Intl.NumberFormat().format(prod.product.price ) %></td>
           <td><%= prod.quantity %></td>
-          
+
           <td><%= order.createdAt.toLocaleString() %></td>
           <% }) %>
         </tr>

@@ -3,6 +3,8 @@ const hashPassword = require("../helpers/helper");
 const UserModel = require("../models/userModel");
 const OrderModel = require("../models/orderModel");
 const ProductModel = require("../models/productModel");
+const exceljs = require("exceljs");
+const fs = require("node:fs");
 
 const adminLoginPageController = async (req, res) => {
   if (!req.session.admin) {
@@ -246,6 +248,57 @@ const filterUserController = async (req, res) => {
   }
 };
 
+const getSalesReport = async (req, res) => {
+  try {
+    const orders = await OrderModel.find();
+    res.render("adminPages/salesReport", { orders });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const downloadSalesReport = async (req, res) => {
+  try {
+    const workBook = new exceljs.Workbook();
+    const sheet = workBook.addWorksheet("book");
+    sheet.columns = [
+      { header: "No", key: "no", width: 10 },
+      { header: "Name", key: "name", width: 25 },
+      { header: "Products", key: "products", width: 35 },
+      { header: "Price", key: "price", width: 25 },
+      { header: "Payment Method", key: "paymentMethod", width: 25 },
+      { header: "Order Date", key: "orderDate", width: 25 },
+      { header: "Status", key: "status", width: 20 },
+    ];
+
+    const orders = await OrderModel.find();
+
+    orders.map((order, i) => {
+      sheet.addRow({
+        no: order.orderNumber,
+        name: order.address.name,
+        products: order.products
+          .map((product) => product.product.productName)
+          .join(", "),
+        price: `₹ ${new Intl.NumberFormat().format(order.totalPrice)}`,
+        paymentMethod: order.paymentMethod,
+        orderDate: order.createdAt.toLocaleString(),
+        status: order.status,
+      });
+    });
+
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader("Content-Disposition", "attachment; filename=salesReport.xlsx");
+
+    workBook.xlsx.write(res);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const adminLogoutController = (req, res) => {
   try {
     req.session.admin = null;
@@ -268,4 +321,6 @@ module.exports = {
   filterUserController,
   adminLogoutController,
   chartDataController,
+  getSalesReport,
+  downloadSalesReport,
 };
