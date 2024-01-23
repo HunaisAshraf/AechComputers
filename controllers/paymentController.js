@@ -1,6 +1,8 @@
 const Razorpay = require("razorpay");
 const dotenv = require("dotenv");
-const WalletModel = require("../models/walletModel")
+const WalletModel = require("../models/walletModel");
+const createInvoice = require("../helpers/generatePdf");
+const orderModel = require("../models/orderModel");
 
 dotenv.config();
 
@@ -27,15 +29,35 @@ const createOrder = async (req, res) => {
   }
 };
 
-
-const getWalletBalance = async(req,res)=>{
-  try{
-    const wallet = await WalletModel.findOne({user:req.session.user._id})
-    console.log(wallet)
-    res.json({balance:wallet.balance})
-  }catch(error){
-    console.log(error)
+const getWalletBalance = async (req, res) => {
+  try {
+    const wallet = await WalletModel.findOne({ user: req.session.user._id });
+    console.log(wallet);
+    res.json({ balance: wallet.balance });
+  } catch (error) {
+    console.log(error);
   }
-}
+};
 
-module.exports = { createOrder,getWalletBalance };
+const invoiceDownloadController = async (req, res) => {
+  try {
+    const {id} = req.params;
+
+    const order = await orderModel.findOne({_id:id});
+
+    const stream = res.writeHead(200, {
+      "Content-Type": "application/pdf",
+      "Content-Disposition": "attachment;filename=invoice.pdf",
+    });
+
+    createInvoice(
+      (chunk) => stream.write(chunk),
+      () => stream.end(),
+      order
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = { createOrder, getWalletBalance,invoiceDownloadController };

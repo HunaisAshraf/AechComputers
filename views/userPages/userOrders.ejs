@@ -69,13 +69,11 @@
                 >
               </td>
               <% }else if (order.status === "delivered"){ %>
-                <td>
-                  <a
-                    href="/order-cancel/<%= order._id %>"
-                    class="btn btn-dark"
-                    >Return</a
-                  >
-                </td>
+              <td>
+                <a href="/order-cancel/<%= order._id %>" class="btn btn-dark"
+                  >Return</a
+                >
+              </td>
               <% }else{ %>
               <td>
                 <button
@@ -87,6 +85,11 @@
                 </button>
               </td>
               <% } %>
+              <td>
+                <a href="/invoice/<%= order._id%>" class="btn btn-dark"
+                  >Download Invoice</a
+                >
+              </td>
             </tr>
             <% }) %>
           </tbody>

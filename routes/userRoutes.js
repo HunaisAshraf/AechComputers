@@ -49,6 +49,7 @@ const {
 const {
   createOrder,
   getWalletBalance,
+  invoiceDownloadController,
 } = require("../controllers/paymentController");
 
 const router = express.Router();
@@ -109,6 +110,7 @@ router.get(
 );
 router.post("/create-order", requireSignIn, createOrder);
 router.get("/wallet-balance", requireSignIn, getWalletBalance);
+router.get("/invoice/:id", requireSignIn, invoiceDownloadController);
 
 //logout routes
 router.get("/logout", userLogoutController);

@@ -14,6 +14,9 @@
       <p>order id : <%= order._id %></p>
       <a href="/shop" class="btn btn-dark">Continue Shoping</a>
       <a href="/user/orders" class="btn btn-dark">Order Details</a>
+      <a href="/invoice/<%= order._id%>" class="btn btn-dark"
+        >Download Invoice</a
+      >
     </div>
   </div>
 </main>
