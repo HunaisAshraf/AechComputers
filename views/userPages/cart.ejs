@@ -80,9 +80,12 @@
                 products.product.price* products.quantity ) %>
               </td>
               <td>
-                <a href="/delete-cart/<%= products._id %>" class="btn btn-dark"
-                  ><i class="bi bi-trash3-fill"></i
-                ></a>
+                <button
+                  onclick="deleteCart('<%=products._id %>')"
+                  class="btn btn-dark"
+                >
+                  <i class="bi bi-trash3-fill"></i>
+                </button>
               </td>
             </tr>
             <% }) %>
@@ -192,6 +195,27 @@
 
   function updateCounterDisplay(index) {
     document.getElementById("counterDisplay" + index).value = counter;
+  }
+
+  async function deleteCart(id) {
+    try {
+      const data = await fetch(`/delete-cart/${id}`);
+
+      const json = await data.json();
+
+      if (json.success) {
+        Swal.fire({
+          title: "Deleted!!!",
+          text: "Product Deleted from cart",
+          icon: "success",
+          confirmButtonText: "Ok",
+        }).then(() => {
+          window.location.href = "/cart";
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 </script>
 

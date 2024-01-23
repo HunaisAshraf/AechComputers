@@ -67,7 +67,7 @@
                 <form
                   action="/update-status"
                   method="post"
-                  id="statusForm"
+                  id="statusForm<%= i %>"
                   class="w-100"
                 >
                   <input
@@ -85,6 +85,7 @@
                   <select
                     class="form-select rounded-pill w-50"
                     aria-label="Default select example"
+                    id="<%= order._id %>"
                     onchange="updateStatus(this.value)"
                   >
                     <option selected><%= order.status %></option>

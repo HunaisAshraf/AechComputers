@@ -116,7 +116,7 @@ const cancelOrderController = async (req, res) => {
     await OrderModel.findByIdAndUpdate(id, {
       status: "cancelled",
     });
-    res.redirect("/profile");
+    res.redirect("/user/order");
   } catch (error) {
     console.log(error);
   }

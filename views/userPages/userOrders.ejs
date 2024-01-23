@@ -68,6 +68,14 @@
                   >Cancel</a
                 >
               </td>
+              <% }else if (order.status === "delivered"){ %>
+                <td>
+                  <a
+                    href="/order-cancel/<%= order._id %>"
+                    class="btn btn-dark"
+                    >Return</a
+                  >
+                </td>
               <% }else{ %>
               <td>
                 <button

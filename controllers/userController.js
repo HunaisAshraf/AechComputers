@@ -57,7 +57,10 @@ const filterCategoryPage = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const products = await ProductModel.find({ category: id });
+    const products = await ProductModel.find({ category: id }).populate(
+      "category"
+    );
+
     req.session.products = products;
     res.redirect("/shop");
   } catch (error) {

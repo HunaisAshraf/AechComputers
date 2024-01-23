@@ -33,7 +33,7 @@
         <p class="fw-semibold">
           ₹ <%= new Intl.NumberFormat().format(product.price) %>
         </p>
-        <form action="/add-to-cart/<%= product.id %>" method="post" >
+        <form>
           <div class="btn-group" role="group">
             <button
               type="button"
@@ -47,7 +47,7 @@
               id="counterDisplay"
               name="quantity"
               value="1"
-              style="width: 40px;"
+              style="width: 40px"
             />
 
             <button
@@ -65,7 +65,19 @@
             id="productQuantity"
           />
           <div class="my-3">
-            <button type="submit" class="btn btn-dark w-25">Add To Cart</button>
+            <% if(signIn){ %>
+            <button
+              type="button"
+              onclick="handleSubmit(event,'<%= product.id %>')"
+              class="btn btn-dark w-25"
+            >
+              Add To Cart
+            </button>
+            <% }else{ %>
+
+            <a href="/signin" class="btn btn-dark w-25"> Add To Cart</a>
+            <% } %>
+
             <!-- <a href="/add-to-cart/<%= product._id %>" class="btn btn-dark w-25"
               >Add To Cart</a
             > -->
@@ -88,6 +100,34 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
 
   <script>
+    async function handleSubmit(event, id) {
+      try {
+        event.preventDefault();
+        let quantity = document.getElementById("counterDisplay").value;
+
+        const data = await fetch(`/add-to-cart/${id}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ quantity }),
+        });
+
+        const json = await data.json();
+
+        if (json.success) {
+          Swal.fire({
+            title: "Added!!!",
+            text: "Product Added to cart",
+            icon: "success",
+            confirmButtonText: "Ok",
+          }).then(() => {
+            window.location.href = "/cart";
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
     function changeImg(clickedImg) {
       let image = document.getElementById("disp-img");
       image.src = clickedImg.src;

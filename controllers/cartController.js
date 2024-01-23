@@ -31,7 +31,7 @@ const addToCartController = async (req, res) => {
     const user = req.session.user._id;
     const checkProduct = await productModel.findOne({ _id: product });
     const foundProduct = await CartModel.findOne({ product });
-    const foundUser = await CartModel.findOne({ user:req.session.user._id });
+    const foundUser = await CartModel.findOne({ user: req.session.user._id });
 
     if (foundProduct && foundUser) {
       if (foundProduct.quantity + quantity <= checkProduct.quantity) {
@@ -40,7 +40,8 @@ const addToCartController = async (req, res) => {
         res.redirect(`/product/${product}`);
       }
       foundProduct.save();
-      res.redirect("/cart");
+      // res.redirect("/cart");
+      return res.status(200).send({ success: true });
     } else {
       const cart = await new CartModel({
         user,
@@ -48,7 +49,8 @@ const addToCartController = async (req, res) => {
         quantity,
       }).save();
 
-      res.redirect("/cart");
+      return res.status(200).send({ success: true });
+      // res.redirect("/cart");
     }
   } catch (error) {
     console.log("error in adding to cart", error);
@@ -80,12 +82,11 @@ const updateCartController = async (req, res) => {
 
 const deleteCartController = async (req, res) => {
   try {
-    console.log(req.params);
     const { id } = req.params;
 
     const cart = await CartModel.findByIdAndDelete(id);
-
-    res.redirect("/cart");
+    res.status(200).send({ success: true });
+    // res.redirect("/cart");
   } catch (error) {
     console.log(error);
   }
@@ -157,11 +158,11 @@ const updateAdressController = async (req, res) => {
       state,
       pincode,
     });
-    res.status(200).send({success:true})
+    res.status(200).send({ success: true });
     // res.redirect("/address");
   } catch (error) {
     console.log("error in updating address ", error);
-    res.status(500).send({success:false})
+    res.status(500).send({ success: false });
   }
 };
 
@@ -170,10 +171,10 @@ const deleteAddressController = async (req, res) => {
     const { id } = req.params;
     const address = await AddressModel.findByIdAndDelete(id);
     // res.redirect("/address");
-    res.status(200).send({success:true})
+    res.status(200).send({ success: true });
   } catch (error) {
     console.log("error in deleting address ", error);
-    res.status(500).send({success:false})
+    res.status(500).send({ success: false });
   }
 };
 

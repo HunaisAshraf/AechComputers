@@ -128,6 +128,10 @@ const adminLoginController = async (req, res) => {
 
     const user = await AdminModel.findOne({ email });
 
+    if (!user) {
+      req.session.inValid = true;
+      res.redirect("/admin-login");
+    }
     const matchPassword = await hashPassword.comparePassword(
       password,
       user.password

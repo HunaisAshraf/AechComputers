@@ -524,12 +524,17 @@
           title: "Not Valid!!",
           text: "Coupon applied is not valid",
           icon: "warning",
+          confirmButtonText: "Ok",
+        }).then(() => {
+          window.location.reload();
         });
       } else if (currDate > endDate) {
         Swal.fire({
           title: "Expired!!",
           text: "Coupon expired",
           icon: "warning",
+        }).then(() => {
+          window.location.reload();
         });
       } else if (json.success) {
         console.log("lasjdf");
