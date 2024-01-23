@@ -10,7 +10,7 @@
         <% banners.forEach((banner, index) => { %>
         <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
           <img
-            src="uploads/<%= banner.image %>"
+            src="/uploads/<%= banner.image %>"
             class="d-block w-100 rounded img-fluid"
             alt="<%= banner.image %>"
           />
@@ -51,7 +51,7 @@
       >
         <div class="card mb-3" style="max-width: 18rem">
           <img
-            src="uploads/<%= category.image %>"
+            src="/uploads/<%= category.image %>"
             class="card-img-top"
             alt="..."
           />

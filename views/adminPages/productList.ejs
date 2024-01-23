@@ -57,7 +57,7 @@
             <th scope="row"><%= i+1 %></th>
             <td>
               <% product.images.forEach(image => { %>
-              <img height="50" src="uploads/<%= image %>" alt="" />
+              <img height="50" src="/uploads/<%= image %>" alt="" />
               <% }) %>
             </td>
             <td><%= product.productName %></td>
@@ -126,6 +126,20 @@
           <% }) %>
         </tbody>
       </table>
+      <div class="d-flex justify-content-center py-3">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+           
+            <% for( let i = 0; i < count/limit; i++ ) { %>
+            <li class="page-item">
+              <a class="page-link" href="/product-list/?page=<%=i+1 %>"><%= i+1 %></a>
+            </li>
+            <% } %>
+           
+          </ul>
+        </nav>
+      </div>
+    </section>
     </div>
   </div>
   <script>

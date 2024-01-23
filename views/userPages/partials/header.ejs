@@ -65,11 +65,19 @@
                 <a class="nav-link text-white" href="/shop">Products</a>
               </li>
               <li class="nav-item">
+                <div id="search-bar" class=" justify-content-center" style="display: none;">
+                  <form class="d-flex" role="search" action="/user/search-prouct" method="post">
+                    <input name="search" class="form-control rounded-start-pill border-light" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-light rounded-end-pill" type="submit"><i class="bi bi-search"></i></button>
+                  </form>
+                </div>
+            </li>
+              <!-- <li class="nav-item">
                 <a class="nav-link text-white" href="#">About</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link text-white" href="#">Contact</a>
-              </li>
+              </li> -->
               <!-- <li>
                 <form class="d-flex" role="search">
                   <input
@@ -85,6 +93,13 @@
               </li> -->
             </ul>
             <ul class="navbar-nav mb-2 mb-lg-0">
+              
+              <li class="nav-item">
+                <button onclick="handleSearch()" type="button" class="btn" >
+                  <i class="bi bi-search text-light"></i>
+                </button>
+                
+              </li>
               <li class="nav-item">
                 <a href="" class="nav-link"
                   ><i class="bi bi-heart text-white fs-6"></i
@@ -129,5 +144,17 @@
         </div>
       </nav>
     </header>
-
+    
 </html>
+<script>
+  function handleSearch(){
+    let search = document.getElementById("search-bar")
+
+    if(search.style.display === "none"){
+      search.style.display="flex";
+    }else{
+      search.style.display="none";
+    }
+
+  }
+</script>

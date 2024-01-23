@@ -4,12 +4,17 @@ const mongoose = require("mongoose");
 const getCategoryListpage = async (req, res) => {
   try {
     let categories;
+    let count;
+    let page = Number(req.query.page) || 1;
+    let limit = 3;
+    let skip = (page - 1) * limit;
     if (req.session.category) {
       categories = req.session.category;
     } else {
-      categories = await CategoryModel.find();
+      count = await CategoryModel.find().estimatedDocumentCount();
+      categories = await CategoryModel.find().skip(skip).limit(limit);
     }
-    res.render("adminPages/categoryList", { categories });
+    res.render("adminPages/categoryList", { categories,count,limit });
     req.session.category = null;
     req.session.save();
   } catch (error) {
@@ -34,7 +39,7 @@ const AddCategoryController = async (req, res) => {
   try {
     const { categoryName, description } = req.body;
     const image = req.files[0].filename;
-    
+
     const categories = await CategoryModel.findOne({ categoryName });
 
     if (categories) {

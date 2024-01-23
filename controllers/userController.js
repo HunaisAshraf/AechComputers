@@ -30,21 +30,35 @@ const getHomeController = async (req, res) => {
 const getShopPage = async (req, res) => {
   try {
     let allProducts;
+    let count;
+    let page = Number(req.query.page) || 1;
+    // let limit = Number(req.query.limit);
+    let limit = 3;
+    let skip = (page - 1) * limit;
+
     if (req.session.products) {
       allProducts = req.session.products;
     } else {
-      allProducts = await ProductModel.find().populate("category");
+      count = await ProductModel.find().estimatedDocumentCount();
+      allProducts = await ProductModel.find()
+        .skip(skip)
+        .limit(limit)
+        .populate("category");
     }
+
     let products = allProducts.filter((product) => {
       if (product.category.isAvailable && product.isListed) {
         return product;
       }
     });
+    
     const categories = await CategoryModel.find({ isAvailable: true });
     res.render("userPages/shopPage", {
       signIn: req.session.signIn,
       products,
       categories,
+      count,
+      limit
     });
     req.session.products = null;
     req.session.save();
@@ -61,6 +75,22 @@ const filterCategoryPage = async (req, res) => {
       "category"
     );
 
+    req.session.products = products;
+    res.redirect("/shop");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const searchUserProductController = async (req, res) => {
+  try {
+    const { search } = req.body;
+    const products = await ProductModel.find({
+      $or: [
+        { productName: { $regex: search, $options: "i" } },
+        { description: { $regex: search, $options: "i" } },
+      ],
+    }).populate("category");
     req.session.products = products;
     res.redirect("/shop");
   } catch (error) {
@@ -520,4 +550,5 @@ module.exports = {
   getUserAddressController,
   getUserOrdersController,
   editUserPasswordController,
+  searchUserProductController,
 };

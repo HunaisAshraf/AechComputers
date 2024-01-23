@@ -4,13 +4,22 @@ const ProductModel = require("../models/productModel");
 const getProductListPage = async (req, res) => {
   try {
     let products;
+    let count;
+    let page = Number(req.query.page) || 1;
+    let limit = 3;
+    let skip = (page - 1) * limit;
+
     if (req.session.product) {
       products = req.session.product;
     } else {
-      products = await ProductModel.find().populate("category");
+      count = await ProductModel.find().estimatedDocumentCount();
+      products = await ProductModel.find()
+        .skip(skip)
+        .limit(limit)
+        .populate("category");
     }
 
-    res.render("adminPages/productList", { products });
+    res.render("adminPages/productList", { products,count,limit });
     req.session.product = null;
     req.session.save();
   } catch (error) {

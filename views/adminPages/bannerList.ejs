@@ -8,10 +8,23 @@
     <div class="content p-3">
       <% banner.forEach(b => { %>
       <div class="border b-3 d-flex justify-content-around align-items-center py-3">
-        <img width="500" class="rounded" src="uploads/<%= b.image %>" alt=""  />
+        <img width="500" class="rounded" src="/uploads/<%= b.image %>" alt=""  />
         <button class="btn btn-dark">Delete</button>
       </div>
       <% }) %>
+    </div>
+    <div class="d-flex justify-content-center py-3">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+         
+          <% for( let i = 0; i < count/limit; i++ ) { %>
+          <li class="page-item">
+            <a class="page-link" href="/banner-list/?page=<%=i+1 %>"><%= i+1 %></a>
+          </li>
+          <% } %>
+         
+        </ul>
+      </nav>
     </div>
   </div>
 </section>

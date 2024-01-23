@@ -9,7 +9,7 @@
         <div class="list-img d-flex flex-column">
           <%product.images.forEach(image => { %>
           <img
-            src="uploads/<%= image %>"
+            src="/uploads/<%= image %>"
             height="100"
             alt=""
             class="me-2 mb-2 rounded zoom-img"
@@ -21,7 +21,7 @@
         <div class="show-img">
           <img
             id="disp-img"
-            src="uploads/<%= product.images[0] %>"
+            src="/uploads/<%= product.images[0] %>"
             alt=""
             class="rounded img-fluid"
             data-zoom-image="uploads/<%= product.images[0] %>"

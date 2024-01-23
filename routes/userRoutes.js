@@ -27,6 +27,7 @@ const {
   getUserAddressController,
   getUserOrdersController,
   editUserPasswordController,
+  searchUserProductController,
 } = require("../controllers/userController");
 const { requireSignIn } = require("../middlewares/userMiddleware");
 const {
@@ -63,6 +64,7 @@ router.get("/user/address", requireSignIn, getUserAddressController);
 router.get("/user/orders", requireSignIn, getUserOrdersController);
 router.post("/user/edit-user", requireSignIn, editUserinfoController);
 router.post("/user/edit-password", requireSignIn, editUserPasswordController);
+router.post("/user/search-prouct", searchUserProductController);
 
 //login routes
 router.get("/signin", getUserLoginController);

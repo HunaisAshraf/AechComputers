@@ -2,12 +2,19 @@ const OrderModel = require("../models/orderModel");
 
 const getOrderList = async (req, res) => {
   try {
+    let orders;
+    let count;
+    let page = Number(req.query.page) || 1;
+    let limit = 3;
+    let skip = (page - 1) * limit;
     if (req.session.orderList) {
-      res.render("adminPages/orderList", { orders: req.session.orderList });
+      orders = req.session.orderList;
     } else {
-      const orders = await OrderModel.find();
-      res.render("adminPages/orderList", { orders });
+      count = await OrderModel.find().estimatedDocumentCount();
+
+      orders = await OrderModel.find().skip(skip).limit(limit);
     }
+    res.render("adminPages/orderList", { orders, count, limit });
     req.session.orderList = null;
     req.session.save();
   } catch (error) {

@@ -162,12 +162,19 @@ const userListPageController = async (req, res) => {
 
 const userListController = async (req, res) => {
   try {
+    let users;
+    let count;
+    let page = Number(req.query.page) || 1;
+    let limit = 2;
+    let skip = (page - 1) * limit;
     if (!req.session.allUser) {
-      const users = await UserModel.find();
-      res.render("adminPages/userList", { users });
+      count = await UserModel.find().estimatedDocumentCount();
+      users = await UserModel.find().skip(skip).limit(limit);
     } else {
-      res.render("adminPages/userList", { users: req.session.allUser });
+      users = req.session.allUser;
+      // res.render("adminPages/userList", { users: req.session.allUser });
     }
+    res.render("adminPages/userList", { users, count, limit });
     req.session.allUser = null;
     req.session.save();
   } catch (error) {
