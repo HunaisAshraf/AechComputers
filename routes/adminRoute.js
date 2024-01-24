@@ -55,6 +55,7 @@ const {
   filterCategoryController,
 } = require("../controllers/categoryController");
 const { getCouponPage, addCouponController, editCouponController, editCouponStatusController } = require("../controllers/couponController");
+const { getOfferPage, addProductOfferController, editProductOffer, editProductOfferStatus } = require("../controllers/offerControl");
 
 //admin login
 router.get("/admin-login", adminLoginPageController);
@@ -120,6 +121,13 @@ router.patch("/coupon/change-status",isAdmin,editCouponStatusController)
 
 router.get("/sales-report",isAdmin,getSalesReport)
 router.get("/download-sales-report",isAdmin,downloadSalesReport)
+
+//product offer list
+
+router.get("/offer-list",isAdmin,getOfferPage)
+router.post("/add-product-offer",isAdmin,addProductOfferController)
+router.put("/edit-product-offer",isAdmin,editProductOffer)
+router.get("/productoffer-status/:id",isAdmin,editProductOfferStatus)
 
 module.exports = router;
 

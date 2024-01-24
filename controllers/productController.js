@@ -19,7 +19,7 @@ const getProductListPage = async (req, res) => {
         .populate("category");
     }
 
-    res.render("adminPages/productList", { products,count,limit });
+    res.render("adminPages/productList", { products, count, limit });
     req.session.product = null;
     req.session.save();
   } catch (error) {
@@ -39,14 +39,13 @@ const getAddProductPage = async (req, res) => {
 
 const addProductController = async (req, res) => {
   try {
-    console.log(req.body);
-    console.log(req.files);
     const { productName, price, category, quantity, description } = req.body;
     const images = req.files.map((m) => m.filename);
 
     const product = await new ProductModel({
       productName,
       price,
+      offerPrice: price,
       category,
       quantity,
       description,

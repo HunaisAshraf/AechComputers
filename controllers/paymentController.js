@@ -43,7 +43,7 @@ const invoiceDownloadController = async (req, res) => {
   try {
     const {id} = req.params;
 
-    const order = await orderModel.findOne({_id:id});
+    const order = await orderModel.findOne ({_id:id});
 
     const stream = res.writeHead(200, {
       "Content-Type": "application/pdf",

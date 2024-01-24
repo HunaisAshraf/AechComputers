@@ -116,9 +116,24 @@
                 >
                   <div>
                     <h5 class="card-title"><%= product.productName %></h5>
+                    <% if(product.offerPrice < product.price){ %>
+
+                    <p class="card-text">
+                      <span class="fw-bold">
+                        ₹ <%= new
+                        Intl.NumberFormat().format(product.offerPrice)%>
+                      </span>
+                      <span class="text-danger text-decoration-line-through"
+                        >₹ <%= new
+                        Intl.NumberFormat().format(product.price)%></span
+                      >
+                    </p>
+                    <% }else{ %>
+
                     <p class="card-text">
                       ₹ <%= new Intl.NumberFormat().format(product.price)%>
                     </p>
+                    <% } %>
                   </div>
                   <% if(signIn){ %>
                   <button

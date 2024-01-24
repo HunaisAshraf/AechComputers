@@ -11,7 +11,7 @@ const getCartPage = async (req, res) => {
     let totalPrice = 0;
 
     for (let product of cartProducts) {
-      totalPrice += product?.product?.price * product?.quantity;
+      totalPrice += product?.product?.offerPrice * product?.quantity;
     }
 
     res.render("userPages/cart", {
@@ -101,7 +101,7 @@ const getAdressPage = async (req, res) => {
     let totalPrice = 0;
 
     for (let product of cart) {
-      totalPrice += product?.product?.price * product?.quantity;
+      totalPrice += product?.product?.offerPrice * product?.quantity;
     }
 
     const addresses = await AddressModel.find({

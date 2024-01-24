@@ -195,7 +195,7 @@
                       <input
                         type="date"
                         class="form-control"
-                        id="startDate"
+                        id="startDate<%= i %>"
                         name="startDate"
                         aria-describedby="emailHelp"
                         value="<%=coupon.startDate.toISOString().split('T')[0]%>"
@@ -208,7 +208,7 @@
                       <input
                         type="date"
                         class="form-control"
-                        id="endDate"
+                        id="endDate<%= i %>"
                         name="endDate"
                         aria-describedby="emailHelp"
                         value="<%=coupon.endDate.toISOString().split('T')[0]%>"
@@ -230,13 +230,13 @@
       <div class="d-flex justify-content-center py-3">
         <nav aria-label="Page navigation example">
           <ul class="pagination">
-           
             <% for( let i = 0; i < count/limit; i++ ) { %>
             <li class="page-item">
-              <a class="page-link" href="/coupon-list/?page=<%=i+1 %>"><%= i+1 %></a>
+              <a class="page-link" href="/coupon-list/?page=<%=i+1 %>"
+                ><%= i+1 %></a
+              >
             </li>
             <% } %>
-           
           </ul>
         </nav>
       </div>
@@ -288,7 +288,7 @@
             text: "Coupon Already Exists",
             icon: "error",
             confirmButtonText: "OK",
-          })
+          });
         } else if (json.success) {
           Swal.fire({
             title: "Added!!",
@@ -347,6 +347,47 @@
     } catch (error) {
       console.log(error);
     }
+  }
+
+  let today = new Date().toISOString().split("T")[0];
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var startDateInput = document.getElementById("startDate");
+    var endDateInput = document.getElementById("endDate");
+
+    startDateInput.setAttribute("min", today);
+    endDateInput.setAttribute("min", today);
+
+    startDateInput.addEventListener("change", function () {
+      var startDate = startDateInput.value;
+      endDateInput.setAttribute("min", startDate);
+    });
+
+    endDateInput.addEventListener("change", function () {
+      var endDate = endDateInput.value;
+      startDateInput.setAttribute("max", endDate);
+    });
+  });
+
+  for (let i = 0; i < "<%= coupons.length %>"; i++) {
+
+    document.addEventListener("DOMContentLoaded", function () {
+      var startDateInput = document.getElementById("startDate" + i);
+      var endDateInput = document.getElementById("endDate" + i);
+
+      startDateInput.setAttribute("min", today);
+      endDateInput.setAttribute("min", today);
+
+      startDateInput.addEventListener("change", function () {
+        var startDate = startDateInput.value;
+        endDateInput.setAttribute("min", startDate);
+      });
+
+      endDateInput.addEventListener("change", function () {
+        var endDate = endDateInput.value;
+        startDateInput.setAttribute("max", endDate);
+      });
+    });
   }
 </script>
 

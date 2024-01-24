@@ -7,6 +7,7 @@ const path = require("node:path");
 const session = require("express-session");
 const userRoute = require("./routes/userRoutes");
 const adminRoute = require("./routes/adminRoute");
+// const { applyProductOffer } = require("./helpers/offer");
 // const categoryRoute = require("./routes/categoryRoute");
 // const productRoute = require("./routes/productRoute");
 // const cartRoute = require("./routes/cartRoute");
@@ -33,17 +34,24 @@ app.use(
   })
 );
 
+// setInterval(()=>{
+//   console.log("aaa")
+// },3000)
+
 app.use(express.static(path.join(__dirname, "/public")));
 app.use("/edit-category", express.static("public"));
 app.use("/edit-product", express.static("public"));
 app.use("/product", express.static("public"));
 
+
+// console.log();
 //routes
 app.use(userRoute);
 app.use(adminRoute);
 // app.use(categoryRoute);
 // app.use(productRoute);
 // app.use(cartRoute);
+
 app.use("/*", (req, res) => {
   res.render("userPages/404", { signIn: req.session.signIn });
 });

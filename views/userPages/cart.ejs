@@ -77,7 +77,7 @@
 
               <td class="price">
                 ₹ <%=new Intl.NumberFormat("en-IN").format(
-                products.product.price* products.quantity ) %>
+                products.product.offerPrice* products.quantity ) %>
               </td>
               <td>
                 <button
@@ -160,9 +160,9 @@
     let grandTotal = 0;
     for (let i = 0; i < products.length; i++) {
       price[i].innerHTML = `₹ ${new Intl.NumberFormat("en-IN").format(
-        products[i].product.price * products[i].quantity
+        products[i].product.offerPrice * products[i].quantity
       )}`;
-      grandTotal += products[i].product.price * products[i].quantity;
+      grandTotal += products[i].product.offerPrice * products[i].quantity;
     }
 
     document.getElementById(
