@@ -18,8 +18,8 @@ const getHomeController = async (req, res) => {
   try {
     const banners = await BannerModel.find();
     const categories = await CategoryModel.find();
-    await applyProductOffer();
     await applyCategoryOffer();
+    await applyProductOffer();
     res.render("userPages/userHome", {
       signIn: req.session.signIn,
       banners,
