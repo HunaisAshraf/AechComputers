@@ -15,6 +15,7 @@ const {
   chartDataController,
   getSalesReport,
   downloadSalesReport,
+  filterSalesReport,
 } = require("../controllers/adminController");
 const { isAdmin } = require("../middlewares/adminMiddlewares");
 const {
@@ -135,6 +136,7 @@ router.patch("/coupon/change-status", isAdmin, editCouponStatusController);
 
 router.get("/sales-report", isAdmin, getSalesReport);
 router.get("/download-sales-report", isAdmin, downloadSalesReport);
+router.post("/filter-sales-report", isAdmin, filterSalesReport);
 
 //product offer list
 

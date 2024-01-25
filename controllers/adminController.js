@@ -250,8 +250,32 @@ const filterUserController = async (req, res) => {
 
 const getSalesReport = async (req, res) => {
   try {
-    const orders = await OrderModel.find();
-    res.render("adminPages/salesReport", { orders });
+    let sales;
+    if (req.session.sales) {
+      sales = req.session.sales;
+    } else {
+      sales = await OrderModel.find();
+    }
+    res.render("adminPages/salesReport", {
+      sales,
+      date: req.session.salesFilterDate,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const filterSalesReport = async (req, res) => {
+  try {
+    let { startDate, endDate } = req.body;
+
+    let sales = await OrderModel.find({
+      createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) },
+    });
+
+    req.session.sales = sales;
+    req.session.salesFilterDate = req.body;
+    res.redirect("/sales-report");
   } catch (error) {
     console.log(error);
   }
@@ -271,7 +295,11 @@ const downloadSalesReport = async (req, res) => {
       { header: "Status", key: "status", width: 20 },
     ];
 
-    const orders = await OrderModel.find();
+    const { startDate, endDate } = req.session.salesFilterDate;
+
+    const orders = await OrderModel.find({
+      createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) },
+    });
 
     orders.map((order, i) => {
       sheet.addRow({
@@ -291,7 +319,10 @@ const downloadSalesReport = async (req, res) => {
       "Content-Type",
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     );
-    res.setHeader("Content-Disposition", "attachment; filename=salesReport.xlsx");
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=salesReport.xlsx"
+    );
 
     workBook.xlsx.write(res);
   } catch (error) {
@@ -323,4 +354,5 @@ module.exports = {
   chartDataController,
   getSalesReport,
   downloadSalesReport,
+  filterSalesReport,
 };

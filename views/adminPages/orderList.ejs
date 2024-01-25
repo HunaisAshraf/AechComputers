@@ -86,7 +86,8 @@
                     class="form-select rounded-pill w-50"
                     aria-label="Default select example"
                     id="<%= order._id %>"
-                    onchange="updateStatus(this.value)"
+                
+                    onchange="updateStatus(this.value,'<%= i%>')"
                   >
                     <option selected><%= order.status %></option>
                     <option value="pending">pending</option>
@@ -123,11 +124,13 @@
   </div>
 </section>
 <script>
-  function updateStatus(val) {
+  function updateStatus(val,index) {
+
+    console.log(val, index)
     let selectedStatus = document.getElementById("selectedStatus");
     selectedStatus.value = val;
 
-    let form = document.getElementById("statusForm");
+    let form = document.getElementById("statusForm"+index);
     form.submit();
   }
   function handleSubmit(val) {
