@@ -3,7 +3,7 @@ const BannerModel = require("../models/bannerModel");
 const getBannerPage = async (req, res) => {
   try {
     let page = Number(req.query.page) || 1;
-    let limit = 3;
+    let limit = 5;
     let skip = (page - 1) * limit;
     const count = await BannerModel.find().estimatedDocumentCount();
     const banner = await BannerModel.find();

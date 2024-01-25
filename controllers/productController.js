@@ -6,7 +6,7 @@ const getProductListPage = async (req, res) => {
     let products;
     let count;
     let page = Number(req.query.page) || 1;
-    let limit = 3;
+    let limit = 5;
     let skip = (page - 1) * limit;
 
     if (req.session.product) {

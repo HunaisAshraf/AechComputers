@@ -36,7 +36,7 @@ const getShopPage = async (req, res) => {
     let count;
     let page = Number(req.query.page) || 1;
     // let limit = Number(req.query.limit);
-    let limit = 3;
+    let limit = 5;
     let skip = (page - 1) * limit;
 
     if (req.session.products) {
@@ -62,6 +62,7 @@ const getShopPage = async (req, res) => {
       categories,
       count,
       limit,
+      selectedFilter: req.session.selectedFilter,
     });
     req.session.products = null;
     req.session.save();
@@ -104,11 +105,11 @@ const searchUserProductController = async (req, res) => {
 const filterProductByCAtegory = async (req, res) => {
   try {
     const { id } = req.body;
-    console.log(id);
     const products = await ProductModel.find({ category: id }).populate(
       "category"
     );
     req.session.products = products;
+    req.session.selectedFilter = id;
     res.redirect("/shop");
   } catch (error) {
     console.log(error);

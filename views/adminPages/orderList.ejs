@@ -59,10 +59,10 @@
               </td>
               <td><%= order.paymentMethod %></td>
               <td><%= order.createdAt.toLocaleString() %></td>
-              <% if(order.status === "cancelled") {%> 
-                
-                <td>cancelled</td>
-                <% }else{ %>
+              <% if(order.status === "cancelled") {%>
+
+              <td>cancelled</td>
+              <% }else{ %>
               <td>
                 <form
                   action="/update-status"
@@ -80,13 +80,12 @@
                     type="text"
                     class="hidden"
                     name="selectedStatus"
-                    id="selectedStatus"
+                    id="selectedStatus<%= i %>"
                   />
                   <select
                     class="form-select rounded-pill w-50"
                     aria-label="Default select example"
                     id="<%= order._id %>"
-                
                     onchange="updateStatus(this.value,'<%= i%>')"
                   >
                     <option selected><%= order.status %></option>
@@ -109,13 +108,13 @@
         <div class="d-flex justify-content-center py-3">
           <nav aria-label="Page navigation example">
             <ul class="pagination">
-            
               <% for( let i = 0; i < count/limit; i++ ) { %>
               <li class="page-item">
-                <a class="page-link" href="/order-list/?page=<%=i+1 %>"><%= i+1 %></a>
+                <a class="page-link" href="/order-list/?page=<%=i+1 %>"
+                  ><%= i+1 %></a
+                >
               </li>
               <% } %>
-             
             </ul>
           </nav>
         </div>
@@ -124,13 +123,12 @@
   </div>
 </section>
 <script>
-  function updateStatus(val,index) {
-
-    console.log(val, index)
-    let selectedStatus = document.getElementById("selectedStatus");
+  function updateStatus(val, index) {
+    console.log(val, index);
+    let selectedStatus = document.getElementById("selectedStatus"+index);
     selectedStatus.value = val;
 
-    let form = document.getElementById("statusForm"+index);
+    let form = document.getElementById("statusForm" + index);
     form.submit();
   }
   function handleSubmit(val) {

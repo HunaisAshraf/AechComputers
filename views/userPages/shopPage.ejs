@@ -18,7 +18,7 @@
               class="form-check-input border-secondary"
               type="radio"
               name="id"
-              id="flexRadioDefault1"
+              id="<%= category._id%>"
               value="<%= category._id %>"
               oninput="submitForm()"
             />
@@ -28,7 +28,7 @@
           </div>
           <% }); %>
         </form>
-        <form action="/filter-price" method="post" class="my-3" id="priceForm">
+        <!-- <form action="/filter-price" method="post" class="my-3" id="priceForm">
           <h5 class="mb-3">Price</h5>
           <div class="form-check my-2">
             <input
@@ -82,7 +82,7 @@
               ₹ 2,00,000
             </label>
           </div>
-        </form>
+        </form> -->
       </div>
     </aside>
     <section class="all-products border my-5 mx-3 w-100">
@@ -91,8 +91,8 @@
           <h2 class="text-center">All products</h2>
           <select name="" id="" class="form-select form-select-sm rounded w-25">
             <option selected>Filter</option>
-            <option value="">Low - High</option>
-            <option value="">High - Low</option>
+            <option value="highToLow">Low - High</option>
+            <option value="lowToHigh">High - Low</option>
           </select>
           <button class="btn btn-dark filter-btn" onclick="showFilter()">
             Filter
@@ -187,6 +187,9 @@
 </main>
 
 <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("<%= selectedFilter %>").checked = true;
+  });
   async function addCart(event, id) {
     try {
       event.preventDefault();
@@ -224,7 +227,7 @@
 
       const json = await data.json();
 
-      if(json.exist){
+      if (json.exist) {
         Swal.fire({
           title: "Added!!!",
           text: "Product Added to wishlist",
@@ -233,7 +236,7 @@
         }).then(() => {
           window.location.href = "/wishlist";
         });
-      }else if (json.success) {
+      } else if (json.success) {
         Swal.fire({
           title: "Added!!!",
           text: "Product Added to wishlist",
@@ -242,13 +245,13 @@
         }).then(() => {
           window.location.href = "/wishlist";
         });
-      }else{
+      } else {
         Swal.fire({
           title: "Failed!!!",
           text: "failed to add product to wishlist",
           icon: "error",
           confirmButtonText: "Ok",
-        })
+        });
       }
     } catch (error) {
       console.log(error);

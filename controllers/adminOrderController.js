@@ -5,7 +5,7 @@ const getOrderList = async (req, res) => {
     let orders;
     let count;
     let page = Number(req.query.page) || 1;
-    let limit = 3;
+    let limit = 5;
     let skip = (page - 1) * limit;
     if (req.session.orderList) {
       orders = req.session.orderList;

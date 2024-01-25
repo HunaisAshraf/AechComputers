@@ -167,7 +167,7 @@ const userListController = async (req, res) => {
     let users;
     let count;
     let page = Number(req.query.page) || 1;
-    let limit = 2;
+    let limit = 5;
     let skip = (page - 1) * limit;
     if (!req.session.allUser) {
       count = await UserModel.find().estimatedDocumentCount();
@@ -251,13 +251,20 @@ const filterUserController = async (req, res) => {
 const getSalesReport = async (req, res) => {
   try {
     let sales;
+    let count;
+    let page = Number(req.query.page) || 1;
+    let limit = 5;
+    let skip = (page - 1) * limit;
     if (req.session.sales) {
       sales = req.session.sales;
     } else {
-      sales = await OrderModel.find();
+      count = await OrderModel.find().estimatedDocumentCount();
+      sales = await OrderModel.find().skip(skip).limit(limit);
     }
     res.render("adminPages/salesReport", {
       sales,
+      count,
+      limit,
       date: req.session.salesFilterDate,
     });
   } catch (error) {
