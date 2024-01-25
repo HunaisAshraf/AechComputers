@@ -225,7 +225,20 @@
         </div>
       </div>
       <div class="personal border-bottom my-3">
-        <h4 class="my-3">Personal Info</h4>
+        <div class="d-flex justify-content-between my-5">
+          <h4 class="">Personal Info</h4>
+          <div id="referal" class=" d-flex">
+            <input
+              type="text"
+              class="form-control w-50 rounded-0 rounded-start"
+              id="referalCode"
+              disabled
+              aria-describedby="emailHelp"
+              value="<%= user.referal %>"
+            />
+            <button id="copyBtn" onclick="copyText()" class="btn rounded-0 rounded-end" style="background-color: #e9ecef;"><i class="bi bi-copy"></i></button>
+          </div>
+        </div>
         <div class="name d-flex justify-content-between">
           <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label" class="fw-bolder"
@@ -297,6 +310,19 @@
   </section>
 </main>
 <script>
+
+function copyText() {
+  var text = document.getElementById("referalCode");
+
+  text.select();
+  text.setSelectionRange(0, 99999); 
+
+  navigator.clipboard.writeText(text.value);
+
+  document.getElementById("copyBtn").style.backgroundColor ="#C1F2B0"
+
+}
+
   $("#editUserForm").validate({
     rules: {
       firstName: {

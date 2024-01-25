@@ -25,6 +25,9 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  referal: {
+    type: String,
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);

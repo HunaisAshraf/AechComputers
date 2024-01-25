@@ -144,7 +144,6 @@ const getProductPage = async (req, res) => {
 
 const getUserLoginController = (req, res) => {
   try {
-
     if (!req.session.signIn) {
       res.render("userPages/userLogin", {
         signIn: req.session.signIn,
@@ -219,11 +218,18 @@ const sendOtp = async (req, res, next) => {
 
 const userSignupController = async (req, res, next) => {
   try {
-    const { firstName, lastName, email, phone, password, confirmPassword } =
-      req.body;
+    console.log(req.body);
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      password,
+      confirmPassword,
+      referal,
+    } = req.body;
 
     const user = await userModel.findOne({ email });
-    console.log(user);
 
     const errMsg = {};
     req.session.inputErr = false;
@@ -267,7 +273,7 @@ const userSignupController = async (req, res, next) => {
         email,
         phone,
         password,
-        confirmPassword,
+        referal,
       };
       next();
     }
@@ -310,8 +316,26 @@ const otpVerify = async (req, res, next) => {
 
 const addUser = async (req, res, next) => {
   try {
-    const { firstName, lastName, email, phone, password } = req.session.user;
+    const { firstName, lastName, email, phone, password, referal } =
+      req.session.user;
     const hashedPassword = await hashPassword(password);
+
+    const refUser = await userModel.findOne({ referal });
+
+    if (refUser) {
+      await WalletModel.updateOne(
+        { user: refUser._id },
+        {
+          $inc: { balance: 100 },
+        }
+      );
+    }
+
+    let digits = "0123456789";
+    let newRef = firstName.toUpperCase();
+    for (let i = 0; i < 6; i++) {
+      newRef += digits[Math.floor(Math.random() * 10)];
+    }
 
     const user = await new userModel({
       firstName,
@@ -319,6 +343,7 @@ const addUser = async (req, res, next) => {
       email,
       phone,
       password: hashedPassword,
+      referal: newRef,
     }).save();
     req.session.user = user;
     req.session.signIn = true;
