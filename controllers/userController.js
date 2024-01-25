@@ -12,13 +12,14 @@ const ProductModel = require("../models/productModel");
 const OrderModel = require("../models/orderModel");
 const { AddressModel } = require("../models/addressModel");
 const WalletModel = require("../models/walletModel");
-const { applyProductOffer } = require("../helpers/offer");
+const { applyProductOffer, applyCategoryOffer } = require("../helpers/offer");
 
 const getHomeController = async (req, res) => {
   try {
     const banners = await BannerModel.find();
     const categories = await CategoryModel.find();
-    applyProductOffer();
+    await applyProductOffer();
+    await applyCategoryOffer();
     res.render("userPages/userHome", {
       signIn: req.session.signIn,
       banners,

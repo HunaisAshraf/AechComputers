@@ -14,7 +14,7 @@ const categoryOfferSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  discountAmount: {
+  offerPercentage: {
     type: Number,
     requierd: true,
   },

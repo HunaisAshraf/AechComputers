@@ -1,26 +1,69 @@
 const ProductModel = require("../models/productModel");
 const ProductOfferModel = require("../models/productOfferModel");
+const CategoryOfferModel = require("../models/categoryOfferModel");
 
 const applyProductOffer = async () => {
   try {
     const today = new Date();
 
     const offers = await ProductOfferModel.find().populate("product");
-
-    offers.forEach(async (offer) => {
-      if (offer.startDate <= today && offer.endDate >= today && offer.isAvailable) {
-        await ProductModel.findByIdAndUpdate(offer.product, {
-          offerPrice: Math.floor(offer.product.price - ( offer.product.price * offer.offerPercentage) / 100),
-        });
-      } else {
-        await ProductModel.findByIdAndUpdate(offer.product, {
-          offerPrice: offer.product.price,
-        });
-      }
-    });
+    if (prod.offerPrice === prod.price) {
+      offers.forEach(async (offer) => {
+        if (
+          offer.startDate <= today &&
+          offer.endDate >= today &&
+          offer.isAvailable
+        ) {
+          await ProductModel.findByIdAndUpdate(offer.product, {
+            offerPrice: Math.floor(
+              offer.product.price -
+                (offer.product.price * offer.offerPercentage) / 100
+            ),
+          });
+        } else {
+          await ProductModel.findByIdAndUpdate(offer.product, {
+            offerPrice: offer.product.price,
+          });
+        }
+      });
+    }
   } catch (error) {
     console.log(error);
   }
 };
 
-module.exports = { applyProductOffer };
+const applyCategoryOffer = async () => {
+  try {
+    const today = new Date();
+
+    const offers = await CategoryOfferModel.find({ isAvailable: true });
+
+    const allProducts = await ProductModel.find();
+
+    for (const prod of allProducts) {
+      const currentOffer = offers.find(
+        (offer) => String(offer.category) === String(prod.category)
+      );
+
+      if (
+        currentOffer &&
+        currentOffer.startDate <= today &&
+        currentOffer.endDate >= today
+      ) {
+        await ProductModel.findByIdAndUpdate(prod._id, {
+          offerPrice: Math.floor(
+            prod.price - (prod.price * currentOffer.offerPercentage) / 100
+          ),
+        });
+      } else {
+        await ProductModel.findByIdAndUpdate(prod._id, {
+          offerPrice: prod.price,
+        });
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = { applyProductOffer, applyCategoryOffer };

@@ -54,8 +54,22 @@ const {
   searchCategoryController,
   filterCategoryController,
 } = require("../controllers/categoryController");
-const { getCouponPage, addCouponController, editCouponController, editCouponStatusController } = require("../controllers/couponController");
-const { getOfferPage, addProductOfferController, editProductOffer, editProductOfferStatus } = require("../controllers/offerControl");
+const {
+  getCouponPage,
+  addCouponController,
+  editCouponController,
+  editCouponStatusController,
+} = require("../controllers/couponController");
+const {
+  getOfferPage,
+  addProductOfferController,
+  editProductOffer,
+  editProductOfferStatus,
+  getCategoryOffer,
+  addCategoryOffer,
+  editCategoryOffer,
+  editCategoryOfferStatus,
+} = require("../controllers/offerControl");
 
 //admin login
 router.get("/admin-login", adminLoginPageController);
@@ -110,24 +124,31 @@ router.post("/edit-category", isAdmin, upload.any(), editCategoryController);
 router.post("/search-category", isAdmin, searchCategoryController);
 router.post("/filter-category", isAdmin, filterCategoryController);
 
-//coupon 
+//coupon
 
-router.get("/coupon-list",isAdmin,getCouponPage)
-router.post("/add-coupon",isAdmin,addCouponController)
-router.post("/edit-coupon",isAdmin,editCouponController)
-router.patch("/coupon/change-status",isAdmin,editCouponStatusController)
+router.get("/coupon-list", isAdmin, getCouponPage);
+router.post("/add-coupon", isAdmin, addCouponController);
+router.post("/edit-coupon", isAdmin, editCouponController);
+router.patch("/coupon/change-status", isAdmin, editCouponStatusController);
 
 //salesReport
 
-router.get("/sales-report",isAdmin,getSalesReport)
-router.get("/download-sales-report",isAdmin,downloadSalesReport)
+router.get("/sales-report", isAdmin, getSalesReport);
+router.get("/download-sales-report", isAdmin, downloadSalesReport);
 
 //product offer list
 
-router.get("/offer-list",isAdmin,getOfferPage)
-router.post("/add-product-offer",isAdmin,addProductOfferController)
-router.put("/edit-product-offer",isAdmin,editProductOffer)
-router.get("/productoffer-status/:id",isAdmin,editProductOfferStatus)
+router.get("/offer-list", isAdmin, getOfferPage);
+router.post("/add-product-offer", isAdmin, addProductOfferController);
+router.put("/edit-product-offer", isAdmin, editProductOffer);
+router.get("/productoffer-status/:id", isAdmin, editProductOfferStatus);
+
+//category offer list
+
+router.get("/category-offer-list", isAdmin, getCategoryOffer);
+router.post("/add-category-offer", isAdmin, addCategoryOffer);
+router.put("/edit-category-offer", isAdmin, editCategoryOffer);
+router.get("/categoryoffer-status/:id", isAdmin, editCategoryOfferStatus);
 
 module.exports = router;
 

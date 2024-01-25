@@ -76,9 +76,6 @@ const getProductEditpage = async (req, res) => {
       "category"
     );
 
-    console.log(product);
-    console.log(categories);
-
     res.render("adminPages/editProduct", { categories, product });
   } catch (error) {
     console.log(error);
@@ -90,8 +87,6 @@ const editProductController = async (req, res) => {
     const { productName, price, category, quantity, description, id } =
       req.body;
     const images = req.files.map((m) => m.filename);
-    console.log(req.files);
-    console.log(images);
 
     await ProductModel.updateOne(
       { _id: id },
@@ -99,6 +94,7 @@ const editProductController = async (req, res) => {
         $set: {
           productName,
           price,
+          offerPrice: price,
           category,
           quantity,
           description,
