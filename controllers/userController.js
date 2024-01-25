@@ -144,6 +144,7 @@ const getProductPage = async (req, res) => {
 
 const getUserLoginController = (req, res) => {
   try {
+
     if (!req.session.signIn) {
       res.render("userPages/userLogin", {
         signIn: req.session.signIn,

@@ -84,7 +84,10 @@ const deleteCartController = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const cart = await CartModel.findByIdAndDelete(id);
+    const cart = await CartModel.deleteOne({
+      user: req.session.user._id,
+      product: id,
+    });
     res.status(200).send({ success: true });
     // res.redirect("/cart");
   } catch (error) {

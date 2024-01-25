@@ -115,7 +115,7 @@
                   class="card-body d-flex justify-content-between align-items-center"
                 >
                   <div>
-                    <h5 class="card-title"><%= product.productName %></h5>
+                    <p class="card-title fw-bold"><%= product.productName %></p>
                     <% if(product.offerPrice < product.price){ %>
 
                     <p class="card-text">
@@ -142,10 +142,19 @@
                   >
                     <i class="bi bi-cart-fill"></i>
                   </button>
+                  <button
+                    onclick="addWishlist(event,'<%= product._id %>')"
+                    class="btn btn-dark rounded-circle py-2"
+                  >
+                    <i class="bi bi-heart text-white fs-6"></i>
+                  </button>
                   <% }else{ %>
 
                   <a href="/signin" class="btn btn-dark rounded-circle py-2">
                     <i class="bi bi-cart-fill"></i
+                  ></a>
+                  <a href="/signin" class="btn btn-dark rounded-circle py-2">
+                    <i class="bi bi-heart text-white fs-6"></i
                   ></a>
                   <% } %>
                 </div>
@@ -199,6 +208,47 @@
         }).then(() => {
           window.location.href = "/cart";
         });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function addWishlist(event, id) {
+    try {
+      event.preventDefault();
+
+      const data = await fetch(`/add-to-wishlist/${id}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const json = await data.json();
+
+      if(json.exist){
+        Swal.fire({
+          title: "Added!!!",
+          text: "Product Added to wishlist",
+          icon: "success",
+          confirmButtonText: "Ok",
+        }).then(() => {
+          window.location.href = "/wishlist";
+        });
+      }else if (json.success) {
+        Swal.fire({
+          title: "Added!!!",
+          text: "Product Added to wishlist",
+          icon: "success",
+          confirmButtonText: "Ok",
+        }).then(() => {
+          window.location.href = "/wishlist";
+        });
+      }else{
+        Swal.fire({
+          title: "Failed!!!",
+          text: "failed to add product to wishlist",
+          icon: "error",
+          confirmButtonText: "Ok",
+        })
       }
     } catch (error) {
       console.log(error);

@@ -1,0 +1,116 @@
+<%- include("partials/header") %>
+
+<main class="container">
+  <section class="mt-5 gap-2">
+    <div class="cart border rounded">
+      <div class="cart-head border-bottom py-4 text-center">
+        <h3>Wish List</h3>
+      </div>
+      <div class="cart-item table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="text-center" scope="col">Product</th>
+              <th class="text-center" scope="col">Price</th>
+              <th class="text-center" scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% products.forEach(prod => { %>
+            <tr>
+              <td class="text-center">
+                <img
+                  src="/uploads/<%= prod.product.images[0] %>"
+                  height="70px"
+                  class="me-3"
+                  alt=""
+                />
+                <%= prod.product.productName%>
+              </td>
+              <td class="text-center">
+                <span class="fw-bold">
+                  ₹ <%= new
+                  Intl.NumberFormat().format(prod.product.offerPrice)%>
+                </span>
+                <span class="text-danger text-decoration-line-through"
+                  >₹ <%= new
+                  Intl.NumberFormat().format(prod.product.price)%></span
+                >
+              </td>
+              <td class="text-center">
+                <button
+                  onclick="addCart(event,'<%= prod.product._id %>')"
+                  class="btn btn-dark"
+                >
+                  <i class="bi bi-cart-fill"></i>
+                </button>
+                <button onclick="deleteWishlist('<%= prod.product._id %>')" class="btn btn-danger">
+                  <i class="bi bi-trash-fill"></i>
+                </button>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  async function addCart(event, id) {
+    try {
+      event.preventDefault();
+
+      const data = await fetch(`/add-to-cart/${id}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ quantity: 1 }),
+      });
+
+      const json = await data.json();
+
+      if (json.success) {
+        Swal.fire({
+          title: "Added!!!",
+          text: "Product Added to cart",
+          icon: "success",
+          confirmButtonText: "Ok",
+        }).then(() => {
+          window.location.href = "/cart";
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function deleteWishlist(id) {
+    try {
+      const data = await fetch(`/delete-wishlist/${id}`);
+
+      const json = await data.json();
+
+      if (json.success) {
+        Swal.fire({
+          title: "Deleted!!!",
+          text: "Product Deleted from wishlist",
+          icon: "success",
+          confirmButtonText: "Ok",
+        }).then(() => {
+          window.location.href = "/wishlist";
+        });
+      }else{
+        Swal.fire({
+          title: "Failed!!!",
+          text: "Failed to delete from wishlist",
+          icon: "error",
+          confirmButtonText: "Ok",
+        })
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+</script>
+
+<%- include("partials/footer") %>

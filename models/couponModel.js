@@ -22,6 +22,7 @@ const couponSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  appliedUsers:[]
 });
 
 module.exports = mongoose.model("Coupon", couponSchema);

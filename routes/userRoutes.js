@@ -52,6 +52,7 @@ const {
   getWalletBalance,
   invoiceDownloadController,
 } = require("../controllers/paymentController");
+const { getWishList, addToWishlistController, removeFromWishList } = require("../controllers/wishlistController");
 
 const router = express.Router();
 
@@ -94,6 +95,14 @@ router.get("/cart", requireSignIn, getCartPage);
 router.post("/add-to-cart/:id", requireSignIn, addToCartController);
 router.post("/update-cart", requireSignIn, updateCartController);
 router.get("/delete-cart/:id", requireSignIn, deleteCartController);
+
+//wishlist
+
+router.get("/wishlist",requireSignIn,getWishList)
+router.post("/add-to-wishlist/:id", requireSignIn, addToWishlistController);
+router.get("/delete-wishlist/:id", requireSignIn, removeFromWishList);
+
+
 
 //address
 router.get("/address", requireSignIn, getAdressPage);

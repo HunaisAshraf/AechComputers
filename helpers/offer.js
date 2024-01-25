@@ -7,8 +7,8 @@ const applyProductOffer = async () => {
     const today = new Date();
 
     const offers = await ProductOfferModel.find().populate("product");
-    if (prod.offerPrice === prod.price) {
-      offers.forEach(async (offer) => {
+    offers.forEach(async (offer) => {
+      if (offer.product.offerPrice === offer.product.price) {
         if (
           offer.startDate <= today &&
           offer.endDate >= today &&
@@ -25,8 +25,8 @@ const applyProductOffer = async () => {
             offerPrice: offer.product.price,
           });
         }
-      });
-    }
+      }
+    });
   } catch (error) {
     console.log(error);
   }
