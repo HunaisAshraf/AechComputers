@@ -28,7 +28,7 @@ const getOrderPage = async (req, res) => {
 const checkoutController = async (req, res) => {
   try {
     const user = req.session.user._id;
-    let { addressId, paymentMethod, totalPrice } = req.body;
+    let { addressId, paymentMethod, totalPrice, coupon } = req.body;
 
     let paid;
 
@@ -45,6 +45,7 @@ const checkoutController = async (req, res) => {
       addressId = order.notes.address;
       paymentMethod = order.method;
       totalPrice = Number(order.notes.totalPrice);
+      coupon = order.coupon;
     }
 
     const address = await AddressModel.findOne({ _id: addressId });
@@ -63,6 +64,14 @@ const checkoutController = async (req, res) => {
       paymentMethod,
       totalPrice,
     }).save();
+    console.log(products);
+
+    const applyCoupon = await CouponModel.updateOne(
+      { _id: coupon._id },
+      {
+        $addToSet: { appliedUsers: req.session.user._id },
+      }
+    );
 
     req.session.ordereditems = order;
     const deleteCart = await CartModel.deleteMany({ user });
@@ -82,16 +91,24 @@ const applyCouponController = async (req, res) => {
   try {
     const { couponCode } = req.body;
     const coupon = await CouponModel.findOne({ couponCode });
-    console.log(coupon);
+
+    const usedCoupon = await CouponModel.findOne({
+      couponCode,
+      appliedUsers: { $in: [req.session.user._id] },
+    });
+
+    if (usedCoupon) {
+      return res.status(500).json({ used: true, coupon });
+    }
 
     if (coupon) {
-      res.status(200).json({ success: true, coupon });
+      return res.status(200).json({ success: true, coupon });
     } else {
-      res.status(500).json({ success: false });
+      return res.status(500).json({ success: false });
     }
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false });
+    return res.status(500).json({ success: false });
   }
 };
 

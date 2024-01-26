@@ -343,9 +343,18 @@
                 <button
                   type="button"
                   onclick="applyCoupon()"
+                  id="applyCouponBtn"
                   class="btn btn-outline-dark"
                 >
                   Apply
+                </button>
+                <button
+                  class="btn btn-outline-dark"
+                  id="cancelBtn"
+                  onclick="return window.location.reload()"
+                  style="display: none"
+                >
+                  Cancel
                 </button>
               </div>
             </div>
@@ -486,6 +495,7 @@
 </script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
+  let coupon;
   let walletBalance;
   let totalPrice = "<%= Number(totalPrice) %>";
   document.getElementById("wallet").addEventListener("change", async () => {
@@ -513,13 +523,19 @@
       let currDate;
       let startDate;
       let endDate;
+      coupon = json.coupon;
       if (json.success) {
         currDate = new Date();
         startDate = new Date(json.coupon.startDate);
         endDate = new Date(json.coupon.endDate);
       }
 
-      if (!json.success || !json.coupon.isAvailable || currDate < startDate) {
+      if (
+        json.used ||
+        !json.success ||
+        !json.coupon.isAvailable ||
+        currDate < startDate
+      ) {
         Swal.fire({
           title: "Not Valid!!",
           text: "Coupon applied is not valid",
@@ -557,6 +573,11 @@
         ).innerText = ` Total Price : ₹ ${new Intl.NumberFormat("en-IN").format(
           totalPrice
         )}`;
+
+        document.getElementById("couponCode").disabled = true;
+        document.getElementById("applyCouponBtn").style.display = "none";
+        document.getElementById("cancelBtn").style.display = "block";
+
         Swal.fire({
           title: "Applied!!",
           text: "Coupon applied succesfully",
@@ -606,6 +627,7 @@
           paymentMethod,
           addressId,
           totalPrice,
+          coupon,
         }),
       });
       let res = await data.json();
@@ -643,6 +665,7 @@
             notes: {
               address: addressId,
               totalPrice: price,
+              coupon,
             },
             theme: {
               color: "#455163",
@@ -671,6 +694,7 @@
             paymentMethod,
             addressId,
             totalPrice,
+            coupon,
           }),
         });
         let res = await data.json();

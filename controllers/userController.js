@@ -36,7 +36,7 @@ const getShopPage = async (req, res) => {
     let count;
     let page = Number(req.query.page) || 1;
     // let limit = Number(req.query.limit);
-    let limit = 5;
+    let limit = 6;
     let skip = (page - 1) * limit;
 
     if (req.session.products) {

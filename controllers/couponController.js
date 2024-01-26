@@ -43,7 +43,8 @@ const editCouponController = async (req, res) => {
 
     const couponExist = await CouponModel.findOne({ couponCode });
 
-    if (!couponExist || couponExist._id === id) {
+    if (!couponExist || String(couponExist._id) === id) {
+
       const coupon = await CouponModel.findByIdAndUpdate(id, {
         couponCode,
         discountAmount,
