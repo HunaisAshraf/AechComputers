@@ -42,8 +42,13 @@ const getShopPage = async (req, res) => {
     if (req.session.products) {
       allProducts = req.session.products;
     } else {
-      count = await ProductModel.find().estimatedDocumentCount();
-      allProducts = await ProductModel.find()
+      count = await ProductModel.find({
+        isListed: true,
+      }).estimatedDocumentCount();
+      allProducts = await ProductModel.find({
+        isListed: true,
+        // "category.isAvailable": true,
+      })
         .skip(skip)
         .limit(limit)
         .populate("category");
