@@ -67,6 +67,7 @@ const updateCartController = async (req, res) => {
       { $set: { quantity } }
     );
 
+    
     const cartProducts = await CartModel.find({
       user: req.session.user._id,
     }).populate("product");
@@ -83,11 +84,15 @@ const updateCartController = async (req, res) => {
 const deleteCartController = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log(req.params);
 
     const cart = await CartModel.deleteOne({
       user: req.session.user._id,
-      product: id,
+      _id: id,
     });
+
+    console.log(cart);
+
     res.status(200).send({ success: true });
     // res.redirect("/cart");
   } catch (error) {

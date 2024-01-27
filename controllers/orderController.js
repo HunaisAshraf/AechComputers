@@ -3,6 +3,7 @@ const CartModel = require("../models/cartModel");
 const OrderModel = require("../models/orderModel");
 const WalletModel = require("../models/walletModel");
 const CouponModel = require("../models/couponModel");
+const ProductModel = require("../models/productModel")
 
 const Razorpay = require("razorpay");
 const dotenv = require("dotenv");
@@ -66,15 +67,26 @@ const checkoutController = async (req, res) => {
     }).save();
     console.log(products);
 
-    const applyCoupon = await CouponModel.updateOne(
-      { _id: coupon._id },
-      {
-        $addToSet: { appliedUsers: req.session.user._id },
-      }
-    );
+    if (coupon) {
+      const applyCoupon = await CouponModel.updateOne(
+        { _id: coupon._id },
+        {
+          $addToSet: { appliedUsers: req.session.user._id },
+        }
+      );
+    }
 
     req.session.ordereditems = order;
     const deleteCart = await CartModel.deleteMany({ user });
+
+    for (let i = 0; i < products.length; i++) {
+      await ProductModel.updateOne(
+        { _id: products[i].product._id },
+        {
+          $inc: { quantity: -products[0].quantity },
+        }
+      );
+    }
 
     if (paymentMethod === "localWallet" || paymentMethod === "cashOnDelivery") {
       res.status(200).json({ success: true });
