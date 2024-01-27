@@ -134,6 +134,27 @@ const filterProductByPrice = async (req, res) => {
   }
 };
 
+const sortProductController = async (req, res) => {
+  try {
+    const { sort } = req.query;
+    let products;
+
+    if (sort === "highToLow") {
+      products = await ProductModel.find()
+        .sort({ price: 1 })
+        .populate("category");
+    } else if (sort === "lowToHigh") {
+      products = await ProductModel.find()
+        .sort({ price: -1 })
+        .populate("category");
+    }
+    req.session.products = products;
+    return res.send({ success: true });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const getProductPage = async (req, res) => {
   try {
     const { id } = req.params;
@@ -598,4 +619,5 @@ module.exports = {
   editUserPasswordController,
   searchUserProductController,
   getUserOrdersDetailsController,
+  sortProductController,
 };

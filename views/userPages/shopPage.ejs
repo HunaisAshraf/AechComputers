@@ -89,8 +89,13 @@
       <div class="p-3">
         <div class="head border-bottom py-2 d-flex justify-content-between">
           <h2 class="text-center">All products</h2>
-          <select name="" id="" class="form-select form-select-sm rounded w-25">
-            <option selected>Filter</option>
+          <select
+            name="sortProduct"
+            id="sortProduct"
+            onclick="handleSort()"
+            class="form-select form-select-sm rounded w-25"
+          >
+            <option value="">Filter</option>
             <option value="highToLow">Low - High</option>
             <option value="lowToHigh">High - Low</option>
           </select>
@@ -192,7 +197,9 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("<%= selectedFilter %>").checked = true;
+    if ("<%= selectedFilter%>") {
+      document.getElementById("<%= selectedFilter %>").checked = true;
+    }
   });
   async function addCart(event, id) {
     try {
@@ -265,6 +272,21 @@
       }
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  let sortDefaultValue = document.getElementById("sortProduct").value;
+  async function handleSort() {
+    let sort = document.getElementById("sortProduct").value;
+    console.log(sort);
+
+    if (sortDefaultValue !== sort) {
+      let data = await fetch(`/sort-product/?sort=${sort}`);
+      let json = await data.json();
+
+      if (json.success) {
+        window.location.reload();
+      }
     }
   }
 

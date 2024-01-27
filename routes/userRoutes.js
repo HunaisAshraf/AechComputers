@@ -29,6 +29,7 @@ const {
   editUserPasswordController,
   searchUserProductController,
   getUserOrdersDetailsController,
+  sortProductController,
 } = require("../controllers/userController");
 const { requireSignIn } = require("../middlewares/userMiddleware");
 const {
@@ -69,6 +70,7 @@ router.get("/user/orders/:id", requireSignIn, getUserOrdersDetailsController);
 router.post("/user/edit-user", requireSignIn, editUserinfoController);
 router.post("/user/edit-password", requireSignIn, editUserPasswordController);
 router.post("/user/search-prouct", searchUserProductController);
+router.get("/sort-product",sortProductController)
 
 //login routes
 router.get("/signin", getUserLoginController);
@@ -101,8 +103,6 @@ router.get("/delete-cart/:id", requireSignIn, deleteCartController);
 router.get("/wishlist",requireSignIn,getWishList)
 router.post("/add-to-wishlist/:id", requireSignIn, addToWishlistController);
 router.get("/delete-wishlist/:id", requireSignIn, removeFromWishList);
-
-
 
 //address
 router.get("/address", requireSignIn, getAdressPage);
