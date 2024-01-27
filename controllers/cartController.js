@@ -33,6 +33,10 @@ const addToCartController = async (req, res) => {
     const foundProduct = await CartModel.findOne({ product });
     const foundUser = await CartModel.findOne({ user: req.session.user._id });
 
+    if (checkProduct.quantity < 1) {
+      return res.status(500).send({ outOfStock: true });
+    }
+
     if (foundProduct && foundUser) {
       if (foundProduct.quantity + quantity <= checkProduct.quantity) {
         foundProduct.quantity += quantity;
@@ -67,7 +71,6 @@ const updateCartController = async (req, res) => {
       { $set: { quantity } }
     );
 
-    
     const cartProducts = await CartModel.find({
       user: req.session.user._id,
     }).populate("product");
