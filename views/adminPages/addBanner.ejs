@@ -5,7 +5,6 @@
   >
     <div class="w-50 shadow p-5">
       <h2 class="text-center my-3">Add Banner</h2>
-      <!-- action="/add-Banner" method="post" -->
       <form enctype="multipart/form-data">
         <div class="mb-3">
           <div
@@ -76,7 +75,6 @@
           })
             .then((response) => response.json())
             .then((data) => {
-              console.log(data);
 
               if (data.success) {
                 Swal.fire({

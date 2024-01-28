@@ -95,8 +95,7 @@
   </script>
   <script>
     function loadFile(event) {
-      // let image = document.getElementById("image");
-      // image.src = URL.createObjectURL(event.target.files[0]);
+
       let image = document.getElementById("image");
       let croppedImg = document.getElementById("croppedImg");
       let inputImg = document.getElementById("input-img");
@@ -111,7 +110,6 @@
         aspectRatio: 4 / 3,
         autoCrop: false,
       });
-      console.log(cropper);
 
       document.getElementById("cropButton").addEventListener(
         "click",
@@ -138,8 +136,6 @@
             })
               .then((response) => response.json())
               .then((data) => {
-                console.log(data.success);
-
                 if (data.success) {
                   Swal.fire({
                     title: "Added!!",

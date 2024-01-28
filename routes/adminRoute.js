@@ -154,6 +154,3 @@ router.get("/categoryoffer-status/:id", isAdmin, editCategoryOfferStatus);
 
 module.exports = router;
 
-// router.get("/delete-category/:id", isAdmin, deleteCategoryController);
-// router.get("/user-list", isAdmin, userListPageController);
-// userListPageController,

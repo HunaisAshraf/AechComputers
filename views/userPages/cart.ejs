@@ -31,7 +31,6 @@
               </td>
               <td><%= products.product.productName %></td>
 
-              <!-- hidden tags -->
               <input
                 type="hidden"
                 class="hidden"
@@ -182,11 +181,7 @@
       });
       let json = await data.json();
       if (json?.success) {
-        console.log(json?.products);
         calculatePrice(json?.products);
-        // let products = json?.products;
-        // let totalPrice =
-        // window.location.reload();
       }
     } catch (error) {
       console.log("errror in updating quantity ", error);

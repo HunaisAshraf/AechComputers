@@ -44,7 +44,6 @@ const addToCartController = async (req, res) => {
         res.redirect(`/product/${product}`);
       }
       foundProduct.save();
-      // res.redirect("/cart");
       return res.status(200).send({ success: true });
     } else {
       const cart = await new CartModel({
@@ -54,7 +53,6 @@ const addToCartController = async (req, res) => {
       }).save();
 
       return res.status(200).send({ success: true });
-      // res.redirect("/cart");
     }
   } catch (error) {
     console.log("error in adding to cart", error);
@@ -87,17 +85,14 @@ const updateCartController = async (req, res) => {
 const deleteCartController = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(req.params);
 
     const cart = await CartModel.deleteOne({
       user: req.session.user._id,
       _id: id,
     });
 
-    console.log(cart);
 
     res.status(200).send({ success: true });
-    // res.redirect("/cart");
   } catch (error) {
     console.log(error);
   }
@@ -147,7 +142,6 @@ const addAdressController = async (req, res) => {
       state,
       pincode,
     }).save();
-    // res.redirect("/address");
     res.status(200).send({ success: true });
   } catch (error) {
     console.log(error);
@@ -170,7 +164,6 @@ const updateAdressController = async (req, res) => {
       pincode,
     });
     res.status(200).send({ success: true });
-    // res.redirect("/address");
   } catch (error) {
     console.log("error in updating address ", error);
     res.status(500).send({ success: false });
@@ -181,7 +174,6 @@ const deleteAddressController = async (req, res) => {
   try {
     const { id } = req.params;
     const address = await AddressModel.findByIdAndDelete(id);
-    // res.redirect("/address");
     res.status(200).send({ success: true });
   } catch (error) {
     console.log("error in deleting address ", error);

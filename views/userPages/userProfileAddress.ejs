@@ -14,7 +14,7 @@
   </nav>
 
   <aside
-    class="navbar d-none sidebar col-md-2 rounded d-md-flex flex-column py-3 "
+    class="navbar d-none sidebar col-md-2 rounded d-md-flex flex-column py-3"
   >
     <div class="links">
       <h1 class="text-light">AECH</h1>
@@ -37,93 +37,6 @@
     </div>
   </aside>
   <section class="w-100">
-   
-    <!-- <div id="user" class="user mx-3 p-3 border">
-      <h1 class="text-center">Edit Details</h1>
-      <div class="d-flex justify-content-center">
-        <form action="/edit-user" method="post" class="w-50" id="edituser">
-          <input type="text" class="hidden" name="id" value="<%= user._id %>" />
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label"
-              >First Name</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              value="<%= user.firstName %>"
-              name="firstName"
-              required
-            />
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Last Name</label>
-            <input
-              type="text"
-              class="form-control"
-              id="exampleInputEmail1"
-              name="lastName"
-              aria-describedby="emailHelp"
-              value="<%= user.lastName %>"
-              required
-            />
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label"
-              >Email address</label
-            >
-            <input
-              type="email"
-              class="form-control"
-              id="exampleInputEmail1"
-              name="email"
-              aria-describedby="emailHelp"
-              value="<%= user.email %>"
-              required
-            />
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Phone</label>
-            <input
-              type="number"
-              class="form-control"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              name="phone"
-              value="<%= user.phone %>"
-              required
-            />
-          </div>
-          <div class="mb-3">
-            <label for="pass" class="form-label">Password</label>
-            <input
-              type="password"
-              class="form-control"
-              id="pass"
-              name="password"
-              aria-describedby="emailHelp"
-              required
-            />
-          </div>
-          <div class="mb-3">
-            <label for="confirmPass" class="form-label">Confirm Password</label>
-            <input
-              type="password"
-              class="form-control"
-              id="confirmPass"
-              aria-describedby="emailHelp"
-              required
-            />
-          </div>
-          <div class="text-center">
-            <button onclick="checkPassword()" class="btn btn-dark">
-              Submit
-            </button>
-          </div>
-        </form>
-      </div>
-    </div> -->
     <div id="address" class="address mx-3 p-3 border">
       <div class="head d-flex justify-content-between mb-5 border-bottom pb-3">
         <h1>Address</h1>
@@ -362,55 +275,6 @@
         <% }) %>
       </div>
     </div>
-    <!-- <div id="orders" style="display: none" class="order mx-3 p-3 border">
-      <div class="text-center mb-5">
-        <h1>Orders</h1>
-      </div>
-      <div class="d-flex justify-content-evenly"></div>
-      <div class="m-5 px-4 table-responsive content">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Order Number</th>
-              <th scope="col">Price</th>
-              <th scope="col">status</th>
-              <th scope="col">Order Date</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% order.forEach(order => { %>
-
-            <tr>
-              <td><%= order.orderNumber %></td>
-              <td>₹ <%=new Intl.NumberFormat().format( order.totalPrice) %></td>
-              <td><%= order.status %></td>
-              <td><%= order.createdAt.toLocaleString() %></td>
-              <% if (order.status === "cancelled") { %>
-              <td>
-                <a
-                  href="/order-cancel/<%= order._id %>"
-                  class="btn btn-dark disabled"
-                  >Cancel</a
-                >
-              </td>
-              <% }else{ %>
-              <td>
-                <button
-                  onclick="confirmCancel(this)"
-                  value="<%= order._id %>"
-                  class="btn btn-dark"
-                >
-                  Cancel
-                </button>
-              </td>
-              <% } %>
-            </tr>
-            <% }) %>
-          </tbody>
-        </table>
-      </div>
-    </div> -->
   </section>
 </main>
 <script>
@@ -430,7 +294,6 @@
     let confirmPass = document.getElementById("ConfirmPass").value;
 
     if (pass === confirmPass) {
-      console.log("ddd");
       document.getElementById("edituser").submit();
     } else {
       Swal.fire({

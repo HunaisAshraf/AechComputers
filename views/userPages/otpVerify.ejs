@@ -67,7 +67,6 @@
     }
 
     function handleSubmit() {
-      console.log(otpMatch);
       if (otpMatch) {
         form.submit();
       }
@@ -85,23 +84,6 @@
       time--;
     }, 1000);
 
-    // if (!localStorage.getItem("time") || localStorage.getItem("time") <= 0) {
-    //   localStorage.setItem("time", 60);
-    // }
-
-    // let time = JSON.parse(localStorage.getItem("time"));
-
-    // const interval = setInterval(() => {
-    //   if (time === 0) {
-    //     localStorage.removeItem("time");
-    //     submit.classList.add("hidden");
-    //     resend.classList.remove("hidden");
-    //     clearInterval(interval);
-    //   }
-    //   localStorage.setItem("time", time);
-    //   timeCounter.innerText = `OTP expires in ${time} seconds`;
-    //   time--;
-    // }, 1000);
   </script>
 </main>
 <%- include("partials/footer") %>

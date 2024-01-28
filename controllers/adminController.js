@@ -154,7 +154,6 @@ const adminLoginController = async (req, res) => {
 const userListPageController = async (req, res) => {
   try {
     const user = await UserModel.find();
-    console.log(user);
 
     res.render("adminPages/userList");
   } catch (error) {
@@ -174,7 +173,6 @@ const userListController = async (req, res) => {
       users = await UserModel.find().skip(skip).limit(limit);
     } else {
       users = req.session.allUser;
-      // res.render("adminPages/userList", { users: req.session.allUser });
     }
     res.render("adminPages/userList", { users, count, limit });
     req.session.allUser = null;
@@ -233,7 +231,7 @@ const searchUserController = async (req, res) => {
 const filterUserController = async (req, res) => {
   try {
     const { filter } = req.body;
-    console.log("value : ", filter);
+
     let users;
     if (filter === "active") {
       users = await UserModel.find({ isBlocked: false });
@@ -242,7 +240,6 @@ const filterUserController = async (req, res) => {
     }
     req.session.allUser = users;
     res.redirect("/user-list");
-    // res.render("adminPages/userList", { users });
   } catch (error) {
     console.log(error);
   }

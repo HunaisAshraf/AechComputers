@@ -35,7 +35,6 @@ const getShopPage = async (req, res) => {
     let allProducts;
     let count;
     let page = Number(req.query.page) || 1;
-    // let limit = Number(req.query.limit);
     let limit = 6;
     let skip = (page - 1) * limit;
 
@@ -47,7 +46,6 @@ const getShopPage = async (req, res) => {
       }).estimatedDocumentCount();
       allProducts = await ProductModel.find({
         isListed: true,
-        // "category.isAvailable": true,
       })
         .skip(skip)
         .limit(limit)
@@ -211,7 +209,6 @@ const userLoginController = async (req, res) => {
 
     req.session.user = user;
     req.session.signIn = true;
-    // req.session.notBlocked = user.isBlocked;
     res.redirect("/");
   } catch (error) {
     console.log(error);
@@ -233,8 +230,6 @@ const sendOtp = async (req, res, next) => {
     const otp = getOtp();
     req.session.otp = otp;
 
-    console.log(otp);
-
     const send = await otpSender(firstName, email, otp);
 
     res.redirect("/verify-otp");
@@ -245,7 +240,6 @@ const sendOtp = async (req, res, next) => {
 
 const userSignupController = async (req, res, next) => {
   try {
-    console.log(req.body);
     const {
       firstName,
       lastName,
@@ -311,11 +305,6 @@ const userSignupController = async (req, res, next) => {
 
 const getOtpVerifyPage = async (req, res) => {
   try {
-    // setTimeout(() => {
-    //   req.session.otp = null;
-    //   console.log("otp expired ", req.session.otp);
-    // }, 1000 * 60);
-    console.log("userpage ", req.session.otp);
     res.render("userPages/otpVerify", {
       signIn: req.session.signIn,
       inValidOTP: req.session.inValidOtp,
@@ -332,10 +321,6 @@ const otpVerify = async (req, res, next) => {
     if (otp !== "" && otp == req.session.otp) {
       next();
     }
-    // next();
-    //   req.session.inValidOtp = true;
-    //   res.redirect("/verify-otp");
-    // }
   } catch (error) {
     console.log(error);
   }
@@ -468,7 +453,6 @@ const updatePasswordController = async (req, res) => {
   try {
     const { password, confirmPassword } = req.body;
     const { email } = req.session.user;
-    console.log(email);
     const errMsg = {};
     req.session.inputErr = false;
     if (password.length < 6) {

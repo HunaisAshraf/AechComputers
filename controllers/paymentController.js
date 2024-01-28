@@ -32,7 +32,6 @@ const createOrder = async (req, res) => {
 const getWalletBalance = async (req, res) => {
   try {
     const wallet = await WalletModel.findOne({ user: req.session.user._id });
-    console.log(wallet);
     res.json({ balance: wallet.balance });
   } catch (error) {
     console.log(error);

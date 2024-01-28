@@ -111,7 +111,6 @@ const addCategoryOffer = async (req, res) => {
 
 const editCategoryOffer = async (req, res) => {
   try {
-    console.log(req.body);
     const { id, offerPercentage, startDate, endDate } = req.body;
 
     const offer = await categoryOfferModel.findByIdAndUpdate(id, {

@@ -312,7 +312,6 @@
           <h4>Shipping information</h4>
         </div>
         <div class="shipping-address py-2 px-4 border-bottom">
-          <!-- <p id="ship-address">Seclect Shipping Address</p> -->
           <h6 id="ship-name">Name : <%= addresses[0].name %></h6>
           <p id="ship-phone">Phone : <%= addresses[0].phone %></p>
           <p id="ship-houseNo">House No : <%= addresses[0].houseNo %></p>
@@ -553,7 +552,6 @@
           window.location.reload();
         });
       } else if (json.success) {
-        console.log("lasjdf");
         totalPrice -= json.coupon.discountAmount;
 
         let originalAmountElement = document.getElementById(

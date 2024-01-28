@@ -24,7 +24,6 @@ const getOrderList = async (req, res) => {
 
 const orderStatusController = async (req, res) => {
   try {
-    console.log(req.body);
     const { orderId, selectedStatus } = req.body;
 
     const order = await OrderModel.findByIdAndUpdate(orderId, {

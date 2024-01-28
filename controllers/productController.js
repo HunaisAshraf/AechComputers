@@ -154,7 +154,6 @@ const filterProductController = async (req, res) => {
     }
     req.session.product = products;
     res.redirect("/product-list");
-    // res.render("adminPages/userList", { users });
   } catch (error) {
     console.log(error);
   }

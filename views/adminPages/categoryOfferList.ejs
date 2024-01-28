@@ -246,7 +246,6 @@
     submitHandler: async function (form, event) {
       try {
         event.preventDefault();
-        // const formData = new FormData(form);
 
         const formData = {
           category: form.offerCategory.value,
@@ -302,7 +301,6 @@
       let startDateInput = document.getElementById("startDate" + i);
       let endDateInput = document.getElementById("endDate" + i);
 
-      // startDateInput.setAttribute("min", today);
       endDateInput.setAttribute("min", today);
 
       startDateInput.addEventListener("change", function () {

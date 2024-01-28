@@ -41,7 +41,6 @@ const checkoutController = async (req, res) => {
       wallet.save();
     } else {
       let order = await instance.payments.fetch(req.body.razorpay_payment_id);
-      console.log(order);
       paid = true;
       addressId = order.notes.address;
       paymentMethod = order.method;
@@ -65,7 +64,6 @@ const checkoutController = async (req, res) => {
       paymentMethod,
       totalPrice,
     }).save();
-    console.log(products);
 
     if (coupon) {
       const applyCoupon = await CouponModel.updateOne(

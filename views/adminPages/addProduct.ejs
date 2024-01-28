@@ -77,7 +77,6 @@
             </div>
           </div>
           <div class="text-center">
-            <!-- <button type="submit" class="btn btn-dark">Add Product</button> -->
             <button type="button" id="cropButton" class="btn btn-dark">
               Submit
             </button>
@@ -134,7 +133,6 @@
       document.getElementById("cropButton").addEventListener(
         "click",
         function () {
-          console.log("clicked");
           let croppedImage = [];
           let productName = document.getElementById("productName").value;
           let price = document.getElementById("price").value;
@@ -175,7 +173,6 @@
             })
               .then((response) => response.json())
               .then((data) => {
-                console.log(data.success);
 
                 if (data.success) {
                   Swal.fire({
@@ -230,7 +227,6 @@
           },
           images: {
             required: true,
-            // maxlength: 4,
           },
         },
       });

@@ -59,16 +59,6 @@ const AddCategoryController = async (req, res) => {
   }
 };
 
-// const deleteCategoryController = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-
-//     const user = await CategoryModel.findByIdAndDelete(id);
-//     res.redirect("/category-list");
-//   } catch (error) {
-//     console.log("error in deleting category ", error);
-//   }
-// };
 
 const blockCategoryController = async (req, res) => {
   try {
@@ -115,7 +105,6 @@ const editCategoryController = async (req, res) => {
     const findCat = await CategoryModel.findOne({ categoryName });
 
     if (!findCat || String(findCat._id) === id) {
-      console.log("sdasfafs");
       const category = await CategoryModel.updateOne(
         { _id: id },
         { $set: { categoryName, description } }
@@ -163,7 +152,6 @@ const filterCategoryController = async (req, res) => {
     }
     req.session.category = category;
     res.redirect("/category-list");
-    // res.render("adminPages/userList", { users });
   } catch (error) {
     console.log(error);
   }

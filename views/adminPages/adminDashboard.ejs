@@ -60,7 +60,6 @@
         <h6>Total Orders Placed</h6>
         <p class="ms-3"><%= orderCount %></p>
       </div>
-      <% console.log(JSON.parse(payMethod)) %> <% console.log(payMethod) %>
       <div class="card three">
         <h6>Total Product</h6>
         <p class="ms-3"><%= productCount %></p>
@@ -78,12 +77,10 @@
     document.addEventListener("DOMContentLoaded", async function () {
       let data = await fetch("/chart-data");
       let json = await data.json();
-      console.log(json);
-      console.log(json.paymentMethod);
+
       const label = json.paymentMethod.map((item) => item._id);
       const amount = json.paymentMethod.map((item) => item.amount);
       const count = json.paymentMethod.map((item) => item.count);
-      console.log(amount, label);
 
       const bar = document.getElementById("bar");
       const pie = document.getElementById("pie");
@@ -103,7 +100,6 @@
           ],
         },
         options: {
-          // maintainAspectRatio:false,
           scales: {
             y: {
               beginAtZero: true,
@@ -124,7 +120,6 @@
           ],
         },
         options: {
-          // maintainAspectRatio:false,
           scales: {
             y: {
               beginAtZero: true,

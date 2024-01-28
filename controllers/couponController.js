@@ -19,7 +19,6 @@ const addCouponController = async (req, res) => {
     const { couponCode, discountAmount, startDate, endDate } = req.body;
 
     const couponExist = await CouponModel.findOne({ couponCode });
-    console.log(couponExist);
     if (couponExist) {
       return res.status(500).send({ exist: true });
     }
