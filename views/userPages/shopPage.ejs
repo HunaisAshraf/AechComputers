@@ -28,19 +28,19 @@
           </div>
           <% }); %>
         </form>
-        <!-- <form action="/filter-price" method="post" class="my-3" id="priceForm">
+        <form action="/filter-price" method="post" class="my-3" id="priceForm">
           <h5 class="mb-3">Price</h5>
           <div class="form-check my-2">
             <input
               class="form-check-input border-secondary"
               type="radio"
               name="price"
-              id="flexRadioDefault1"
+              id="50000"
               value="50000"
               oninput="submitPrice()"
             />
             <label class="form-check-label" for="flexRadioDefault1">
-              ₹ 50,000
+              ₹ 0 - 50K
             </label>
           </div>
           <div class="form-check my-2">
@@ -48,12 +48,12 @@
               class="form-check-input border-secondary"
               type="radio"
               name="price"
-              id="flexRadioDefault1"
+              id="100000"
               value="100000"
               oninput="submitPrice()"
             />
             <label class="form-check-label" for="flexRadioDefault1">
-              ₹ 1,00,000
+              ₹ 50K - 100K
             </label>
           </div>
           <div class="form-check my-2">
@@ -61,28 +61,15 @@
               class="form-check-input border-secondary"
               type="radio"
               name="price"
-              id="flexRadioDefault1"
+              id="150000"
               value="150000"
               oninput="submitPrice()"
             />
             <label class="form-check-label" for="flexRadioDefault1">
-              ₹ 1,50,000
+              ₹ 100K - 200K
             </label>
           </div>
-          <div class="form-check my-2">
-            <input
-              class="form-check-input border-secondary"
-              type="radio"
-              name="price"
-              id="flexRadioDefault1"
-              value="200000"
-              oninput="submitPrice()"
-            />
-            <label class="form-check-label" for="flexRadioDefault1">
-              ₹ 2,00,000
-            </label>
-          </div>
-        </form> -->
+        </form>
       </div>
     </aside>
     <section class="all-products border my-5 mx-3 w-100">
@@ -324,12 +311,13 @@
   @media only screen and (max-width: 1024px) {
     .filter {
       display: none;
-      /* position: fixed;
-    top: 0; */
-      position: absolute;
+      position: fixed;
+      top: 0;
       z-index: 1;
       background-color: #ffffff;
-      width: 200px;
+      width: 300px;
+      height: 100vh;
+      padding: 10px 0 0 20px;
     }
     .filter-btn {
       display: block;

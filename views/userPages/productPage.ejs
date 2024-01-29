@@ -1,12 +1,23 @@
 <%- include("partials/header") %>
+
+<style>
+  @media only screen and (max-width: 990px) {
+    .btn {
+      width: 100%;
+    }
+  }
+</style>
+
 <main class="container-md">
   <section>
     <% if(product) {%>
     <div class="box p-5 mt-4 row align-items-center border rounded bg-white">
       <div
-        class="image text-center col-md-6 d-flex align-items-center border-end"
+        class="image text-center col-md-6 d-flex flex-md-row flex-column-reverse align-items-center border border-md-end"
       >
-        <div class="list-img d-flex flex-column">
+        <div
+          class="list-img d-flex justify-content-evenly gap-md-0 flex-md-column flex-wrap"
+        >
           <%product.images.forEach(image => { %>
           <img
             src="/uploads/<%= image %>"
@@ -32,23 +43,21 @@
         <h3><%= product.productName %></h3>
         <% if(product.offerPrice < product.price){ %>
 
-          <p class="card-text">
-            <span class="fw-bold">
-              ₹ <%= new
-              Intl.NumberFormat().format(product.offerPrice)%>
-            </span>
-            <span class="text-danger text-decoration-line-through"
-              >₹ <%= new
-              Intl.NumberFormat().format(product.price)%></span
-            >
-          </p>
-          <% }else{ %>
+        <p class="card-text">
+          <span class="fw-bold">
+            ₹ <%= new Intl.NumberFormat().format(product.offerPrice)%>
+          </span>
+          <span class="text-danger text-decoration-line-through"
+            >₹ <%= new Intl.NumberFormat().format(product.price)%></span
+          >
+        </p>
+        <% }else{ %>
 
-          <p class="card-text">
-            ₹ <%= new Intl.NumberFormat().format(product.price)%>
-          </p>
-          <% } %>
-        <form>
+        <p class="card-text">
+          ₹ <%= new Intl.NumberFormat().format(product.price)%>
+        </p>
+        <% } %>
+        <form class="w-100">
           <div class="btn-group" role="group">
             <button
               type="button"
@@ -79,28 +88,28 @@
             value="<%= product.quantity %>"
             id="productQuantity"
           />
-          <div class="my-3">
+          <div class="my-3 w-100">
             <% if(signIn){ %>
             <button
               type="button"
               onclick="handleSubmit(event,'<%= product.id %>')"
-              class="btn btn-dark w-25"
+              class="btn btn-dark"
             >
               Add To Cart
             </button>
             <% }else{ %>
 
-            <a href="/signin" class="btn btn-dark w-25"> Add To Cart</a>
+            <a href="/signin" class="btn btn-dark"> Add To Cart</a>
             <% } %>
-
           </div>
         </form>
         <p class="fw-semibold fs-5">Product Details</p>
         <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium,
+          <%= product.description %>
+          <!-- Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium,
           rem ducimus eligendi vel temporibus eum neque necessitatibus nulla
           aspernatur ipsam, fugit quod, amet reprehenderit laboriosam
-          dignissimos hic! Autem, nulla eligendi?
+          dignissimos hic! Autem, nulla eligendi? -->
         </p>
       </div>
     </div>
@@ -149,7 +158,6 @@
         cursor: "crosshair",
         easing: true,
       });
-
     });
 
     let counter = 1;

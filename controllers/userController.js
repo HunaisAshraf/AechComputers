@@ -68,6 +68,7 @@ const getShopPage = async (req, res) => {
       selectedFilter: req.session.selectedFilter,
     });
     req.session.products = null;
+    req.session.selectedFilter = null;
     req.session.save();
   } catch (error) {
     console.log(error);
@@ -121,11 +122,24 @@ const filterProductByCAtegory = async (req, res) => {
 
 const filterProductByPrice = async (req, res) => {
   try {
-    const price = Number(req.body.price);
+    const price = req.body.price;
+    let startPrice;
+    let endPrice;
+    if (price === "50000") {
+      startPrice = 0;
+      endPrice = 49999;
+    } else if (price === "100000") {
+      startPrice = 50000;
+      endPrice = 99999;
+    } else if (price === "150000") {
+      startPrice = 100000;
+      endPrice = 200000;
+    }
     const products = await ProductModel.find({
-      price: { $lte: price },
+      price: { $gte: startPrice, $lte: endPrice },
     }).populate("category");
     req.session.products = products;
+    req.session.selectedFilter = price;
     res.redirect("/shop");
   } catch (error) {
     console.log(error);
@@ -506,10 +520,24 @@ const getUserAddressController = async (req, res) => {
 };
 const getUserOrdersController = async (req, res) => {
   try {
+    let page = Number(req.query.page) || 1;
+    let limit = 8;
+    let skip = (page - 1) * limit;
+    let count = await OrderModel.find({
+      user: req.session.user._id,
+    }).estimatedDocumentCount();
     const order = await OrderModel.find({
       user: req.session.user._id,
-    }).populate("products");
-    res.render("userPages/userOrders", { signIn: req.session.signIn, order });
+    })
+      .skip(skip)
+      .limit(limit)
+      .populate("products");
+    res.render("userPages/userOrders", {
+      signIn: req.session.signIn,
+      order,
+      count,
+      limit,
+    });
   } catch (error) {
     console.log(error);
   }

@@ -141,7 +141,7 @@ const addAdressController = async (req, res) => {
       city,
       state,
       pincode,
-    }).save();
+    }).save();   
     res.status(200).send({ success: true });
   } catch (error) {
     console.log(error);
