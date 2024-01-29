@@ -3,7 +3,7 @@ const CartModel = require("../models/cartModel");
 const OrderModel = require("../models/orderModel");
 const WalletModel = require("../models/walletModel");
 const CouponModel = require("../models/couponModel");
-const ProductModel = require("../models/productModel")
+const ProductModel = require("../models/productModel");
 
 const Razorpay = require("razorpay");
 const dotenv = require("dotenv");
@@ -38,6 +38,11 @@ const checkoutController = async (req, res) => {
     } else if (paymentMethod === "localWallet") {
       const wallet = await WalletModel.findOne({ user: req.session.user._id });
       wallet.balance -= totalPrice;
+      wallet.transcation.push({
+        message: "Product Ordered",
+        amount: -totalPrice,
+        date: new Date(),
+      });
       wallet.save();
     } else {
       let order = await instance.payments.fetch(req.body.razorpay_payment_id);
@@ -133,9 +138,21 @@ const cancelOrderController = async (req, res) => {
         await new WalletModel({
           user: req.session.user._id,
           balance: order.totalPrice,
+          transcation: [
+            {
+              message: "Order Cancelled",
+              amount: order.totalPrice,
+              date: new Date(),
+            },
+          ],
         }).save();
       } else {
         wallet.balance += order.totalPrice;
+        wallet.transcation.push({
+          message: "Order Cancelled",
+          amount: order.totalPrice,
+          date: new Date(),
+        });
         wallet.save();
       }
     }

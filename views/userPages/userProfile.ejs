@@ -37,7 +37,9 @@
   </aside>
   <section class="w-100">
     <div class="user mx-3 p-3 border">
-      <div class="head d-md-flex justify-content-between border-bottom pb-3 mb-3">
+      <div
+        class="head d-md-flex justify-content-between border-bottom pb-3 mb-3"
+      >
         <h2 class="m-0">Profile</h2>
         <div class="mt-2">
           <button
@@ -308,6 +310,42 @@
             Wallet Balance : <%= new Intl.NumberFormat().format( wallet.balance)
             %>
           </h5>
+        </div>
+        <div class="px-4 table-responsive content">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Transcation</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% wallet.transcation.forEach((transcation) => { %>
+
+              <tr>
+                <td><%= transcation.message %></td>
+                <% if (transcation.amount < 0) { %>
+                <td class="text-danger">
+                  ₹ <%=new Intl.NumberFormat().format( transcation.amount) %>
+                </td>
+
+                <% } else {%>
+                <td>
+                  ₹ <%=new Intl.NumberFormat().format( transcation.amount) %>
+                </td>
+                <% } %>
+
+                <td><%= transcation.date.toLocaleString() %></td>
+              </tr>
+              <%}) %>
+            </tbody>
+          </table>
+          <div class="d-flex justify-content-center py-3">
+            <nav aria-label="Page navigation example">
+              <ul class="pagination"></ul>
+            </nav>
+          </div>
         </div>
       </div>
     </div>

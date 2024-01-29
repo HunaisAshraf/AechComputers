@@ -9,6 +9,22 @@ const walletSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  transcation: [
+    // {
+    //   date: {
+    //     type: Date,
+    //     default: new Date(),
+    //   },
+    //   message: {
+    //     type: String,
+    //     required: true,
+    //   },
+    //   amount: {
+    //     type: Number,
+    //     required: true,
+    //   },
+    // },
+  ],
 });
 
 module.exports = mongoose.model("Wallet", walletSchema);
