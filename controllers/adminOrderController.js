@@ -12,7 +12,7 @@ const getOrderList = async (req, res) => {
     } else {
       count = await OrderModel.find().estimatedDocumentCount();
 
-      orders = await OrderModel.find().skip(skip).limit(limit);
+      orders = await OrderModel.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
     }
     res.render("adminPages/orderList", { orders, count, limit });
     req.session.orderList = null;

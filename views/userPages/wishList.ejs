@@ -77,8 +77,14 @@
       });
 
       const json = await data.json();
-
-      if (json.success) {
+      if (json.outOfStock) {
+        Swal.fire({
+          title: "OutOfStock!!!",
+          text: "Product out of stock",
+          icon: "warmng",
+          confirmButtonText: "Ok",
+        });
+      } else if (json.success) {
         Swal.fire({
           title: "Added!!!",
           text: "Product Added to cart",
@@ -98,7 +104,6 @@
       const data = await fetch(`/delete-wishlist/${id}`);
 
       const json = await data.json();
-
       if (json.success) {
         Swal.fire({
           title: "Deleted!!!",

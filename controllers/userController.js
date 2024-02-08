@@ -529,6 +529,7 @@ const getUserOrdersController = async (req, res) => {
     const order = await OrderModel.find({
       user: req.session.user._id,
     })
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .populate("products");

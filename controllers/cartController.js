@@ -36,12 +36,17 @@ const addToCartController = async (req, res) => {
     if (checkProduct.quantity < 1) {
       return res.status(500).send({ outOfStock: true });
     }
+    // console.log("check",checkProduct.quantity)
+    // console.log("found",foundProduct.quantity)
+    if(checkProduct.quantity === foundProduct?.quantity){
+      return res.status(500).send({ outOfStock: true });
+    }
 
     if (foundProduct && foundUser) {
       if (foundProduct.quantity + quantity <= checkProduct.quantity) {
         foundProduct.quantity += quantity;
       } else {
-        res.redirect(`/product/${product}`);
+       return res.redirect(`/product/${product}`);
       }
       foundProduct.save();
       return res.status(200).send({ success: true });
